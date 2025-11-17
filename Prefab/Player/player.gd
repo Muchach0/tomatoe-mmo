@@ -45,7 +45,6 @@ var is_force_field_enabled: bool = false # used to enable/disable the force fiel
 var bonus_number: int = 0 # The number of bonuses picked up by the player
 
 @onready var sync = $MultiplayerSynchronizer
-@onready var camera = $PlayerCamera
 @onready var timer_glow: Timer = $TimerGlow
 @onready var health_bar: ProgressBar = $HealthBar
 

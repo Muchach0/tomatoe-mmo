@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfive5moe6hsv"]
+
+[ext_resource type="Script" uid="uid://dpnewdtf518vd" path="res://Prefab/Player/player_camera.gd" id="1_qhhrp"]
+
+[node name="PlayerCamera" type="Camera2D"]
+enabled = false
+process_callback = 0
+limit_left = 0
+limit_top = 0
+script = ExtResource("1_qhhrp")
