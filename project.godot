@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="tomatoe-mmo"
+run/main_scene="uid://c1487i5d7y1yh"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://bxjx6hdsa7flh"
 
@@ -91,3 +92,4 @@ pointing/emulate_touch_from_mouse=true
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+2d/snap/snap_2d_transforms_to_pixel=true

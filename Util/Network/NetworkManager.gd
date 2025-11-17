@@ -9,7 +9,7 @@ signal player_disconnected(peer_id)
 signal server_disconnected
 
 
-var url = "wss://mmo-tomatoe-server.muchacho.app:443"
+var url = "wss://tomatoe-mmo-server.muchacho.app:443"
 # var url = "wss://multi-server-1036179882263.europe-west1.run.app:443"
 # var url = "ws://localhost:" + str(DEFAULT_PORT) # Default URL for local testing
 

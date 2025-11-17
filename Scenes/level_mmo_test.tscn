@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=4 uid="uid://c1487i5d7y1yh"]
+[gd_scene load_steps=9 format=4 uid="uid://c1487i5d7y1yh"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_ll5u2"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_obgea"]
+[ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_tpf4k"]
 [ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="9_qfg4i"]
 [ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="10_yqvot"]
 
@@ -311,6 +312,8 @@ size = Vector2(955, 1313)
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_ll5u2")
+
+[node name="PlayerCamera" parent="." instance=ExtResource("2_tpf4k")]
 
 [node name="UI" parent="." instance=ExtResource("2_obgea")]
 

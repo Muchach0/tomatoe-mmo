@@ -67,6 +67,9 @@ docker-server-rm:
 
 docker-server-update: docker-server-rm docker-server-build-run
 
+docker-server-pull-and-run:
+	docker pull $(DOCKER_IMAGE_SERVER):v2
+	docker run --name=godot-server --restart unless-stopped -p 10567:10567/tcp -d -t $(DOCKER_IMAGE_SERVER):v2
 
 
 

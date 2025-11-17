@@ -20,6 +20,9 @@ var is_hidden: bool = false # used when the player should be hidden
 
 var init_position = position
 @export var synced_position := Vector2()
+# Interpolation variables for smooth remote player movement
+@export var interpolation_speed: float = 10.0  # Adjust this value to control interpolation speed (higher = faster, recommended: 8-15)
+var target_position: Vector2 = Vector2()
 # @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Array of BulletStrategy holding all the strategies applied to the player
@@ -58,6 +61,10 @@ func _ready() -> void:
     EventBus.add_upgrade_to_player.connect(on_add_upgrade_to_player)
     EventBus.refresh_visibility.connect(on_refresh_visibility)
 
+    # Initialize interpolation target
+    target_position = position
+    synced_position = position
+
     # Enable camera for local player only
     # Use a timer to ensure multiplayer authority is properly set
     await get_tree().process_frame
@@ -75,15 +82,16 @@ func _ready() -> void:
     # Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func setup_camera() -> void:
-    # return
     # Only enable camera for the local player (the one with multiplayer authority)
     if multiplayer == null or is_multiplayer_authority():
-        camera.enabled = true
-        camera.make_current()
-        print("Camera enabled for local player: " + str(peer_id))
-    else:
-        camera.enabled = false
-        print("Camera disabled for remote player: " + str(peer_id))
+        EventBus.set_player_camera.emit(self)
+        # emit_signal("set_player_camera", self)
+        # camera.enabled = true
+        # camera.make_current()
+        # print("Camera enabled for local player: " + str(peer_id))
+    # else:
+    #     camera.enabled = false
+    #     print("Camera disabled for remote player: " + str(peer_id))
 
 func on_sync_bonus_count(bonus_number_from_server: int, _is_bonus_picked_up: bool = false) -> void:
     bonus_number = bonus_number_from_server
@@ -114,8 +122,10 @@ func _physics_process(_delta: float) -> void:
     if multiplayer == null or is_multiplayer_authority():
         var x_input = Input.get_axis("ui_left", "ui_right")
         var y_input = Input.get_axis("ui_up", "ui_down")
-        motion = Vector2(x_input, y_input).normalized()
+        var input_vector = Vector2(x_input, y_input)
+        motion = input_vector.normalized() if input_vector.length() > 0.01 else Vector2.ZERO
         synced_position = position
+        target_position = position  # Keep target in sync for local player
 
         if motion.length() > 0.01:
             last_nonzero_motion = motion
@@ -126,7 +136,12 @@ func _physics_process(_delta: float) -> void:
             # Add your custom logic for ui_accept here, e.g., interact, shoot, etc.
 
     else:
-        position = synced_position
+        # Smooth interpolation for remote players to avoid jitter
+        if target_position != synced_position:
+            target_position = synced_position
+        
+        # Interpolate position smoothly instead of snapping
+        position = position.lerp(target_position, interpolation_speed * _delta)
 
     # TODO: Fix state machine later
     # # If the player is not moving, we don't need to update the state machine
@@ -314,6 +329,7 @@ func reset_player(new_position: Vector2) -> void:
     visible = true
     position = new_position
     synced_position = new_position
+    target_position = new_position  # Reset interpolation target
     number_of_life = INIT_NUMBER_OF_LIFE
     is_invincible = false  # Reset the invincibility state
     touching = 0  # Reset the number of bullets touching the player
