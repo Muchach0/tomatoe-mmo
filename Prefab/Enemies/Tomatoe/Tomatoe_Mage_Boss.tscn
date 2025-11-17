@@ -1,0 +1,273 @@
+[gd_scene load_steps=23 format=3 uid="uid://c2vu4if27jxev"]
+
+[ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_cvd54"]
+[ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_dopvd"]
+[ext_resource type="Texture2D" uid="uid://uccl5gcaekoc" path="res://Art/Sprites/tomatoe/flan_1.png" id="3_d4px0"]
+[ext_resource type="Script" uid="uid://b73sir6xbr0gt" path="res://Util/Components/hurtbox.gd" id="4_feqlc"]
+[ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="5_gahft"]
+[ext_resource type="Script" uid="uid://c78lqfuowj4ou" path="res://Util/States/State_machine.gd" id="6_ytddd"]
+[ext_resource type="Script" uid="uid://b2myt44bpyvvy" path="res://Util/States/EnemyIdle.gd" id="7_d4px0"]
+[ext_resource type="Script" uid="uid://7emw4goubm1q" path="res://Util/States/EnemyFollowing.gd" id="10_814en"]
+[ext_resource type="Script" uid="uid://bfyarrfnc1tlo" path="res://Util/States/EnemyDying.gd" id="11_e5sy7"]
+[ext_resource type="PackedScene" uid="uid://hlkjer88mbpu" path="res://Prefab/Components/HealthComponent.tscn" id="12_qy4lw"]
+[ext_resource type="Texture2D" uid="uid://hrdmj1kjxrht" path="res://Art/Sprites/recolor/shadow_circle_recolor.png" id="13_vijao"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seed_boss_main"]
+radius = 50.0
+height = 120.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seed_boss_hurtbox"]
+radius = 60.0
+height = 140.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seed_boss_hitbox"]
+radius = 65.0
+height = 150.0
+
+[sub_resource type="Animation" id="Animation_seed_boss_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_seed_boss_attack"]
+resource_name = "attack"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_seed_boss_die"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [12, 13]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.7, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.7, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.7, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -14)]
+}
+
+[sub_resource type="Animation" id="Animation_seed_boss_hit"]
+resource_name = "hit"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [12, 13, 12]
+}
+
+[sub_resource type="Animation" id="Animation_seed_boss_idle"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 4, 6]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_seed_boss"]
+_data = {
+&"RESET": SubResource("Animation_seed_boss_reset"),
+&"attack": SubResource("Animation_seed_boss_attack"),
+&"die": SubResource("Animation_seed_boss_die"),
+&"hit": SubResource("Animation_seed_boss_hit"),
+&"idle": SubResource("Animation_seed_boss_idle")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_seed_boss_aggro"]
+radius = 142.8357
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_seed_boss"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite2D:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="MageBoss" type="CharacterBody2D"]
+y_sort_enabled = true
+material = ExtResource("1_cvd54")
+scale = Vector2(0.7, 0.7)
+motion_mode = 1
+script = ExtResource("2_dopvd")
+MAX_DEFAULT_HEALTH = 200
+speed = 150.0
+should_be_able_to_move = false
+bullet_damage = 1.0
+bullet_speed = 300.0
+metadata/_custom_type_script = "uid://dwrvjvtfymngy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(6, 6)
+shape = SubResource("CapsuleShape2D_seed_boss_main")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+use_parent_material = true
+scale = Vector2(8, 8)
+texture = ExtResource("3_d4px0")
+hframes = 4
+vframes = 4
+frame = 4
+
+[node name="Hurtbox" type="Area2D" parent="Sprite2D"]
+scale = Vector2(0.12499999, 0.12499999)
+script = ExtResource("4_feqlc")
+metadata/_custom_type_script = "uid://b73sir6xbr0gt"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Hurtbox"]
+visible = false
+position = Vector2(6, 6)
+shape = SubResource("CapsuleShape2D_seed_boss_hurtbox")
+
+[node name="Hitbox" type="Area2D" parent="."]
+script = ExtResource("5_gahft")
+metadata/_custom_type_script = "uid://c7n12r1ga5b8m"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+visible = false
+position = Vector2(6, 6)
+shape = SubResource("CapsuleShape2D_seed_boss_hitbox")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("6_ytddd")
+metadata/_custom_type_script = "uid://c78lqfuowj4ou"
+
+[node name="EnemyIdle" type="Node" parent="StateMachine"]
+script = ExtResource("7_d4px0")
+metadata/_custom_type_script = "uid://b2myt44bpyvvy"
+
+[node name="EnemyFollowing" type="Node" parent="StateMachine"]
+script = ExtResource("10_814en")
+
+[node name="EnemyDying" type="Node" parent="StateMachine"]
+script = ExtResource("11_e5sy7")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="TimerAttack" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerGlow" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_seed_boss")
+}
+
+[node name="HealthComponent" parent="." instance=ExtResource("12_qy4lw")]
+position = Vector2(2, -100)
+scale = Vector2(1.2, 1.2)
+
+[node name="AggroArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
+shape = SubResource("CircleShape2D_seed_boss_aggro")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_seed_boss")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(0.71429634, 76.685715)
+scale = Vector2(2.6278663, 1.5183673)
+texture = ExtResource("13_vijao")

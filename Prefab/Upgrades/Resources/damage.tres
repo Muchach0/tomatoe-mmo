@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DamageBoostStrategy" load_steps=3 format=3 uid="uid://crggwoi06hde6"]
+
+[ext_resource type="Script" uid="uid://dwuqfrf7ultv5" path="res://Util/Upgrade/DamageBoostStrategy.gd" id="1_quhjr"]
+[ext_resource type="Texture2D" uid="uid://dfhk7eqfescwu" path="res://Art/Sprites/test/fish.png" id="2_quhjr"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_quhjr")
+damage_bonus = 2.0
+texture = ExtResource("2_quhjr")
+upgrade_text = "Damage"
+metadata/_custom_type_script = "uid://dwuqfrf7ultv5"

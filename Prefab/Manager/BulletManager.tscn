@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://g1ov0o7f67on"]
+
+[ext_resource type="Script" uid="uid://o4aqkcxrdtxi" path="res://Util/Bullet/bullet_manager.gd" id="1_npuix"]
+[ext_resource type="Script" uid="uid://c3vgjlohosgy3" path="res://Util/Bullet/bullet_pool.gd" id="2_dpa37"]
+
+[node name="BulletManager" type="Node" groups=["bullet_manager"]]
+script = ExtResource("1_npuix")
+
+[node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bvn2x3y4k5l6m")
+spawn_path = NodePath("../..")
+
+[node name="BulletPool" type="Node" parent="."]
+script = ExtResource("2_dpa37")
+metadata/_custom_type_script = "uid://c3vgjlohosgy3"

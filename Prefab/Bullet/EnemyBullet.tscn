@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq8k5f6vn2d5a"]
+
+[ext_resource type="Script" uid="uid://bb2o2n0krqp6w" path="res://Prefab/Bullet/EnemyBullet.gd" id="1_p8q7k"]
+[ext_resource type="Texture2D" uid="uid://bdvaqre0d5u28" path="res://Art/Sprites/test/fire_trail.png" id="2_k5r8m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 8)
+
+[node name="EnemyBullet" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("1_p8q7k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.3, 0.3, 1)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_k5r8m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VisibilityNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="queue_free"]

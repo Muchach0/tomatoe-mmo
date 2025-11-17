@@ -1,0 +1,221 @@
+[gd_scene load_steps=28 format=3 uid="uid://c5ymybfjm8kfm"]
+
+[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/game_logic.gd" id="1_8fp34"]
+[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_q5jsk"]
+[ext_resource type="Texture2D" uid="uid://e7ev8a2nskv2" path="res://Art/Sprites/background_space_wide_screen.png" id="5_tu1ko"]
+[ext_resource type="Material" uid="uid://5slcagwnqqij" path="res://Art/Shaders/Glowing.tres" id="6_f78ry"]
+[ext_resource type="Texture2D" uid="uid://ce3i324ntjxh3" path="res://Art/Sprites/star_2.png" id="7_raqwp"]
+[ext_resource type="PackedScene" uid="uid://r4el6umoyi8v" path="res://Prefab/BulletShower/bullets.tscn" id="12_ffjdm"]
+[ext_resource type="Texture2D" uid="uid://bkby2e0hkghxd" path="res://Art/Sprites/placeholder.svg" id="13_0nudk"]
+[ext_resource type="Texture2D" uid="uid://2vbmwrfbswhb" path="res://Art/Sprites/bonus.png" id="14_reuqd"]
+[ext_resource type="PackedScene" uid="uid://4t0v4wxi1jn6" path="res://Prefab/Upgrades/speed_upgrade.tscn" id="14_tu1ko"]
+[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="15_8fp34"]
+[ext_resource type="Script" uid="uid://ml68vemh2d58" path="res://Util/Upgrade/SpeedBoostStrategy.gd" id="15_f78ry"]
+[ext_resource type="PackedScene" uid="uid://cpndxvp5ubsl8" path="res://Prefab/Enemies/Dummy.tscn" id="16_275od"]
+[ext_resource type="Texture2D" uid="uid://cksc370vxgcc5" path="res://Art/Sprites/test/carrot.png" id="16_raqwp"]
+[ext_resource type="PackedScene" uid="uid://cpjfn3h6rvp5d" path="res://Prefab/Upgrades/damage_upgrade.tscn" id="17_2ymk3"]
+[ext_resource type="PackedScene" uid="uid://3iti8rxlsrc2" path="res://Prefab/Enemies/Dino/Dino_Green.tscn" id="17_iafda"]
+[ext_resource type="Script" uid="uid://dwuqfrf7ultv5" path="res://Util/Upgrade/DamageBoostStrategy.gd" id="18_c1ea3"]
+[ext_resource type="Texture2D" uid="uid://dfhk7eqfescwu" path="res://Art/Sprites/test/fish.png" id="19_0jots"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w2sp8"]
+radius = 40.9132
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3wjhk"]
+size = Vector2(1598, 159)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p0w5i"]
+radius = 20.6155
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4bnm5"]
+radius = 13.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w86v4"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="Resource" id="Resource_y1vuu"]
+resource_local_to_scene = true
+script = ExtResource("15_f78ry")
+speed_multiplier = 1.5
+texture = ExtResource("16_raqwp")
+upgrade_text = "Speed"
+metadata/_custom_type_script = "uid://ml68vemh2d58"
+
+[sub_resource type="Resource" id="Resource_ffjdm"]
+resource_local_to_scene = true
+script = ExtResource("15_f78ry")
+speed_multiplier = 1.5
+texture = ExtResource("16_raqwp")
+upgrade_text = "Speed"
+metadata/_custom_type_script = "uid://ml68vemh2d58"
+
+[sub_resource type="Resource" id="Resource_0nudk"]
+resource_local_to_scene = true
+script = ExtResource("18_c1ea3")
+damage_bonus = 2.0
+texture = ExtResource("19_0jots")
+upgrade_text = "Damage"
+metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
+
+[sub_resource type="Resource" id="Resource_reuqd"]
+resource_local_to_scene = true
+script = ExtResource("18_c1ea3")
+damage_bonus = 2.0
+texture = ExtResource("19_0jots")
+upgrade_text = "Damage"
+metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
+
+[sub_resource type="Resource" id="Resource_ttlqr"]
+resource_local_to_scene = true
+script = ExtResource("15_f78ry")
+speed_multiplier = 1.5
+texture = ExtResource("16_raqwp")
+upgrade_text = "Speed"
+metadata/_custom_type_script = "uid://ml68vemh2d58"
+
+[node name="Shower" type="Node2D"]
+script = ExtResource("1_8fp34")
+
+[node name="UI" parent="." instance=ExtResource("2_q5jsk")]
+
+[node name="Space_background" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(799.5, 450.5)
+texture = ExtResource("5_tu1ko")
+
+[node name="Star" type="Area2D" parent="." groups=["star"]]
+position = Vector2(983, 126)
+scale = Vector2(0.855469, 0.855469)
+
+[node name="StarSprite" type="Sprite2D" parent="Star"]
+material = ExtResource("6_f78ry")
+scale = Vector2(0.13, 0.13)
+texture = ExtResource("7_raqwp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Star"]
+shape = SubResource("CircleShape2D_w2sp8")
+
+[node name="Bullets" parent="." instance=ExtResource("12_ffjdm")]
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="1" type="Node2D" parent="SpawnPoints"]
+position = Vector2(848, 780)
+
+[node name="2" type="Node2D" parent="SpawnPoints"]
+position = Vector2(973, 779)
+
+[node name="3" type="Node2D" parent="SpawnPoints"]
+position = Vector2(553, 778)
+
+[node name="4" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1178, 770)
+
+[node name="5" type="Node2D" parent="SpawnPoints"]
+position = Vector2(670, 781)
+
+[node name="6" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1088, 772)
+
+[node name="7" type="Node2D" parent="SpawnPoints"]
+position = Vector2(655, 871)
+
+[node name="8" type="Node2D" parent="SpawnPoints"]
+position = Vector2(945, 875)
+
+[node name="9" type="Node2D" parent="SpawnPoints"]
+position = Vector2(568, 866)
+
+[node name="10" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1181, 870)
+
+[node name="11" type="Node2D" parent="SpawnPoints"]
+position = Vector2(770, 874)
+
+[node name="12" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1092, 881)
+
+[node name="SafeZone" type="Node2D" parent="."]
+position = Vector2(2, 680)
+
+[node name="ColorRect" type="ColorRect" parent="SafeZone"]
+offset_left = -9.0
+offset_top = 57.0
+offset_right = 1610.0
+offset_bottom = 227.0
+color = Color(0.2, 0.5, 1, 0.3)
+
+[node name="AreaSafeZone" type="Area2D" parent="SafeZone" groups=["safeZone"]]
+position = Vector2(3, -23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SafeZone/AreaSafeZone"]
+position = Vector2(795, 162.5)
+shape = SubResource("RectangleShape2D_3wjhk")
+
+[node name="MyBullet" type="Node2D" parent="."]
+position = Vector2(431, 115)
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="MyBullet"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyBullet/CharacterBody2D"]
+shape = SubResource("CircleShape2D_p0w5i")
+
+[node name="Sprite2D" type="Sprite2D" parent="MyBullet"]
+scale = Vector2(0.24, 0.24)
+texture = ExtResource("13_0nudk")
+
+[node name="Bonus" type="Area2D" parent="." groups=["bonus"]]
+position = Vector2(846, 105)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bonus"]
+shape = SubResource("CircleShape2D_4bnm5")
+
+[node name="BonusSprite" type="Sprite2D" parent="Bonus"]
+material = ExtResource("6_f78ry")
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("14_reuqd")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Bonus"]
+replication_config = SubResource("SceneReplicationConfig_w86v4")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
+spawn_path = NodePath("..")
+
+[node name="SpeedUpgrade" parent="." instance=ExtResource("14_tu1ko")]
+position = Vector2(794, 621)
+bullet_strategy = SubResource("Resource_y1vuu")
+
+[node name="SpeedUpgrade2" parent="." instance=ExtResource("14_tu1ko")]
+position = Vector2(872, 613)
+bullet_strategy = SubResource("Resource_ffjdm")
+
+[node name="DamageUpgrade" parent="." instance=ExtResource("17_2ymk3")]
+position = Vector2(724, 619)
+bullet_strategy = SubResource("Resource_0nudk")
+
+[node name="DamageUpgrade2" parent="." instance=ExtResource("17_2ymk3")]
+position = Vector2(637, 613)
+bullet_strategy = SubResource("Resource_reuqd")
+
+[node name="SpeedUpgrade3" parent="." instance=ExtResource("14_tu1ko")]
+position = Vector2(562, 607)
+bullet_strategy = SubResource("Resource_ttlqr")
+
+[node name="Manager" parent="." instance=ExtResource("15_8fp34")]
+
+[node name="Dummy" parent="." instance=ExtResource("16_275od")]
+position = Vector2(788, 375)
+MAX_DEFAULT_HEALTH = 100
+
+[node name="Dummy2" parent="." instance=ExtResource("16_275od")]
+position = Vector2(883, 375)
+MAX_DEFAULT_HEALTH = 100
+
+[node name="Dino_green" parent="." instance=ExtResource("17_iafda")]
+position = Vector2(1025, 400)
+
+[node name="Dino_green2" parent="." instance=ExtResource("17_iafda")]
+position = Vector2(1095, 472)

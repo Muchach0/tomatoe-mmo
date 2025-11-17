@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://u0thptxyq17u"]
+
+[ext_resource type="Script" uid="uid://cjo7oh74nkvp7" path="res://Prefab/Components/DamageLabel.gd" id="1_2dfbu"]
+[ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="1_mr835"]
+
+[sub_resource type="Animation" id="Animation_od40c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2dfbu"]
+resource_name = "show"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.133333, 0.433333, 0.5, 0.6),
+"transitions": PackedFloat32Array(0.287, 1, 1, 1, 2.37, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.1, 1.1), Vector2(1, 1), Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_udw16"]
+_data = {
+&"RESET": SubResource("Animation_od40c"),
+&"show": SubResource("Animation_2dfbu")
+}
+
+[node name="DamageLabel" type="Node2D"]
+script = ExtResource("1_2dfbu")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_udw16")
+}
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("1_mr835")
+theme_override_font_sizes/font_size = 36
+text = "-1"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

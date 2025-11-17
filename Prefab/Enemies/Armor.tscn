@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://c4fl8ufkoo7ba"]
+
+[ext_resource type="PackedScene" uid="uid://cpndxvp5ubsl8" path="res://Prefab/Enemies/Dummy.tscn" id="1_f8wvl"]
+[ext_resource type="Texture2D" uid="uid://d2bfpvadf786y" path="res://Art/Sprites/enemies/chat_gpt_armor_2_fixed_v2.png" id="2_21tin"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t7kgx"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f8wvl"]
+radius = 64.0
+height = 160.0
+
+[node name="Armor" instance=ExtResource("1_f8wvl")]
+
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource("CapsuleShape2D_t7kgx")
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("2_21tin")
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource("CapsuleShape2D_f8wvl")

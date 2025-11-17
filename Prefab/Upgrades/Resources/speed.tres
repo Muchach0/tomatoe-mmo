@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SpeedBoostStrategy" load_steps=3 format=3 uid="uid://btjrrnu5urako"]
+
+[ext_resource type="Script" uid="uid://ml68vemh2d58" path="res://Util/Upgrade/SpeedBoostStrategy.gd" id="1_846jd"]
+[ext_resource type="Texture2D" uid="uid://cksc370vxgcc5" path="res://Art/Sprites/test/carrot.png" id="2_fn7gi"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_846jd")
+speed_multiplier = 1.5
+texture = ExtResource("2_fn7gi")
+upgrade_text = "Speed"
+metadata/_custom_type_script = "uid://ml68vemh2d58"

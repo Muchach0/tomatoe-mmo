@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyt55ogvloo6u"]
+
+[ext_resource type="Script" uid="uid://dg4c6gkfuchil" path="res://Prefab/Bullet/bullet.gd" id="1_58p37"]
+[ext_resource type="Texture2D" uid="uid://bdvaqre0d5u28" path="res://Art/Sprites/test/fire_trail.png" id="2_30eju"]
+
+[node name="BulletPlayer" type="CharacterBody2D"]
+script = ExtResource("1_58p37")
+metadata/_custom_type_script = "uid://dg4c6gkfuchil"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_30eju")

@@ -1,0 +1,123 @@
+[gd_scene load_steps=13 format=3 uid="uid://btfwk1j12fmv3"]
+
+[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/game_logic.gd" id="1_y0q1k"]
+[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_ctdla"]
+[ext_resource type="Texture2D" uid="uid://e7ev8a2nskv2" path="res://Art/Sprites/background_space_wide_screen.png" id="5_bsmra"]
+[ext_resource type="Material" uid="uid://5slcagwnqqij" path="res://Art/Shaders/Glowing.tres" id="6_uloy4"]
+[ext_resource type="Texture2D" uid="uid://ce3i324ntjxh3" path="res://Art/Sprites/star_2.png" id="7_8biwy"]
+[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="8_hct1m"]
+[ext_resource type="PackedScene" uid="uid://r4el6umoyi8v" path="res://Prefab/BulletShower/bullets.tscn" id="14_4xkw2"]
+[ext_resource type="Texture2D" uid="uid://2vbmwrfbswhb" path="res://Art/Sprites/bonus.png" id="15_v67t6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w2sp8"]
+radius = 40.9132
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3wjhk"]
+size = Vector2(1598, 159)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_plucx"]
+radius = 13.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_r6qr8"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Shower" type="Node2D"]
+script = ExtResource("1_y0q1k")
+
+[node name="UI" parent="." instance=ExtResource("2_ctdla")]
+
+[node name="Space_background" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(799.5, 450.5)
+texture = ExtResource("5_bsmra")
+
+[node name="Star" type="Area2D" parent="." groups=["star"]]
+position = Vector2(796, 109)
+scale = Vector2(0.855469, 0.855469)
+
+[node name="StarSprite" type="Sprite2D" parent="Star"]
+material = ExtResource("6_uloy4")
+scale = Vector2(0.13, 0.13)
+texture = ExtResource("7_8biwy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Star"]
+shape = SubResource("CircleShape2D_w2sp8")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
+spawn_path = NodePath("..")
+
+[node name="Bullets" parent="." instance=ExtResource("14_4xkw2")]
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="1" type="Node2D" parent="SpawnPoints"]
+position = Vector2(848, 780)
+
+[node name="2" type="Node2D" parent="SpawnPoints"]
+position = Vector2(973, 779)
+
+[node name="3" type="Node2D" parent="SpawnPoints"]
+position = Vector2(553, 778)
+
+[node name="4" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1178, 770)
+
+[node name="5" type="Node2D" parent="SpawnPoints"]
+position = Vector2(670, 781)
+
+[node name="6" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1088, 772)
+
+[node name="7" type="Node2D" parent="SpawnPoints"]
+position = Vector2(655, 871)
+
+[node name="8" type="Node2D" parent="SpawnPoints"]
+position = Vector2(945, 875)
+
+[node name="9" type="Node2D" parent="SpawnPoints"]
+position = Vector2(568, 866)
+
+[node name="10" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1181, 870)
+
+[node name="11" type="Node2D" parent="SpawnPoints"]
+position = Vector2(770, 874)
+
+[node name="12" type="Node2D" parent="SpawnPoints"]
+position = Vector2(1092, 881)
+
+[node name="SafeZone" type="Node2D" parent="."]
+position = Vector2(2, 680)
+
+[node name="ColorRect" type="ColorRect" parent="SafeZone"]
+offset_left = -9.0
+offset_top = 57.0
+offset_right = 1610.0
+offset_bottom = 227.0
+color = Color(0.2, 0.5, 1, 0.3)
+
+[node name="AreaSafeZone" type="Area2D" parent="SafeZone" groups=["safeZone"]]
+position = Vector2(3, -23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SafeZone/AreaSafeZone"]
+position = Vector2(795, 162.5)
+shape = SubResource("RectangleShape2D_3wjhk")
+
+[node name="Bonus" type="Area2D" parent="." groups=["bonus"]]
+position = Vector2(805, 488)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bonus"]
+shape = SubResource("CircleShape2D_plucx")
+
+[node name="BonusSprite" type="Sprite2D" parent="Bonus"]
+material = ExtResource("6_uloy4")
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("15_v67t6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Bonus"]
+replication_config = SubResource("SceneReplicationConfig_r6qr8")
+
+[node name="Manager" parent="." instance=ExtResource("8_hct1m")]

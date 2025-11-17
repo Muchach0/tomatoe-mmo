@@ -1,0 +1,217 @@
+[gd_scene load_steps=8 format=3 uid="uid://jdgl6gpb80es"]
+
+[ext_resource type="Script" uid="uid://cp1qex37r1rrc" path="res://Prefab/UI/ui.gd" id="1_gtstx"]
+[ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="2_bqg0t"]
+[ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="3_17e3r"]
+[ext_resource type="AudioStream" uid="uid://cv1200f5e67ib" path="res://Art/Sounds/explosion.wav" id="4_wheuw"]
+[ext_resource type="AudioStream" uid="uid://3i1neqbgutxm" path="res://Art/Sounds/pickupCoin.wav" id="5_fiall"]
+[ext_resource type="AudioStream" uid="uid://cejnvkaruohkw" path="res://Art/Sounds/bonusPickUp.wav" id="6_3qnsr"]
+[ext_resource type="AudioStream" uid="uid://b34dfti6a06rt" path="res://Art/Sounds/bonusUsed.wav" id="7_ty01m"]
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_gtstx")
+
+[node name="Joystick" parent="." instance=ExtResource("2_bqg0t")]
+
+[node name="GameOverScreen" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.224949, 0.224949)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="GameOverScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="GameOverScreen/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -324.5
+offset_top = -313.0
+offset_right = 324.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "ROUND OVER"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="GameOverScreen"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GameOverScreen/Control2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -494.0
+offset_right = 494.0
+offset_bottom = 321.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Restart"
+
+[node name="WaveLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -352.0
+offset_top = -7.0
+offset_right = 353.0
+offset_bottom = 80.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = "Wave: 0 / 0 - Enemy killed: 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveCompletedLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.5
+offset_top = -43.5
+offset_right = 352.5
+offset_bottom = 43.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = "Wave %d completed!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="."]
+offset_left = 1.0
+offset_top = -8.0
+offset_right = 189.0
+offset_bottom = 79.0
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = " Level: 0"
+vertical_alignment = 1
+
+[node name="IsServerLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.0
+offset_top = -148.0
+offset_right = 353.0
+offset_bottom = -61.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = "SERVER UI"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NetworkLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -705.0
+offset_top = -7.0
+offset_bottom = 80.0
+grow_horizontal = 0
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = "Player connected: 0 "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="IsAGameRunningLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.5
+offset_top = -43.5
+offset_right = 352.5
+offset_bottom = 43.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = "A round is running, wait for the end to get started again ..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BonusLabel" type="Label" parent="."]
+visible = false
+offset_left = 28.0
+offset_top = -2.0
+offset_right = 390.89847
+offset_bottom = 85.0
+rotation = -0.00440829
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+text = " Shield: 0 "
+vertical_alignment = 1
+
+[node name="AiButtonTest" type="Button" parent="."]
+visible = false
+offset_left = 28.0
+offset_top = 105.0
+offset_right = 176.0
+offset_bottom = 170.0
+text = "TEST AI BUTTON"
+
+[node name="AiResponseLabel" type="Label" parent="."]
+visible = false
+offset_left = 10.0
+offset_top = 181.0
+offset_right = 162.0
+offset_bottom = 204.0
+text = "AI RESPONSE LABEL"
+
+[node name="AiRequestFailedLabel" type="Label" parent="."]
+visible = false
+offset_left = -15.0
+offset_top = 216.0
+offset_right = 170.0
+offset_bottom = 239.0
+text = "AI Request Failed LABEL"
+
+[node name="AudioManager" type="Node" parent="."]
+
+[node name="ExplosionAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("4_wheuw")
+
+[node name="WinAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("5_fiall")
+
+[node name="BonusPickUpAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("6_3qnsr")
+
+[node name="BonusUsedAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("7_ty01m")
+
+[connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]
