@@ -47,7 +47,7 @@ signal add_upgrade_to_player # Signal to notify the game logic that a player sho
 # Enemy handling
 signal one_enemy_die # Signal to notify the game logic that an enemy has died
 signal update_score # Signal to notify the game logic that the score should be updated
-
+signal spawn_enemy # Signal to notify the game logic that an enemy should be spawned
 
 # Level selection related signals
 signal level_selected # Signal to notify the game logic that a level has been selected

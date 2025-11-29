@@ -1,13 +1,18 @@
-[gd_scene load_steps=7 format=4 uid="uid://bbibw8vynhs5h"]
+[gd_scene load_steps=10 format=4 uid="uid://bbibw8vynhs5h"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_foedh"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_iyu8m"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="3_klr5u"]
 [ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="4_3asne"]
 [ext_resource type="TileSet" uid="uid://j1200pbdngie" path="res://Art/Tileset/tileset_level_mmo_forest.tres" id="5_rexd0"]
+[ext_resource type="PackedScene" uid="uid://u0e5l8v2mytq" path="res://Prefab/Spawner/Mob_Spawner.tscn" id="6_foedh"]
+[ext_resource type="Resource" uid="uid://bqy38kmcvt3tk" path="res://Resources/Spawner/spawner_orc.tres" id="8_klr5u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3asne"]
+radius = 420.0
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -95,7 +100,7 @@ shape = SubResource("RectangleShape2D_ll5u2")
 
 [node name="AreaZoneB" type="Area2D" parent="." groups=["zoneB"]]
 visible = false
-position = Vector2(1320, 3)
+position = Vector2(1403, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaZoneB"]
 position = Vector2(300, 1189)
@@ -108,3 +113,8 @@ position = Vector2(1264, 443)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaZoneC"]
 position = Vector2(1236.8125, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
+
+[node name="MobSpawnerOrc" parent="." instance=ExtResource("6_foedh")]
+position = Vector2(1538, 533)
+enemy_spawner_resource = ExtResource("8_klr5u")
+shape = SubResource("CircleShape2D_3asne")

@@ -190,7 +190,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rj2wl"]
-radius = 1434.0684
+radius = 600.2133
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rj2wl"]
 properties/0/path = NodePath(".:position")
@@ -295,7 +295,6 @@ scale = Vector2(1, 1)
 [node name="AggroArea2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
-visible = false
 shape = SubResource("CircleShape2D_rj2wl")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

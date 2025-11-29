@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="tomatoe-mmo"
-run/main_scene="uid://c1487i5d7y1yh"
+run/main_scene="uid://bbibw8vynhs5h"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://bxjx6hdsa7flh"
 
@@ -30,8 +30,9 @@ window/stretch/mode="viewport"
 folder_colors={
 "res://Art/": "yellow",
 "res://Prefab/": "pink",
+"res://Resources/": "green",
 "res://Scenes/": "blue",
-"res://Util/": "green"
+"res://Util/": "purple"
 }
 
 [global_group]

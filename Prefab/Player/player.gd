@@ -436,6 +436,9 @@ func zone_exiting(zone_name: String) -> void:
 func on_refresh_visibility(players_dict: Dictionary) -> void:
     # if not is_multiplayer_authority():
     #     return
+
+    if is_multiplayer_authority(): # local player is always visible on the server
+        sync.set_visibility_for(1, true)
     
     print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - Players: ", players_dict)
 
@@ -449,7 +452,7 @@ func on_refresh_visibility(players_dict: Dictionary) -> void:
         if has_a_common_zone_with_player(players_dict, remote_peer_id, peer_id): # players in the same zone
             print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to true")
             visible = true
-            if is_multiplayer_authority():
+            if is_multiplayer_authority(): 
                 sync.set_visibility_for(remote_peer_id, true)
         else: # players not in the same zone
             print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to false")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://bqy38kmcvt3tk"]
+
+[ext_resource type="PackedScene" uid="uid://mdb5hoqaf1rq" path="res://Prefab/Enemies/Orc/Orc.tscn" id="1_0ic8j"]
+[ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="3_gbvp1"]
+
+[resource]
+script = ExtResource("3_gbvp1")
+name = "MobSpawnerOrc"
+max_enemies_to_spawn = 5
+spawn_time = 5.0
+enemy_scene_array_of_dictionnary = Array[Dictionary]([{
+"name": "Orc",
+"scene": ExtResource("1_0ic8j"),
+"spawn_rate": 1.0
+}])
+metadata/_custom_type_script = "uid://bad6ch318s8w6"

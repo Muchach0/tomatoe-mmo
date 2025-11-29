@@ -20,6 +20,8 @@ func _ready() -> void:
     # EventBus.connect("one_enemy_die", _on_enemy_died)
     # EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
     
+
+    EventBus.spawn_enemy.connect(spawn_enemies)
     # Setup enemy spawner
     if enemy_spawner:
         enemy_spawner.spawn_function = _spawn_enemy_callback
@@ -34,7 +36,7 @@ var enemy_scenes = {
     "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
     "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
     "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
-    "Dino_green": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
+    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
     "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
     "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
 }
@@ -123,7 +125,8 @@ func _spawn_enemy_callback(data: Dictionary) -> Node:
     
     var enemy = enemy_scene.instantiate()
     enemy.global_position = data.position
-    enemy.add_to_group("wave_enemies")  # Add to group for easy tracking
+    print("game_logic.gd - _spawn_enemy_callback() - Adding enemy to group: ", data)
+    enemy.add_to_group(data.spawner_name)  # Add to group for easy tracking
     
     # # Connect enemy death signal if available
     # if enemy.has_signal("enemy_died"):
@@ -165,5 +168,34 @@ func update_players_dict_on_server(zone_name: String, is_entering: bool) -> void
 func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict: Dictionary) -> void:
     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - broadcast_players_dict_then_send_refresh_visibility - players dict: ", players_dict)
     EventBus.refresh_visibility.emit(players_dict)
+
+#endregion
+
+
+
+
+#region SPAWN ENEMY SECTION =================================================================
+
+func spawn_enemies(spawner_name: String, enemy_name: String, spawn_position: Vector2) -> void:
+    if not multiplayer.is_server(): # Only the server can spawn enemies
+        return
+    print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", position, " from spawner: ", spawner_name)
+
+    var enemy = null
+    
+    if enemy_spawner:
+        # Use MultiplayerSpawner if available
+        var spawn_data = {
+            "enemy_type": enemy_name,
+            "position": spawn_position,
+            "spawner_name": spawner_name
+        }
+        enemy = enemy_spawner.spawn(spawn_data)
+    
+    if enemy:
+        print("game_logic.gd - spawn_enemies() - Spawned %s at %s" % [enemy_name, spawn_position])
+    else:
+        print("game_logic.gd - spawn_enemies() - Failed to spawn %s" % enemy_name)
+
 
 #endregion

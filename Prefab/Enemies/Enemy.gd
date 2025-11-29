@@ -168,7 +168,7 @@ func die(_from_player_id: int) -> void:
     # hurtbox_collision_shape.set_deferred("disabled", true) # Disabling the hurtbox when the ennemy is dying
 
     emit_signal("enemy_died") # Not used right now - signal handling is done via the EventBus signal below (one_enemy_die)
-    EventBus.emit_signal("one_enemy_die")
+    EventBus.emit_signal("one_enemy_die", get_groups()) # Sending as well the list of groups for spawner filtering
     EventBus.emit_signal("update_score", score_given_by_this_enemy, _from_player_id)
     # update_score()
     animation_player.stop(true)
