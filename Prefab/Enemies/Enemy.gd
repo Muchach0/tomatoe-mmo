@@ -54,6 +54,10 @@ var is_attack_on_cooldown = false
 @onready var init_scale: Vector2 = $Sprite2D.scale
 # puppet var puppet_position = Vector2()
 
+# Loot part
+@export var loot_table: LootTable
+var item_drop: PackedScene = preload("res://Util/Items/item_drop.tscn")
+
 signal enemy_died
 signal player_in_melee_range
 
@@ -175,6 +179,10 @@ func die(_from_player_id: int) -> void:
     animation_player.play("die")
     # hurt_box.disabled = true
     # $Sprite.visible = false
+
+    # Loot part
+    drop_loot()
+
     timer.start()
 
 # Function to delete the enemy - used when the enemy is killed by the player
@@ -292,3 +300,22 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
     if not animation_player.has_animation(new_animation):
         return
     animation_player.play(new_animation)
+
+
+
+#region Loot part
+################ Loot part #################
+func drop_loot() -> void:
+    # Do nothing if the loot table is null or we are not in server mode
+    if loot_table == null or not multiplayer or not multiplayer.is_server():
+        return
+    print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Dropping loot")
+    for stack: ItemStack in loot_table.roll_loot():
+        # var spawned_item : ItemDrop = item_drop.instantiate()
+        print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
+        EventBus.spawn_item_drop.emit(stack, global_position)
+        # spawned_item.stack = stack
+        # spawned_item.global_position = global_position
+        # get_tree().current_scene.add_child.call_deferred(spawned_item)
+
+#endregion Loot part

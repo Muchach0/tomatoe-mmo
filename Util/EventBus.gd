@@ -57,3 +57,7 @@ signal level_started # Signal to notify the game logic that the level should be 
 # Signal related to zones (for visibility handling)
 signal zone_touched # Signal to notify the game logic that a zone has been touched
 signal refresh_visibility # Signal to notify the game logic that the visibility should be refreshed
+
+
+# Signal related to items
+signal spawn_item_drop # Signal to notify the game logic that an item drop should be spawned

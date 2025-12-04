@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://lhlqkxbw3w5h"]
+
+[ext_resource type="Script" uid="uid://bgymhixcxv6ed" path="res://Util/Items/item.gd" id="1_xi7ub"]
+[ext_resource type="Texture2D" uid="uid://bi4wal47s7jw6" path="res://Art/Sprites/Dungeon Gathering Free Version/Potion 1.png" id="2_re2tn"]
+
+[resource]
+script = ExtResource("1_xi7ub")
+item_name = "Life Potion"
+sprite = ExtResource("2_re2tn")
+metadata/_custom_type_script = "uid://bgymhixcxv6ed"

@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 # This demo is an example of controling a high number of 2D objects with logic
 # and collision without using nodes in the scene. This technique is a lot more
@@ -49,6 +50,8 @@ var bonus_number: int = 0 # The number of bonuses picked up by the player
 @onready var health_bar: ProgressBar = $HealthBar
 
 @onready var current_zone = "zone0" # Starting zone
+
+var inventory: Inventory = Inventory.new()
 
 func _ready() -> void:
     # Duplicate the shader material to make individual modifications

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://cugmvol4oi7vw"]
+
+[ext_resource type="Script" uid="uid://bgymhixcxv6ed" path="res://Util/Items/item.gd" id="1_uogch"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_mwcfm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ushc"]
+atlas = ExtResource("2_mwcfm")
+region = Rect2(528, 272, 16, 16)
+
+[resource]
+script = ExtResource("1_uogch")
+item_name = "Fish"
+sprite = SubResource("AtlasTexture_0ushc")
+metadata/_custom_type_script = "uid://bgymhixcxv6ed"

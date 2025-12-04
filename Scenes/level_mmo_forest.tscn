@@ -12,7 +12,7 @@
 size = Vector2(1474.375, 2168)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3asne"]
-radius = 420.0
+radius = 570.71
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -67,6 +67,10 @@ spawn_path = NodePath("..")
 _spawnable_scenes = PackedStringArray("uid://cpndxvp5ubsl8", "uid://b0anaegxvegyc", "uid://dbowps5qkmhfv", "uid://d0sopd70yisiq", "uid://bpqw8x1m3r7ck", "uid://3iti8rxlsrc2", "uid://mdb5hoqaf1rq")
 spawn_path = NodePath("..")
 
+[node name="ItemDropSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://c2y8g8aps26he")
+spawn_path = NodePath("..")
+
 [node name="Manager" parent="." instance=ExtResource("4_3asne")]
 
 [node name="TileMapLayer_Background" type="TileMapLayer" parent="."]
@@ -115,6 +119,6 @@ position = Vector2(1236.8125, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
 
 [node name="MobSpawnerOrc" parent="." instance=ExtResource("6_foedh")]
-position = Vector2(1538, 533)
+position = Vector2(1704, 654)
 enemy_spawner_resource = ExtResource("8_klr5u")
 shape = SubResource("CircleShape2D_3asne")

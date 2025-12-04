@@ -5,6 +5,20 @@ var players: Dictionary = {} # This will hold player data for synchronization
 
 # Enemy spawner reference (optional - will fallback to direct instantiation if not found)
 @onready var enemy_spawner: MultiplayerSpawner = get_node_or_null("EnemySpawner")
+@onready var item_drop_spawner: MultiplayerSpawner = get_node_or_null("ItemDropSpawner")
+
+# Enemy scene paths
+var enemy_scenes = {
+    "Dummy": "res://Prefab/Enemies/Dummy.tscn",
+    "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
+    "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
+    "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
+    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
+    "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
+    "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
+}
+
+var item_drop_scene = preload("res://Util/Items/item_drop.tscn")
 
 
 func _ready() -> void:
@@ -26,20 +40,17 @@ func _ready() -> void:
     if enemy_spawner:
         enemy_spawner.spawn_function = _spawn_enemy_callback
 
+    # Setup item drop spawner
+    if item_drop_spawner:
+        item_drop_spawner.spawn_function = _spawn_item_drop_callback
+
     if multiplayer.is_server():
         EventBus.emit_signal("is_server_label_visible", true)
     # EventBus.connect("player_respawned", self, "_on_player_respawned")
 
-# Enemy scene paths
-var enemy_scenes = {
-    "Dummy": "res://Prefab/Enemies/Dummy.tscn",
-    "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
-    "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
-    "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
-    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
-    "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
-    "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
-}
+    EventBus.spawn_item_drop.connect(on_spawn_item_drop)
+
+
 
 
 func add_player(player_id, player_info) -> void:
@@ -197,5 +208,48 @@ func spawn_enemies(spawner_name: String, enemy_name: String, spawn_position: Vec
     else:
         print("game_logic.gd - spawn_enemies() - Failed to spawn %s" % enemy_name)
 
+
+#endregion
+
+#region SPAWN ITEM DROP SECTION =================================================================
+
+# Function connected to the EventBus.spawn_item_drop signal
+func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2) -> void:
+    if not multiplayer.is_server() or not item_drop_spawner: # Only the server can spawn item drops
+        return
+    print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Spawning item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
+
+    var item_drop_node = null
+    var spawn_data = {
+        "item_name": item_stack.item.item_name,
+        "item_sprite_path": item_stack.item.sprite.get_path(),
+        "count": item_stack.count,
+        "spawn_position": spawn_position
+    }
+    item_drop_spawner.spawn.call_deferred(spawn_data)
+    # if item_drop_node:
+    #     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Spawned item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
+    # else:
+    #     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Failed to spawn item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
+
+func _spawn_item_drop_callback(data: Dictionary) -> Node:
+    var item_name = data.get("item_name", "")
+    var item_sprite_path = data.get("item_sprite_path", null)
+    var count = data.get("count", 0)
+    var spawn_position = data.get("spawn_position", Vector2.ZERO)
+    
+    var item_sprite = load(item_sprite_path)
+    if not item_sprite:
+        print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - _spawn_item_drop_callback() - Could not load item sprite: ", item_sprite_path)
+        return null
+    
+    var item = Item.new()
+    item.item_name = item_name
+    item.sprite = item_sprite
+    var item_stack = ItemStack.new(item, count)
+    var item_drop = item_drop_scene.instantiate()
+    item_drop.stack = item_stack
+    item_drop.global_position = spawn_position
+    return item_drop
 
 #endregion

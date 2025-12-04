@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://mdb5hoqaf1rq"]
+[gd_scene load_steps=27 format=3 uid="uid://mdb5hoqaf1rq"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_8yxsx"]
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_7bm7i"]
 [ext_resource type="Texture2D" uid="uid://ctgnrlqk84ep2" path="res://Art/Sprites/enemies/orc.png" id="3_ex05m"]
+[ext_resource type="Resource" uid="uid://bb8ijwgyrcjoc" path="res://Resources/Items/LootTables/orc_loot.tres" id="3_u5vuc"]
 [ext_resource type="Script" uid="uid://b73sir6xbr0gt" path="res://Util/Components/hurtbox.gd" id="4_r1o0a"]
 [ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="5_162n3"]
 [ext_resource type="Script" uid="uid://c78lqfuowj4ou" path="res://Util/States/State_machine.gd" id="6_o1udm"]
@@ -209,6 +210,7 @@ script = ExtResource("2_7bm7i")
 MAX_DEFAULT_HEALTH = 50
 should_flip_sprite = true
 attack_cooldown = 1.5
+loot_table = ExtResource("3_u5vuc")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

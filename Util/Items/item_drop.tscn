@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2y8g8aps26he"]
+
+[ext_resource type="Script" uid="uid://3e0vey8itnh2" path="res://Util/Items/item_drop.gd" id="1_n1uae"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_1ttym"]
+[ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="3_ln63r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jf7ca"]
+atlas = ExtResource("2_1ttym")
+region = Rect2(528, 320, 16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ilwbl"]
+radius = 16.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_n1uae"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="ItemDrop" type="Node2D"]
+scale = Vector2(2, 2)
+script = ExtResource("1_n1uae")
+
+[node name="ItemSprite" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_jf7ca")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ilwbl")
+
+[node name="CountLabel" type="Label" parent="."]
+offset_right = 56.0
+offset_bottom = 52.0
+scale = Vector2(0.15, 0.15)
+theme = ExtResource("3_ln63r")
+theme_override_font_sizes/font_size = 46
+text = "64"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_n1uae")
