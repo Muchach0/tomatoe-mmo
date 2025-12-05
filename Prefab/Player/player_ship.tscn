@@ -35,7 +35,6 @@ bg_color = Color(0.61960787, 0.06666667, 0.06666667, 1)
 bg_color = Color(0.1882353, 0.37254903, 0.14117648, 1)
 
 [node name="PlayerShip" type="CharacterBody2D" groups=["Player"]]
-y_sort_enabled = true
 texture_filter = 1
 material = ExtResource("1_th7s3")
 scale = Vector2(2, 2)
@@ -48,6 +47,7 @@ position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_i6bba")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 1
 texture_filter = 1
 use_parent_material = true
 texture = ExtResource("3_i6bba")
@@ -89,9 +89,9 @@ one_shot = true
 script = ExtResource("10_i6bba")
 
 [node name="Shadow" type="Sprite2D" parent="."]
-z_index = -1
-position = Vector2(0, 10)
-scale = Vector2(0.207632, 0.119048)
+y_sort_enabled = true
+position = Vector2(0.5, 8)
+scale = Vector2(0.207632, 0.10714304)
 texture = ExtResource("9_i6bba")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["player_hitbox"]]
