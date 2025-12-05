@@ -61,3 +61,6 @@ signal refresh_visibility # Signal to notify the game logic that the visibility 
 
 # Signal related to items
 signal spawn_item_drop # Signal to notify the game logic that an item drop should be spawned
+
+# Signal related to inventory
+signal attach_inventory_to_ui # Signal to notify the UI that the inventory should be attached to the player

@@ -42,8 +42,8 @@ func on_body_entered(body: Node2D) -> void:
     # TODO: Queue free send to server and sync to all clients.
 
     var player = body as Player
-    # if player.is_multiplayer_authority(): # Only the authority should add the item to the inventory
-    stack = player.inventory.add_item(stack)
+    if player.is_multiplayer_authority(): # Only the authority should add the item to the inventory
+        stack = player.inventory.add_item(stack)
         
     queue_free()
     # if stack.is_empty():

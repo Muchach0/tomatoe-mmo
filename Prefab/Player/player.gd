@@ -76,6 +76,8 @@ func _ready() -> void:
     if health_bar != null:
         health_bar.value = number_of_life
 
+    if multiplayer != null and is_multiplayer_authority():
+        EventBus.attach_inventory_to_ui.emit(inventory)
     # add_sync_visibility_filter()
 
     # EventBus.connect("player_respawned", _on_player_respawned)

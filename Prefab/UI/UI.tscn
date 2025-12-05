@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://jdgl6gpb80es"]
+[gd_scene load_steps=10 format=3 uid="uid://jdgl6gpb80es"]
 
 [ext_resource type="Script" uid="uid://cp1qex37r1rrc" path="res://Prefab/UI/ui.gd" id="1_gtstx"]
 [ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="2_bqg0t"]
@@ -7,6 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://3i1neqbgutxm" path="res://Art/Sounds/pickupCoin.wav" id="5_fiall"]
 [ext_resource type="AudioStream" uid="uid://cejnvkaruohkw" path="res://Art/Sounds/bonusPickUp.wav" id="6_3qnsr"]
 [ext_resource type="AudioStream" uid="uid://b34dfti6a06rt" path="res://Art/Sounds/bonusUsed.wav" id="7_ty01m"]
+[ext_resource type="Script" uid="uid://dncevmkgy25gn" path="res://Prefab/UI/Inventory/inventory_display.gd" id="8_fiall"]
+[ext_resource type="PackedScene" uid="uid://d0hb815m3rp0f" path="res://Prefab/UI/Inventory/ItemSlot.tscn" id="9_3qnsr"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_gtstx")
@@ -69,6 +71,7 @@ theme_override_font_sizes/font_size = 256
 text = "Restart"
 
 [node name="WaveLabel" type="Label" parent="."]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -213,5 +216,84 @@ stream = ExtResource("6_3qnsr")
 
 [node name="BonusUsedAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
 stream = ExtResource("7_ty01m")
+
+[node name="ControlInventory" type="Control" parent="."]
+z_index = -7
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Control" type="Control" parent="ControlInventory"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InventoryDisplay" type="Control" parent="ControlInventory/Control" node_paths=PackedStringArray("slot_parent")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_fiall")
+slot_parent = NodePath("HBoxContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlInventory/Control/InventoryDisplay"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -254.0
+offset_top = -30.0
+offset_right = 254.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ItemSlot" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot2" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot3" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot4" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot5" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot6" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot7" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot8" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]

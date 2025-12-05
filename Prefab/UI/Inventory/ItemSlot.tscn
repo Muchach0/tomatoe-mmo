@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://d0hb815m3rp0f"]
+
+[ext_resource type="Script" uid="uid://cw1jgr7oc2u5k" path="res://Prefab/UI/Inventory/item_slot.gd" id="1_bj3hp"]
+[ext_resource type="Texture2D" uid="uid://ump855yruull" path="res://Art/Sprites/Kenney/ui_packed.png" id="1_rt1qc"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="3_r5dnw"]
+[ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="4_cp4q7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5dnw"]
+atlas = ExtResource("1_rt1qc")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bj3hp"]
+bg_color = Color(0.39215687, 0.4627451, 0.52156866, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cp4q7"]
+atlas = ExtResource("3_r5dnw")
+region = Rect2(528, 320, 16, 16)
+
+[node name="ItemSlot" type="TextureButton"]
+custom_minimum_size = Vector2(60, 60)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = SubResource("AtlasTexture_r5dnw")
+stretch_mode = 0
+script = ExtResource("1_bj3hp")
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.58000004)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bj3hp")
+
+[node name="ItemSprite" type="Sprite2D" parent="."]
+position = Vector2(30, 30)
+scale = Vector2(3, 3)
+texture = SubResource("AtlasTexture_cp4q7")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 76.0
+offset_bottom = 62.0
+scale = Vector2(0.281, 0.281)
+theme = ExtResource("4_cp4q7")
+theme_override_font_sizes/font_size = 48
+text = "64"

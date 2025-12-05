@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://1vs1pmnvy7sx"]
+
+[ext_resource type="PackedScene" uid="uid://3iti8rxlsrc2" path="res://Prefab/Enemies/Dino/Dino_Green.tscn" id="2_8am12"]
+[ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="3_36hvu"]
+
+[resource]
+script = ExtResource("3_36hvu")
+name = "DinoSpawner"
+enemy_scene_array_of_dictionnary = Array[Dictionary]([{
+"name": "Dino",
+"scene": ExtResource("2_8am12"),
+"spawn_rate": 1.0
+}])
+metadata/_custom_type_script = "uid://bad6ch318s8w6"
