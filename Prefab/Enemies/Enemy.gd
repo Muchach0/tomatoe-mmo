@@ -60,6 +60,7 @@ var item_drop: PackedScene = preload("res://Util/Items/item_drop.tscn")
 
 signal enemy_died
 signal player_in_melee_range
+signal take_damage_signal # Signal to notify the enemy that it has taken damage.
 
 func _ready() -> void:
     if timer != null:
@@ -157,6 +158,7 @@ func take_damage(damage: int, from_player_id: int) -> void:
         return
     if multiplayer!= null and multiplayer.is_server():
         print_debug("Server is seding sync_damage to all peers:", damage, from_player_id, health)
+        take_damage_signal.emit(from_player_id) # Sending the signal to the enemy to take damage.
         sync_damage.rpc(damage, from_player_id, health)
     # elif not EventBus.is_in_network_mode(): # If we are not in network mode, we just take the damage locally
     #     sync_damage(damage, from_player_id, health)

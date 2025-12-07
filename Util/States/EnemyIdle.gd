@@ -23,7 +23,11 @@ func _on_Area2D_body_entered(body):
         # Non-server clients do not decide transitions; they wait for server RPC
         pass
 
-
+# When taking damage, we trasition to the EnemyFollowing state, and the enemy target the enemy that attacked it.
+func on_take_damage(from_player_id: int):
+    if multiplayer != null and multiplayer.is_server():
+        print("EnemyIdle.gd - on_take_damage - Enemy has taken damage")
+        set_target_peer.rpc(from_player_id)
 # func _on_Area2D_area_entered(area):
 #     if not area.is_in_group("Player"):
 #         return
@@ -59,6 +63,10 @@ func Enter():
         if enemy.get_node(AGGRO_AREA_NAME).is_connected("body_entered", _on_Area2D_body_entered) == false:
             print("Connecting Connecting the enemy aggro area to the function _on_Area2D_body_entered")
             enemy.get_node(AGGRO_AREA_NAME).connect("body_entered", _on_Area2D_body_entered)
+
+
+    if not enemy.take_damage_signal.is_connected(on_take_damage):
+        enemy.take_damage_signal.connect(on_take_damage)
 
     if enemy.get_node("AnimationPlayer").has_animation("idle"):
         enemy.get_node("AnimationPlayer").play("idle")
