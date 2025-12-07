@@ -92,8 +92,3 @@ func _handle_hit(collider: Node) -> void:
 func destroy_bullet():
     """Destroy bullet across all clients"""
     queue_free()
-
-# Called when bullet hits screen edge (from Area2D signal)
-func _on_screen_exited():
-    if multiplayer.is_server():
-        destroy_bullet()
