@@ -45,12 +45,20 @@ func on_body_entered(body: Node2D) -> void:
     if player.is_multiplayer_authority(): # Only the authority should add the item to the inventory
         stack = player.inventory.add_item(stack)
         
-    queue_free()
-    # if stack.is_empty():
-    #     queue_free()
-    # else:
-    #     update_display()
+    # queue_free()
+    if stack.is_empty():
+        destroy_item_drop()
+    else:
+        update_display()
 
 
 func _physics_process(delta: float) -> void:
     global_position += velocity * delta
+
+
+func destroy_item_drop():
+    if multiplayer.is_server():
+        queue_free()
+    else:
+        # Hide the item drop on all clients
+        visible = false
