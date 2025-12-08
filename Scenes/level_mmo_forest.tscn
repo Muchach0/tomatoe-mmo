@@ -15,7 +15,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_3asne"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
 resource_local_to_scene = true
 radius = 570.71
 
@@ -133,7 +133,7 @@ shape = SubResource("RectangleShape2D_ll5u2")
 [node name="OrcMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
 position = Vector2(2748, 741)
 enemy_spawner_resource = ExtResource("8_klr5u")
-shape = SubResource("CircleShape2D_3asne")
+shape = SubResource("CircleShape2D_sq5bs")
 
 [node name="DinoMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
 position = Vector2(1291, 464)

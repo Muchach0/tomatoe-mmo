@@ -27,8 +27,19 @@ extends CanvasLayer
 # Quest related labels
 @onready var QuestVBox: VBoxContainer = $ControlQuests/Control/VBoxContainer
 
+# Quest Tree
+@onready var tree: Tree = $ControlQuests/Control/VBoxContainer/Tree
+
 var number_of_players: int = 0
 const THEME: Theme = preload("res://Art/Font/my_theme.tres")
+const ITEM_ICON_SIZE: int = 16
+const ITEM_GOLD_ICON: Texture2D = preload("res://Art/Sprites/icon/gold.png")
+const ITEM_EXPERIENCE_ICON: Texture2D = preload("res://Art/Sprites/icon/experience.png")
+
+# Quest tree item storage: quest_id -> {quest_item: TreeItem, progress_item: TreeItem, rewards_item: TreeItem}
+var quest_tree_items: Dictionary = {}
+var tree_root: TreeItem = null
+
 
 func _ready() -> void:
     EventBus.connect("add_player", on_player_added)
@@ -57,6 +68,13 @@ func _ready() -> void:
     EventBus.connect("quest_progress_updated", on_quest_progress_updated)
     EventBus.connect("quest_completed", on_quest_completed)
 
+    # Setup Tree view for quests
+    tree.columns = 1                 # One column
+    tree.hide_root = false           # Hide the root item
+    tree.focus_mode = Control.FOCUS_NONE # Disable focus mode to prevent keyboard navigation
+    # Create root
+    tree_root = tree.create_item()
+    tree_root.set_text(0, "Quests")
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -148,33 +166,120 @@ func on_restart_button_pressed() -> void:
 
 
 
+
+#region: Quest Tree
+
+func _create_quest_rewards_tree_items(rewards_item: TreeItem, quest_resource: QuestResource) -> void:
+    """Create reward items under the rewards container."""
+    # Clear existing reward children if any (defensive cleanup)
+    var child = rewards_item.get_first_child()
+    while child:
+        var next = child.get_next()
+        child.free()
+        child = next
+    
+    # Add gold reward
+    if quest_resource.reward_gold > 0:
+        var gold_reward = tree.create_item(rewards_item)
+        gold_reward.set_text(0, "x%d" % quest_resource.reward_gold)
+        gold_reward.set_icon(0, ITEM_GOLD_ICON)
+        gold_reward.collapsed = false
+    
+    # Add experience reward
+    if quest_resource.reward_experience > 0:
+        var exp_reward = tree.create_item(rewards_item)
+        exp_reward.set_text(0, "x%d" % quest_resource.reward_experience)
+        exp_reward.set_icon(0, ITEM_EXPERIENCE_ICON)
+        exp_reward.collapsed = false
+    
+    # Add guaranteed items
+    for item_dict in quest_resource.reward_items:
+        if item_dict.has("item") and item_dict.has("count"):
+            var item: Item = item_dict["item"]
+            var count: int = item_dict["count"]
+            if item and count > 0:
+                var item_reward = tree.create_item(rewards_item)
+                item_reward.set_text(0, "x%d" % count)
+                if item.sprite:
+                    item_reward.set_icon(0, item.sprite)
+                item_reward.collapsed = false
+    
+    # Add choice items
+    for item_dict in quest_resource.reward_choice_items:
+        if item_dict.has("item") and item_dict.has("count"):
+            var item: Item = item_dict["item"]
+            var count: int = item_dict["count"]
+            if item and count > 0:
+                var item_reward = tree.create_item(rewards_item)
+                item_reward.set_text(0, "x%d (Choose)" % count)
+                if item.sprite:
+                    item_reward.set_icon(0, item.sprite)
+                item_reward.collapsed = false
+
 # Quest related signals
 func on_quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) -> void:
     print("ui.gd - on_quest_activated() - Quest activated: %s" % quest_name)
-    # Create a Label for the quest and add it to the QuestVBox
-    var quest_label = Label.new()
-    quest_label.name = quest_name
-    quest_label.theme = THEME
-    quest_label.add_theme_font_size_override("font_size", 16) # Override the font size for this specific label
-    var progress_count = 0
-    var target_count = quest_resource.target_count
-    quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [progress_count, target_count]
-    QuestVBox.add_child(quest_label)
-
+    
+    # Ensure tree root exists
+    if not tree_root:
+        tree_root = tree.create_item()
+        tree_root.set_text(0, "Quests")
+    
+    # Create quest tree item
+    var quest_tree_item := tree.create_item(tree_root)
+    quest_tree_item.set_text(0, quest_name)
+    quest_tree_item.collapsed = false
+    
+    # Create progress item
+    var progress_item := tree.create_item(quest_tree_item)
+    progress_item.set_text(0, "%s: 0/%d" % [quest_resource.quest_description, quest_resource.target_count])
+    progress_item.collapsed = false
+    
+    # Create rewards container
+    var rewards_item := tree.create_item(quest_tree_item)
+    rewards_item.set_text(0, "Rewards")
+    rewards_item.collapsed = true
+    
+    # Create reward items
+    _create_quest_rewards_tree_items(rewards_item, quest_resource)
+    
+    # Store tree items for later updates
+    quest_tree_items[quest_id] = {
+        "quest_item": quest_tree_item,
+        "progress_item": progress_item,
+        "rewards_item": rewards_item
+    }
 
 func on_quest_progress_updated(quest_id: String, quest_name: String, quest_resource: QuestResource, current_progress: int, target_progress: int) -> void:
     print("ui.gd - on_quest_progress_updated() - Quest progress updated: %s" % quest_id)
-    var quest_label = QuestVBox.get_node_or_null(quest_name)
-    if quest_label:
-        quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [current_progress, target_progress]
-    else:
-        print("ui.gd - on_quest_progress_updated() - Quest label not found: %s" % quest_id)
+    
+    if quest_id not in quest_tree_items:
+        print("ui.gd - on_quest_progress_updated() - Quest tree items not found: %s" % quest_id)
+        return
+    
+    var quest_data = quest_tree_items[quest_id]
+    var progress_item = quest_data["progress_item"]
+    
+    if progress_item:
+        progress_item.set_text(0, "%s: %d/%d" % [quest_resource.quest_description, current_progress, target_progress])
 
 func on_quest_completed(quest_id: String, quest_name: String, quest_resource: QuestResource) -> void:
     print("ui.gd - on_quest_completed() - Quest completed: %s" % quest_name)
-    var quest_label = QuestVBox.get_node_or_null(quest_name)
-    if quest_label:
-        QuestVBox.remove_child(quest_label)
-        quest_label.queue_free()
+    
+    if quest_id not in quest_tree_items:
+        print("ui.gd - on_quest_completed() - Quest tree items not found: %s" % quest_id)
+        return
+    
+    var quest_data = quest_tree_items[quest_id]
+    var quest_item = quest_data["quest_item"]
+    
+    if quest_item:
+        # Remove the quest item from its parent (tree_root)
+        tree_root.remove_child(quest_item)
+        # Free the tree item (TreeItem uses free(), not queue_free())
+        quest_item.free()
+        quest_tree_items.erase(quest_id)
     else:
-        print("ui.gd - on_quest_completed() - Quest label not found: %s" % quest_id)
+        print("ui.gd - on_quest_completed() - Quest tree item not found: %s" % quest_id)
+
+#endregion: Quest Tree

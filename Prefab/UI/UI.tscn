@@ -320,14 +320,48 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ControlQuests/Control"]
 layout_direction = 3
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -229.0
+offset_right = 195.0
+grow_vertical = 0
 
 [node name="Label" type="Label" parent="ControlQuests/Control/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("3_17e3r")
 theme_override_font_sizes/font_size = 16
-text = "Quests"
+text = "                              Quests"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ControlQuests/Control/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("3_17e3r")
+bbcode_enabled = true
+text = "Test - 15 x [img=24]res://Art/Sprites/star_2.png[/img] world!qweqweqweqweqweqwe"
+fit_content = true
+
+[node name="ProgressBar" type="ProgressBar" parent="ControlQuests/Control/VBoxContainer"]
+visible = false
+layout_direction = 2
+layout_mode = 2
+theme = ExtResource("3_17e3r")
+max_value = 10.0
+step = 1.0
+value = 4.0
+show_percentage = false
+
+[node name="Control" type="Control" parent="ControlQuests/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Tree" type="Tree" parent="ControlQuests/Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/title_button_font_size = 10
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]

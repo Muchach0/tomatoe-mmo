@@ -100,3 +100,7 @@ Label/colors/font_outline_color = Color(0.91764706, 0.30980393, 0.21176471, 1)
 Label/constants/outline_size = 12
 Label/font_sizes/font_size = 32
 Label/fonts/font = ExtResource("1_hpgfv")
+RichTextLabel/colors/font_outline_color = Color(0.91764706, 0.30980393, 0.21176471, 1)
+RichTextLabel/constants/outline_size = 12
+RichTextLabel/font_sizes/font_size = 32
+RichTextLabel/fonts/font = ExtResource("1_hpgfv")

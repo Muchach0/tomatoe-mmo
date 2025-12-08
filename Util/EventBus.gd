@@ -70,3 +70,4 @@ signal attach_inventory_to_ui # Signal to notify the UI that the inventory shoul
 signal quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) # Signal to notify quest activation
 signal quest_progress_updated(quest_id: String, current_progress: int, target_progress: int) # Signal to notify quest progress updates
 signal quest_completed(quest_id: String, quest_resource: QuestResource) # Signal to notify quest completion
+signal quest_reward_choice_available(player: Player, quest_resource: QuestResource, choice_items: Array[ItemStack]) # Signal to notify that a quest reward choice is available

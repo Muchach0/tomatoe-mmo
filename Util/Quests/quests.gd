@@ -288,6 +288,11 @@ func _complete_quest(quest_id: String, quest_data: QuestData) -> void:
     
     print("QuestManager - Quest completed: %s" % quest_data.resource.quest_name)
     
+    # Give rewards to all players who have this quest active
+    # Note: In a multiplayer game, you may want to track which players have which quests
+    # For now, we'll give rewards to all players in the scene
+    _give_quest_rewards_to_all_players(quest_data.resource)
+    
     # Optionally remove from active quests (or keep it for tracking)
     active_quests.erase(quest_id)
 
@@ -363,3 +368,124 @@ func _resolve_mob_spawners(spawner_paths: Array[NodePath]) -> Array[Node]:
             push_warning("QuestManager - Could not find MobSpawner at path: %s" % path)
     
     return spawners
+
+func _give_quest_rewards_to_all_players(quest_resource: QuestResource) -> void:
+    """Give quest rewards to all players in the scene who have the quest active."""
+    var scene_root = get_tree().current_scene
+    if not scene_root:
+        push_warning("QuestManager - Cannot give rewards: no current scene")
+        return
+    
+    # Find all Player nodes in the scene
+    var players = _find_all_players_in_scene(scene_root)
+    
+    for player in players:
+        if player is Player:
+            give_quest_rewards(player as Player, quest_resource)
+
+func _find_all_players_in_scene(root: Node) -> Array[Node]:
+    """Recursively find all Player nodes in the scene."""
+    var players: Array[Node] = []
+    
+    if root is Player:
+        players.append(root)
+    
+    for child in root.get_children():
+        players.append_array(_find_all_players_in_scene(child))
+    
+    return players
+
+func give_quest_rewards(player: Player, quest_resource: QuestResource) -> void:
+    """Give quest rewards to a specific player."""
+    if not player or not player.inventory:
+        push_warning("QuestManager - Cannot give rewards: invalid player or inventory")
+        return
+    
+    print("QuestManager - Giving rewards to player: %s for quest: %s" % [player.name, quest_resource.quest_name])
+    
+    # Give experience (as an item if experience item exists)
+    if quest_resource.reward_experience > 0:
+        _give_experience(player, quest_resource.reward_experience)
+    
+    # Give gold (as an item if gold item exists)
+    if quest_resource.reward_gold > 0:
+        _give_gold(player, quest_resource.reward_gold)
+    
+    # Give guaranteed items
+    for item_dict in quest_resource.reward_items:
+        if item_dict.has("item") and item_dict.has("count"):
+            var item: Item = item_dict["item"]
+            var count: int = item_dict["count"]
+            if item and count > 0:
+                _give_item(player, item, count)
+    
+    # Handle choice items - emit signal for UI to handle selection
+    if not quest_resource.reward_choice_items.is_empty():
+        # Convert Dictionary arrays to ItemStack objects for the signal
+        var choice_item_stacks: Array[ItemStack] = []
+        for item_dict in quest_resource.reward_choice_items:
+            if item_dict.has("item") and item_dict.has("count"):
+                var item: Item = item_dict["item"]
+                var count: int = item_dict["count"]
+                if item and count > 0:
+                    choice_item_stacks.append(ItemStack.new(item, count))
+        
+        if not choice_item_stacks.is_empty():
+            EventBus.quest_reward_choice_available.emit(player, quest_resource, choice_item_stacks)
+
+func _give_experience(player: Player, amount: int) -> void:
+    """Give experience to a player (as an item)."""
+    var experience_item = Items.get_item("Experience")
+    if not experience_item:
+        # Try to load directly if not in registry
+        experience_item = load("res://Resources/Items/Materials/experience.tres") as Item
+    if experience_item:
+        _give_item(player, experience_item, amount)
+    else:
+        push_warning("QuestManager - Experience item not found")
+
+func _give_gold(player: Player, amount: int) -> void:
+    """Give gold to a player (as an item)."""
+    var gold_item = Items.get_item("Gold")
+    if not gold_item:
+        # Try to load directly if not in registry
+        gold_item = load("res://Resources/Items/Materials/gold.tres") as Item
+    if gold_item:
+        _give_item(player, gold_item, amount)
+    else:
+        push_warning("QuestManager - Gold item not found")
+
+func _give_item(player: Player, item: Item, count: int) -> void:
+    """Give an item to a player's inventory."""
+    if not item or count <= 0:
+        return
+    
+    var stack = ItemStack.new(item, count)
+    _give_item_stack(player, stack)
+
+func _give_item_stack(player: Player, item_stack: ItemStack) -> void:
+    """Give an ItemStack to a player's inventory."""
+    if not item_stack or item_stack.is_empty() or item_stack.count <= 0:
+        return
+    
+    var remaining = player.inventory.add_item(item_stack)
+    
+    if not remaining.is_empty():
+        print("QuestManager - Warning: Could not add all items to inventory. Remaining: %d" % remaining.count)
+    
+    print("QuestManager - Gave %d x %s to player %s" % [item_stack.count, item_stack.item.item_name, player.name])
+
+func give_quest_reward_choice(player: Player, quest_resource: QuestResource, chosen_item_stack: ItemStack) -> void:
+    """Give a chosen ItemStack from quest reward choices to a player."""
+    if not player or not player.inventory:
+        push_warning("QuestManager - Cannot give reward choice: invalid player or inventory")
+        return
+    
+    # Verify the chosen item stack is in the choice list
+    if not quest_resource.reward_choice_items.has(chosen_item_stack):
+        push_warning("QuestManager - Chosen item stack is not in the reward choice list")
+        return
+    
+    # Give the chosen item stack
+    _give_item_stack(player, chosen_item_stack)
+    print("QuestManager - Player %s chose reward item: %s (x%d)" % [player.name, chosen_item_stack.item.item_name, chosen_item_stack.count])
