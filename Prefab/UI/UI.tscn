@@ -326,6 +326,8 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="ControlQuests/Control/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 16
 text = "Quests"
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]

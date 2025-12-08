@@ -28,6 +28,7 @@ extends CanvasLayer
 @onready var QuestVBox: VBoxContainer = $ControlQuests/Control/VBoxContainer
 
 var number_of_players: int = 0
+const THEME: Theme = preload("res://Art/Font/my_theme.tres")
 
 func _ready() -> void:
     EventBus.connect("add_player", on_player_added)
@@ -153,6 +154,8 @@ func on_quest_activated(quest_id: String, quest_name: String, quest_resource: Qu
     # Create a Label for the quest and add it to the QuestVBox
     var quest_label = Label.new()
     quest_label.name = quest_name
+    quest_label.theme = THEME
+    quest_label.add_theme_font_size_override("font_size", 16) # Override the font size for this specific label
     var progress_count = 0
     var target_count = quest_resource.target_count
     quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [progress_count, target_count]
