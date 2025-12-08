@@ -54,6 +54,7 @@ func _ready() -> void:
     
     EventBus.connect("quest_activated", on_quest_activated)
     EventBus.connect("quest_progress_updated", on_quest_progress_updated)
+    EventBus.connect("quest_completed", on_quest_completed)
 
 
 
@@ -165,3 +166,12 @@ func on_quest_progress_updated(quest_id: String, quest_name: String, quest_resou
         quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [current_progress, target_progress]
     else:
         print("ui.gd - on_quest_progress_updated() - Quest label not found: %s" % quest_id)
+
+func on_quest_completed(quest_id: String, quest_name: String, quest_resource: QuestResource) -> void:
+    print("ui.gd - on_quest_completed() - Quest completed: %s" % quest_name)
+    var quest_label = QuestVBox.get_node_or_null(quest_name)
+    if quest_label:
+        QuestVBox.remove_child(quest_label)
+        quest_label.queue_free()
+    else:
+        print("ui.gd - on_quest_completed() - Quest label not found: %s" % quest_id)

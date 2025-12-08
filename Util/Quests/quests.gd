@@ -66,10 +66,12 @@ func _ready() -> void:
 func add_quest(quest_resource: QuestResource, quest_id: String = "") -> String:
     """Add a quest to track. Returns the quest_id."""
     if quest_id.is_empty():
-        quest_id = quest_resource.quest_name + "_" + str(Time.get_unix_time_from_system())
+        quest_id = quest_resource.quest_name
     
     if quest_id in active_quests:
-        push_warning("Quest with ID '%s' already exists. Skipping." % quest_id)
+        return quest_id
+
+    if quest_id in completed_quests:
         return quest_id
     
     var quest_data = QuestData.new(quest_resource)
@@ -127,8 +129,11 @@ func activate_quest_from_spawner(quest_resource: QuestResource, spawner: Node) -
     var quest_id = _find_existing_quest_id(quest_resource)
     if quest_id.is_empty():
         # Create a new quest ID based on spawner and quest name
-        quest_id = quest_resource.quest_name + "_" + str(spawner.get_instance_id()) + "_" + str(Time.get_unix_time_from_system())
+        quest_id = quest_resource.quest_name + "_" + str(spawner.get_instance_id())
     
+    if quest_id in completed_quests:
+        return ""
+
     # Ensure the spawner is in the quest's mob_spawners list
     var spawner_path = spawner.get_path()
     if not quest_resource.mob_spawners.has(spawner_path):
@@ -266,15 +271,17 @@ func _complete_quest(quest_id: String, quest_data: QuestData) -> void:
     """Mark a quest as completed."""
     if quest_id in completed_quests:
         return  # Already completed
-    
+    print(multiplayer.get_unique_id(), "- QuestManager - _complete_quest() - Quest completed: %s" % quest_id)
+    print(multiplayer.get_unique_id(), "- QuestManager - _complete_quest() - Quest data: %s" % quest_data.resource.quest_name)
+
     completed_quests.append(quest_id)
-    quest_completed.emit(quest_id, quest_data.resource)
-    EventBus.quest_completed.emit(quest_id, quest_data.resource)
+    quest_completed.emit(quest_id, quest_data.resource.quest_name,quest_data.resource)
+    EventBus.quest_completed.emit(quest_id, quest_data.resource.quest_name,quest_data.resource)
     
     print("QuestManager - Quest completed: %s" % quest_data.resource.quest_name)
     
     # Optionally remove from active quests (or keep it for tracking)
-    # active_quests.erase(quest_id)
+    active_quests.erase(quest_id)
 
 func _resolve_mob_spawners(spawner_paths: Array[NodePath]) -> Array[Node]:
     """Resolve NodePaths to actual MobSpawner nodes."""

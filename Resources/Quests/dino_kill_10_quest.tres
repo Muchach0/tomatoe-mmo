@@ -6,3 +6,4 @@
 script = ExtResource("1_6pd4u")
 quest_name = "Slay the Dinos!"
 quest_description = "Kill 10 dinos"
+target_count = 1
