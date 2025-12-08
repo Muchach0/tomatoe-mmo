@@ -43,7 +43,14 @@ func on_body_entered(body: Node2D) -> void:
 
     var player = body as Player
     if player.is_multiplayer_authority(): # Only the authority should add the item to the inventory
+        var original_count = stack.count
+        var item_type = stack.item  # Store item reference before consumption
         stack = player.inventory.add_item(stack)
+        var picked_up_count = original_count - stack.count
+        
+        # Emit signal for quest tracking (only on server)
+        if picked_up_count > 0 and item_type:
+            EventBus.item_picked_up.emit(item_type, picked_up_count)
         
     # queue_free()
     if stack.is_empty():

@@ -7,6 +7,7 @@ extends Area2D
 
 
 @export var enemy_spawner_resource: EnemySpawnerResourceClass
+@export var quest_resources: Array[QuestResource] = []  # Optional list of quests that start when player enters this spawner's area
 @export var shape: Shape2D: # shape of the area to spawn the enemies - should be added on the worlds view node.
     set(value):
         shape = value
@@ -31,16 +32,20 @@ var array_of_time_to_spawn_enemies : Array[float] = [] # array of time to spawn 
 func _ready() -> void:
     $CollisionShape2D.shape = shape
     
-    if multiplayer == null or not multiplayer.is_server() or Engine.is_editor_hint():
-        return
-    EventBus.one_enemy_die.connect(_on_one_enemy_die)
+    # Connect Area2D signals for quest activation (works for both server and clients)
+    if not Engine.is_editor_hint():
+        body_entered.connect(_on_body_entered)
+        body_exited.connect(_on_body_exited)
     
     # Reading the data from the resource
     enemy_scene_array_of_dictionnary = enemy_spawner_resource.enemy_scene_array_of_dictionnary
     spawner_name = enemy_spawner_resource.name
     max_enemies_to_spawn = enemy_spawner_resource.max_enemies_to_spawn
     spawn_time = enemy_spawner_resource.spawn_time
-
+    
+    if multiplayer == null or not multiplayer.is_server() or Engine.is_editor_hint():
+        return
+    EventBus.one_enemy_die.connect(_on_one_enemy_die)
 
     timer.wait_time = SPAWN_TIMER_TIME
     timer.start() # Only start the timer if we are the server
@@ -99,4 +104,61 @@ func _on_one_enemy_die(enemy_group_names: Array[StringName]) -> void: # To fix -
         array_of_time_to_spawn_enemies.append(0) # Add an entry in the array with a timer set at 0
         print("mob_spawner.gd - _on_one_enemy_die() - number_current_enemies: ", number_current_enemies,  " - Spawner name: ", spawner_name)
 
+func _on_body_entered(body: Node2D) -> void:
+    """Called when a body enters the MobSpawner's Area2D."""
+    if Engine.is_editor_hint():
+        return
     
+    # Check if it's a player
+    if "Player" not in body.get_groups():
+        return
+    
+    # # Only activate quest on server
+    # if multiplayer != null and not multiplayer.is_server():
+    #     return
+    
+    # Check if the player is the authority
+    if body.get_multiplayer_authority() != multiplayer.get_unique_id():
+        return
+
+    # If this spawner has quest resources, activate them
+    if not quest_resources.is_empty():
+        var quest_manager = _get_quest_manager()
+        if quest_manager:
+            for quest_resource in quest_resources:
+                if quest_resource != null:
+                    quest_manager.activate_quest_from_spawner(quest_resource, self)
+                    print("MobSpawner - Player entered area, activating quest: %s" % quest_resource.quest_name)
+
+func _on_body_exited(body: Node2D) -> void:
+    """Called when a body exits the MobSpawner's Area2D."""
+    if Engine.is_editor_hint():
+        return
+    
+    # Check if it's a player
+    if "Player" not in body.get_groups():
+        return
+    
+    # Optional: Handle quest deactivation or cleanup when player leaves
+    # For now, we'll keep the quest active even if player leaves
+
+func _get_quest_manager() -> QuestManager:
+    """Find the QuestManager in the scene tree."""
+    var quest_manager = get_tree().get_first_node_in_group("quest_manager")
+    if quest_manager and quest_manager is QuestManager:
+        return quest_manager
+    
+    # Fallback: search for QuestManager node
+    var scene_root = get_tree().current_scene
+    if scene_root:
+        quest_manager = scene_root.find_child("QuestManager", true, false)
+        if quest_manager and quest_manager is QuestManager:
+            return quest_manager
+    
+    push_warning("MobSpawner - QuestManager not found. Make sure QuestManager is in the scene or in 'quest_manager' group.")
+    return null
+
+    
+
+func get_spawner_name() -> String:
+    return spawner_name

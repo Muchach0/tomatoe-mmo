@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://bbibw8vynhs5h"]
+[gd_scene load_steps=15 format=4 uid="uid://bbibw8vynhs5h"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_foedh"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_iyu8m"]
@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://u0e5l8v2mytq" path="res://Prefab/Spawner/Mob_Spawner.tscn" id="6_foedh"]
 [ext_resource type="Resource" uid="uid://1vs1pmnvy7sx" path="res://Resources/Spawner/dino_spawner.tres" id="8_3asne"]
 [ext_resource type="Resource" uid="uid://bqy38kmcvt3tk" path="res://Resources/Spawner/orc_spawner.tres" id="8_klr5u"]
+[ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
+[ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
@@ -17,7 +20,7 @@ resource_local_to_scene = true
 radius = 570.71
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_klr5u"]
-radius = 483.55
+radius = 284.69
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -133,6 +136,7 @@ enemy_spawner_resource = ExtResource("8_klr5u")
 shape = SubResource("CircleShape2D_3asne")
 
 [node name="DinoMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(1254, 581)
+position = Vector2(1291, 464)
 enemy_spawner_resource = ExtResource("8_3asne")
+quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
 shape = SubResource("CircleShape2D_klr5u")

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=3 format=3 uid="uid://vftb35ieovlj"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_7541j"]
+[ext_resource type="Resource" uid="uid://du7msevpqpymt" path="res://Resources/Items/Materials/skull_dino.tres" id="2_ej2va"]
+
+[resource]
+script = ExtResource("1_7541j")
+quest_name = "Skulls!"
+quest_description = "Pick up dino skulls"
+quest_type = 1
+target_item = ExtResource("2_ej2va")
+metadata/_custom_type_script = "uid://bnvfwn654nhh2"

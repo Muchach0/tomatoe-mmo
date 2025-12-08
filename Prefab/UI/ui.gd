@@ -24,6 +24,8 @@ extends CanvasLayer
 @onready var game_over_screen_label: Label = $GameOverScreen/Control/Label
 @onready var restart_button: Button = $GameOverScreen/Control2/Button
 
+# Quest related labels
+@onready var QuestVBox: VBoxContainer = $ControlQuests/Control/VBoxContainer
 
 var number_of_players: int = 0
 
@@ -49,7 +51,10 @@ func _ready() -> void:
 
     restart_button.pressed.connect(on_restart_button_pressed)
 
-    # Player hidden related signals
+    
+    EventBus.connect("quest_activated", on_quest_activated)
+    EventBus.connect("quest_progress_updated", on_quest_progress_updated)
+
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -138,3 +143,25 @@ func on_wave_cleared(wave_number: int, TOTAL_WAVES: int) -> void:
 func on_restart_button_pressed() -> void:
     print("ui.gd - on_restart_button_pressed() - Restart button pressed by player %d" % multiplayer.get_unique_id())
     EventBus.restart_button_pressed.emit()
+
+
+
+# Quest related signals
+func on_quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) -> void:
+    print("ui.gd - on_quest_activated() - Quest activated: %s" % quest_name)
+    # Create a Label for the quest and add it to the QuestVBox
+    var quest_label = Label.new()
+    quest_label.name = quest_name
+    var progress_count = 0
+    var target_count = quest_resource.target_count
+    quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [progress_count, target_count]
+    QuestVBox.add_child(quest_label)
+
+
+func on_quest_progress_updated(quest_id: String, quest_name: String, quest_resource: QuestResource, current_progress: int, target_progress: int) -> void:
+    print("ui.gd - on_quest_progress_updated() - Quest progress updated: %s" % quest_id)
+    var quest_label = QuestVBox.get_node_or_null(quest_name)
+    if quest_label:
+        quest_label.text = "'" + quest_name + "'" + " - " + quest_resource.quest_description + "\nProgress: %d/%d" % [current_progress, target_progress]
+    else:
+        print("ui.gd - on_quest_progress_updated() - Quest label not found: %s" % quest_id)

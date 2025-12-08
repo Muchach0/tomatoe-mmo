@@ -61,6 +61,12 @@ signal refresh_visibility # Signal to notify the game logic that the visibility 
 
 # Signal related to items
 signal spawn_item_drop # Signal to notify the game logic that an item drop should be spawned
+signal item_picked_up(item: Item, count: int) # Signal to notify that an item was picked up (for quests)
 
 # Signal related to inventory
 signal attach_inventory_to_ui # Signal to notify the UI that the inventory should be attached to the player
+
+# Signal related to quests
+signal quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) # Signal to notify quest activation
+signal quest_progress_updated(quest_id: String, current_progress: int, target_progress: int) # Signal to notify quest progress updates
+signal quest_completed(quest_id: String, quest_resource: QuestResource) # Signal to notify quest completion

@@ -296,4 +296,36 @@ layout_mode = 2
 [node name="ItemSlot8" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
 layout_mode = 2
 
+[node name="ControlQuests" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="ControlQuests"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ControlQuests/Control"]
+layout_direction = 3
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="ControlQuests/Control/VBoxContainer"]
+layout_mode = 2
+text = "Quests"
+
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]
