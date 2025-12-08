@@ -110,8 +110,9 @@ func get_quest_progress(quest_id: String) -> Dictionary:
         }
     return {}
 
-func activate_quest_from_spawner(quest_resource: QuestResource, spawner: Node) -> String:
-    """Activate a quest when a player enters a MobSpawner's area. Returns the quest_id."""
+func activate_quest_from_spawner(quest_resource: QuestResource, spawner: Node, player: Node = null) -> String:
+    """Activate a quest when a player enters a MobSpawner's area. Returns the quest_id.
+    If player is provided and quest is PICKUP_ITEMS, will check inventory for existing items."""
     print("QuestManager - activate_quest_from_spawner() - Spawner: %s, Quest: %s" % [spawner.name, quest_resource.quest_name])
     
     # Check if this specific quest is already active for this spawner
@@ -123,6 +124,9 @@ func activate_quest_from_spawner(quest_resource: QuestResource, spawner: Node) -
                 # Check if it's the same quest resource
                 if existing_quest_data.resource == quest_resource or existing_quest_data.resource.quest_name == quest_resource.quest_name:
                     print("QuestManager - activate_quest_from_spawner() - Quest already active for this spawner: %s" % existing_quest_id)
+                    # Still check inventory in case player has new items
+                    if player and quest_resource.quest_type == QuestResource.QuestType.PICKUP_ITEMS:
+                        _check_inventory_for_quest(existing_quest_id, player)
                     return existing_quest_id
     
     # Check if quest is already active globally (by quest name or resource)
@@ -153,6 +157,10 @@ func activate_quest_from_spawner(quest_resource: QuestResource, spawner: Node) -
         var quest_data = active_quests[quest_id]
         if not quest_data.mob_spawner_nodes.has(spawner):
             quest_data.mob_spawner_nodes.append(spawner)
+        
+        # If this is a PICKUP_ITEMS quest and we have a player, check their inventory
+        if player and quest_resource.quest_type == QuestResource.QuestType.PICKUP_ITEMS:
+            _check_inventory_for_quest(quest_id, player)
     
     var spawner_name_str: String = "Unknown"
     if spawner.has_method("get_spawner_name"):
@@ -282,6 +290,61 @@ func _complete_quest(quest_id: String, quest_data: QuestData) -> void:
     
     # Optionally remove from active quests (or keep it for tracking)
     active_quests.erase(quest_id)
+
+func _check_inventory_for_quest(quest_id: String, player: Node) -> void:
+    """Check player's inventory for items matching a PICKUP_ITEMS quest and update progress."""
+    if quest_id not in active_quests:
+        return
+    
+    var quest_data = active_quests[quest_id]
+    if quest_data.resource.quest_type != QuestResource.QuestType.PICKUP_ITEMS:
+        return
+    
+    # Get player's inventory
+    if not player is Player:
+        push_warning("QuestManager - Body is not a Player instance")
+        return
+    
+    var player_instance: Player = player as Player
+    if not player_instance.inventory:
+        push_warning("QuestManager - Player does not have inventory")
+        return
+    
+    var inventory: Inventory = player_instance.inventory
+    
+    # Count matching items in inventory
+    var item_count: int = 0
+    var target_item = quest_data.resource.target_item
+    
+    if target_item == null:
+        # Count all items
+        for stack in inventory.items:
+            if not stack.is_empty():
+                item_count += stack.count
+    else:
+        # Count specific item
+        for stack in inventory.items:
+            if not stack.is_empty() and (stack.item == target_item or stack.item.item_name == target_item.item_name):
+                item_count += stack.count
+    
+    # Update quest progress if inventory has items
+    if item_count > 0:
+        # Don't exceed target progress
+        var new_progress = min(item_count, quest_data.target_progress)
+        if new_progress > quest_data.current_progress:
+            quest_data.current_progress = new_progress
+            quest_progress_updated.emit(quest_id, quest_data.resource.quest_name, quest_data.resource, quest_data.current_progress, quest_data.target_progress)
+            EventBus.quest_progress_updated.emit(quest_id, quest_data.resource.quest_name, quest_data.resource, quest_data.current_progress, quest_data.target_progress)
+            
+            print("QuestManager - Updated quest '%s' progress from inventory: %d/%d" % [
+                quest_data.resource.quest_name,
+                quest_data.current_progress,
+                quest_data.target_progress
+            ])
+            
+            # Check if quest is completed
+            if quest_data.current_progress >= quest_data.target_progress:
+                _complete_quest(quest_id, quest_data)
 
 func _resolve_mob_spawners(spawner_paths: Array[NodePath]) -> Array[Node]:
     """Resolve NodePaths to actual MobSpawner nodes."""

@@ -125,9 +125,10 @@ func _on_body_entered(body: Node2D) -> void:
     if not quest_resources.is_empty():
         var quest_manager = _get_quest_manager()
         if quest_manager:
+            var player = body as Player
             for quest_resource in quest_resources:
                 if quest_resource != null:
-                    quest_manager.activate_quest_from_spawner(quest_resource, self)
+                    quest_manager.activate_quest_from_spawner(quest_resource, self, player)
                     print("MobSpawner - Player entered area, activating quest: %s" % quest_resource.quest_name)
 
 func _on_body_exited(body: Node2D) -> void:
