@@ -75,6 +75,7 @@ func _ready() -> void:
     # Create root
     tree_root = tree.create_item()
     tree_root.set_text(0, "Quests")
+    tree.item_mouse_selected.connect(_on_tree_item_mouse_selected) # Be able to click to toggle the collapse of the tree item
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -281,5 +282,17 @@ func on_quest_completed(quest_id: String, quest_name: String, quest_resource: Qu
         quest_tree_items.erase(quest_id)
     else:
         print("ui.gd - on_quest_completed() - Quest tree item not found: %s" % quest_id)
+
+func _on_tree_item_mouse_selected(position: Vector2, mouse_button_index: int) -> void:
+    # Check if the click was with the left mouse button (index 1)
+    if mouse_button_index == MOUSE_BUTTON_LEFT:
+        # Get the currently selected TreeItem
+        var item: TreeItem = tree.get_selected()
+        
+        if item != null:
+            # Check if the item has children (i.e., is foldable)
+            if item.get_child(0) != null:
+                # Toggle the 'collapsed' property
+                item.collapsed = not item.collapsed
 
 #endregion: Quest Tree
