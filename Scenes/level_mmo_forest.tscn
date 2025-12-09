@@ -17,10 +17,10 @@ size = Vector2(1474.375, 2168)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
 resource_local_to_scene = true
-radius = 570.71
+radius = 406.43
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_klr5u"]
-radius = 284.69
+radius = 197.08
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -136,7 +136,13 @@ enemy_spawner_resource = ExtResource("8_klr5u")
 shape = SubResource("CircleShape2D_sq5bs")
 
 [node name="DinoMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(1291, 464)
+position = Vector2(1152, 344)
+enemy_spawner_resource = ExtResource("8_3asne")
+quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
+shape = SubResource("CircleShape2D_klr5u")
+
+[node name="DinoMobSpawner2" parent="MobSpawner" instance=ExtResource("6_foedh")]
+position = Vector2(726, 301)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
 shape = SubResource("CircleShape2D_klr5u")

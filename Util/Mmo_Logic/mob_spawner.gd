@@ -50,8 +50,11 @@ func _ready() -> void:
     timer.wait_time = SPAWN_TIMER_TIME
     timer.start() # Only start the timer if we are the server
 
-    for i in range(max_enemies_to_spawn): # Spawn the maximum number of enemies at the start
-        array_of_time_to_spawn_enemies.append(0)
+    # Wait 1 second before spawning initial enemies to ensure systems are ready
+    await get_tree().create_timer(1.0).timeout
+    # Spawn all initial enemies at world creation
+    for i in range(max_enemies_to_spawn):
+        spawn_enemy_at_random_location()
 
 
 func spawn_enemy_at_random_location() -> void:
