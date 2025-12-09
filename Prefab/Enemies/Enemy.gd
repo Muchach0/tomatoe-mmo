@@ -26,9 +26,11 @@ var score_given_by_this_enemy = DEFAULT_SCORE
 # var is_moving = true # boolean to see if the ennemy is going to the target position
 var player = null
 @export var speed: float = 200  # Movement speed in pixels per second
+@export var wander_speed: float = 10.0 # Movement speed in pixels per second when wandering
 # var attack_range = 50 # Range within which enemy attacks
 
 @export var should_be_able_to_move = true
+@export var should_wander_on_idle = false # If true, the enemy will wander when idle
 @export var should_glow_when_hit = true
 
 # Ranged attacking part

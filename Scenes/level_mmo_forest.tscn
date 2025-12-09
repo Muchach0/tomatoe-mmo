@@ -142,7 +142,7 @@ quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtReso
 shape = SubResource("CircleShape2D_klr5u")
 
 [node name="DinoMobSpawner2" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(726, 301)
+position = Vector2(421, 292)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
 shape = SubResource("CircleShape2D_klr5u")

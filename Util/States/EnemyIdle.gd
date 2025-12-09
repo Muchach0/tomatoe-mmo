@@ -8,6 +8,15 @@ var state_animation_name: String = "idle"
 
 const AGGRO_AREA_NAME = "AggroArea2D"
 
+# WANDERING PART
+var rng = RandomNumberGenerator.new() # useful for randomize functions
+var move_direction : Vector2
+var wander_time : float
+
+func randomize_wander():
+    move_direction = Vector2(rng.randf_range(-1, 1), rng.randf_range(-1, 1)).normalized()
+    wander_time = rng.randf_range(1, 3)
+
 func _on_Area2D_body_entered(body):
     if not body.is_in_group("Player"):
         return
@@ -70,6 +79,24 @@ func Enter():
 
     if enemy.get_node("AnimationPlayer").has_animation("idle"):
         enemy.get_node("AnimationPlayer").play("idle")
+
+    if enemy.should_wander_on_idle:
+        rng.randomize()
+        randomize_wander()
+
+func Update(delta: float):
+    if not enemy.should_wander_on_idle:
+        return
+    if wander_time > 0:
+        wander_time -= delta
+    else:
+        randomize_wander()
+
+func Physics_Update(_delta: float):
+    if not enemy.should_wander_on_idle:
+        return
+    enemy.velocity = move_direction * enemy.wander_speed
+    enemy.move_and_slide()
 
 func Exit():
     if enemy.has_node(AGGRO_AREA_NAME):

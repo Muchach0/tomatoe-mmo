@@ -170,6 +170,7 @@ motion_mode = 1
 script = ExtResource("2_8f22t")
 MAX_DEFAULT_HEALTH = 50
 should_flip_sprite = true
+should_wander_on_idle = true
 can_melee_attack = false
 loot_table = ExtResource("3_4eys1")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"

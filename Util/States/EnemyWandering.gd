@@ -1,7 +1,7 @@
 extends State
 class_name EnemyWandering
 
-var enemy : Area2D
+var enemy : Enemy
 @export var move_speed := 10.0
 
 var rng = RandomNumberGenerator.new() # useful for randomize functions
@@ -27,6 +27,7 @@ func Update(delta: float):
 
 func Physics_Update(_delta: float):
     if enemy:
-        enemy.move_and_slide(move_direction * move_speed)
+        enemy.velocity = move_direction * move_speed
+        enemy.move_and_slide()
         # enemy.look_at(enemy.position + move_direction)
         # enemy.play("walk")
