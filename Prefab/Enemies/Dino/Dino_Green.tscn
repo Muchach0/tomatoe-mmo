@@ -204,6 +204,7 @@ shape = SubResource("CapsuleShape2D_p6iod")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("5_4365u")
+initial_state = "EnemyWandering"
 metadata/_custom_type_script = "uid://c78lqfuowj4ou"
 
 [node name="EnemyIdle" type="Node" parent="StateMachine"]

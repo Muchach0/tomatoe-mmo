@@ -25,6 +25,7 @@ var score_given_by_this_enemy = DEFAULT_SCORE
 # var current_state = State.IDLE
 # var is_moving = true # boolean to see if the ennemy is going to the target position
 var player = null
+var target_peer_id: int = 0 # The peer ID of the currently targeted player
 @export var speed: float = 200  # Movement speed in pixels per second
 @export var wander_speed: float = 10.0 # Movement speed in pixels per second when wandering
 # var attack_range = 50 # Range within which enemy attacks
@@ -47,6 +48,7 @@ var is_attack_on_cooldown = false
 # @onready var hitbox_collision_shape := $HitBox/CollisionShape2D if has_node("HitBox/CollisionShape2D") else null
 @onready var hurtbox_collision_shape := $Sprite2D/Hurtbox/CollisionShape2D if has_node("Sprite2D/Hurtbox/CollisionShape2D") else null
 @onready var melee_attack_range_area := $Sprite2D/MeleeAttackRangeArea2D if has_node("Sprite2D/MeleeAttackRangeArea2D") else null
+@onready var aggro_area := $AggroArea2D if has_node("AggroArea2D") else null
 
 # Melee attack configuration
 @export var can_melee_attack: bool = true
@@ -63,6 +65,7 @@ var item_drop: PackedScene = preload("res://Util/Items/item_drop.tscn")
 signal enemy_died
 signal player_in_melee_range
 signal take_damage_signal # Signal to notify the enemy that it has taken damage.
+signal target_changed(target_player: Node) # Signal emitted when the target player changes
 
 func _ready() -> void:
     if timer != null:
@@ -82,16 +85,10 @@ func _ready() -> void:
 
     # Attack part
     if hurtbox != null:
-        print_debug("Enemy.gd - _ready - hurtbox is not null")
         hurtbox.attack_landed_signal.connect(attack_landed)
-    else:
-        print_debug("Enemy.gd - _ready - hurtbox is null")
     if timer_attack_cooldown != null:
-        print_debug("Enemy.gd - _ready - timer_attack_cooldown is not null")
         timer_attack_cooldown.wait_time = attack_cooldown
         timer_attack_cooldown.timeout.connect(reset_cooldown)
-    else:
-        print_debug("Enemy.gd - _ready - timer_attack_cooldown is null")
 
     if animation_player != null: # To keep playing the animation of the state machine when the animation is finished.
         animation_player.animation_finished.connect(_on_animation_player_animation_finished)
@@ -99,6 +96,10 @@ func _ready() -> void:
     if melee_attack_range_area != null:
         melee_attack_range_area.body_entered.connect(_on_melee_attack_range_area_body_entered)
         melee_attack_range_area.body_exited.connect(_on_melee_attack_range_area_body_exited)
+    
+    # Connect aggro area for player detection
+    if aggro_area != null:
+        aggro_area.body_entered.connect(_on_aggro_area_body_entered)
 
 func flip_sprite(flip: bool) -> void:
     if not should_flip_sprite: # do nothing if the enemy should not flip the sprite
@@ -159,7 +160,6 @@ func take_damage(damage: int, from_player_id: int) -> void:
     if not multiplayer or not multiplayer.is_server() or from_player_id == 1: # from_player_id == 1 is the player id of the server
         return
     if multiplayer!= null and multiplayer.is_server():
-        print_debug("Server is seding sync_damage to all peers:", damage, from_player_id, health)
         take_damage_signal.emit(from_player_id) # Sending the signal to the enemy to take damage.
         sync_damage.rpc(damage, from_player_id, health)
     # elif not EventBus.is_in_network_mode(): # If we are not in network mode, we just take the damage locally
@@ -169,7 +169,6 @@ func take_damage(damage: int, from_player_id: int) -> void:
 # Not sure if that should be part of the enemy script or the EnemyDying script. 
 # Keeping it here for now as it is related to the enemy damage above.
 func die(_from_player_id: int) -> void:
-    print_debug("Enemy.gd - die - Enemy ", self, " is dying by player ", _from_player_id)
     # current_state = State.DYING
     collision_shape.set_deferred("disabled", true) # Disabling the collision shape when the ennemy is dying
     # hitbox_collision_shape.set_deferred("disabled", true) # Disabling the hitbox when the ennemy is dying
@@ -197,7 +196,6 @@ func delete_enemy() -> void:
 
 #================ ATTACK PART ================
 func attack_landed():
-    print_debug("Enemy.gd - attack_landed - setting up the cooldown")
     is_attack_on_cooldown = true
     # hurtbox.set_deferred("disabled", true)
     hurtbox_collision_shape.set_deferred("disabled", true) # Disabling the hitbox when we landed an attack
@@ -218,12 +216,10 @@ func play_attack_animation():
         return
     if not animation_player.has_animation("attack"):
         return
-    print_debug("Enemy.gd - play_attack_animation - Playing attack animation")
     # animation_player.stop(true)
     animation_player.play("attack")
 
 func reset_cooldown():
-    print_debug("Enemy.gd - reset_cooldown - reseting cooldown")
     is_attack_on_cooldown = false
     # hurtbox.set_deferred("disabled", false)
     if can_melee_attack: # if melee attack is enabled, the hurtbox is managed by the attack animation
@@ -237,7 +233,6 @@ func reset_cooldown():
 func shoot_bullet(direction: Vector2) -> void:
     """Shoot a bullet in the specified direction"""
     if not can_shoot_bullets or bullet_scene == null:
-        print_debug("Enemy.gd - shoot_bullet - Cannot shoot bullets or bullet scene is null")
         return
     
     var bullet = bullet_scene.instantiate()
@@ -258,14 +253,11 @@ func shoot_bullet(direction: Vector2) -> void:
 
     animation_player.play("attack")
     
-    print_debug("Enemy.gd - shoot_bullet - Bullet shot in direction: ", direction)
 
 
 #================ MELEE ATTACK PART ================
 func _on_melee_attack_range_area_body_entered(body: Node2D) -> void:
-    print_debug("%d - Enemy.gd - _on_melee_attack_range_area_body_entered - Player entered melee attack range" % multiplayer.get_unique_id())
     if body.is_in_group("Player"):
-        print_debug("%d - Enemy.gd - _on_melee_attack_range_area_body_entered - Body is player" % multiplayer.get_unique_id())
         is_any_player_in_melee_range = true
         player_in_melee_range.emit(true) 
 
@@ -289,7 +281,6 @@ func _on_melee_attack_range_area_body_exited(_body: Node2D) -> void:
 
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-    print_debug("Enemy.gd - _on_animation_player_animation_finished - Animation finished: ", anim_name)
     
     # Handle melee attack completion
     if anim_name == "attack":
@@ -323,3 +314,42 @@ func drop_loot() -> void:
         # get_tree().current_scene.add_child.call_deferred(spawned_item)
 
 #endregion Loot part
+
+#================ TARGETING PART ================
+# ===================== AGGRO AREA DETECTION =====================
+func _on_aggro_area_body_entered(body: Node2D) -> void:
+    """Called when a body enters the aggro area. Handles player detection and targeting."""
+    if not body.is_in_group("Player"):
+        return
+    # Only the server decides which player is the focus, then tells all peers
+    if multiplayer != null and multiplayer.is_server():
+        var target_player = body
+        if target_player.is_hidden:
+            return
+        # Broadcast target selection to all peers (and apply locally)
+        set_target_peer.rpc(target_player.peer_id)
+    else:
+        # Non-server clients do not decide transitions; they wait for server RPC
+        pass
+
+# ===================== TARGETING (SERVER-AUTHORITATIVE) =====================
+@rpc("authority", "call_local", "reliable")
+func set_target_peer(new_target_peer_id: int) -> void:
+    """Set the target player by peer ID. This is server-authoritative."""
+    target_peer_id = new_target_peer_id
+    var target_player = _find_player_by_peer_id(target_peer_id)
+    if target_player == null:
+        return
+    if target_player.is_hidden:
+        return
+    player = target_player
+    target_changed.emit(target_player)
+
+func _find_player_by_peer_id(peer_id_to_find: int) -> Node:
+    """Helper function to find a player node by their peer ID."""
+    for n in get_tree().get_nodes_in_group("Player"):
+        if n.peer_id == peer_id_to_find:
+            return n
+    return null
+
+#================ END OF TARGETING PART ================
