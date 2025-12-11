@@ -35,7 +35,7 @@ func update_display():
 func on_body_entered(body: Node2D) -> void:
     if "Player" not in body.get_groups():
         return
-    print(multiplayer.get_unique_id(), " - item_drop.gd - on_body_entered() - Player entered item drop")
+    # print(multiplayer.get_unique_id(), " - item_drop.gd - on_body_entered() - Player entered item drop")
     # TODO: TO FIX LATER - this is not the best way to do it.
     # queue_free() # Probably not the best to queue free on local player with no sync, but it works for now.
     # and it feels better

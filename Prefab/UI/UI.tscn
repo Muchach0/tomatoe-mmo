@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://jdgl6gpb80es"]
+[gd_scene load_steps=19 format=3 uid="uid://jdgl6gpb80es"]
 
 [ext_resource type="Script" uid="uid://cp1qex37r1rrc" path="res://Prefab/UI/ui.gd" id="1_gtstx"]
 [ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="2_bqg0t"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://d0hb815m3rp0f" path="res://Prefab/UI/Inventory/ItemSlot.tscn" id="9_3qnsr"]
 [ext_resource type="Texture2D" uid="uid://bku1tgsc4dkjk" path="res://Art/Sprites/icon/arrow_down.png" id="10_ty01m"]
 [ext_resource type="Texture2D" uid="uid://dsibb0fq75v1t" path="res://Art/Sprites/icon/arrow_left.png" id="11_ty01m"]
+[ext_resource type="FontFile" uid="uid://ch2if433psvdg" path="res://Art/Font/CrimsonPro-Regular.ttf" id="12_18pal"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fiall"]
 bg_color = Color(0, 0, 0, 0)
@@ -392,5 +393,17 @@ theme_override_styles/hovered_selected_focus = SubResource("StyleBoxEmpty_tc14e"
 theme_override_styles/selected = SubResource("StyleBoxEmpty_shvhy")
 select_mode = 1
 auto_tooltip = false
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("12_18pal")
+theme_override_font_sizes/font_size = 37
+text = "This is a test"
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]

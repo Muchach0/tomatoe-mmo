@@ -16,8 +16,8 @@ func _init():
 
 # Take in ItemStack, add in relevant slots, returns either adjusted ItemStack or Empty
 func add_item(new_stack: ItemStack) -> ItemStack:
-    print("inventory.gd - add_item() - Inventory: ", _to_string())
-    print("inventory.gd - add_item() - Adding item: ", new_stack._to_string())
+    # print("inventory.gd - add_item() - Inventory: ", _to_string())
+    # print("inventory.gd - add_item() - Adding item: ", new_stack._to_string())
     for stack in items:
         if new_stack.is_empty():
             break

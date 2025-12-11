@@ -18,7 +18,7 @@ func on_area_entered(hurtbox: Node):
         return
 
     if owner.has_method("take_damage"):
-        print_debug("Hitbox.gd - on_area_entered - owner has a take_damage method")
+        # print_debug("Hitbox.gd - on_area_entered - owner has a take_damage method")
         owner.take_damage(hurtbox.damage, hurtbox.from_player_id)
         hurtbox.attack_landed()
     if hurtbox.should_disapear_on_hit:

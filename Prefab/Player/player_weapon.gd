@@ -6,10 +6,6 @@ extends Node2D
 # Deprecated - kept for compatibility with old bullet system
 var bullet_scene : PackedScene = preload("res://Prefab/Bullet/Bullet.tscn")
 
-# Shooting cooldown to prevent spam
-var last_shot_time: float = 0.0
-var shot_cooldown: float = 0.1  # 100ms between shots
-
 # Continuous firing state
 var is_mouse_pressed: bool = false
 var last_touch_position: Vector2 = Vector2.ZERO
@@ -34,9 +30,9 @@ func _process(_delta):
         if multiplayer == null or is_multiplayer_authority():
             # Use current touch position for mobile, current mouse position for PC
             if last_touch_position != Vector2.ZERO:
-                shoot_primary(last_touch_position)
+                execute_skill(0, last_touch_position)  # Skill 0 = SimpleShootSkill
             else:
-                shoot_primary()
+                execute_skill(0)  # Skill 0 = SimpleShootSkill
 
 # Handles input from mouse (PC) and touch (Mobile)
 func _unhandled_input(event: InputEvent) -> void:
@@ -46,13 +42,18 @@ func _unhandled_input(event: InputEvent) -> void:
     if player.is_hidden:
         return
     
-    # PC: left mouse button press/release
+    # PC: left mouse button press/release (SimpleShootSkill)
     if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
         if event.pressed:
             is_mouse_pressed = true
-            shoot_primary()  # Shoot immediately on press
+            execute_skill(0)  # Skill 0 = SimpleShootSkill
         else:
             is_mouse_pressed = false
+    
+    # PC: right mouse button (AOEShootSkill)
+    elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+        if event.pressed:
+            execute_skill(1)  # Skill 1 = AOEShootSkill
     
     # Mobile: screen touch press/release
     elif event is InputEventScreenTouch:
@@ -60,7 +61,7 @@ func _unhandled_input(event: InputEvent) -> void:
             is_mouse_pressed = true
             # Convert screen coordinates to world coordinates
             last_touch_position = screen_to_world(event.position)
-            shoot_primary(last_touch_position)  # Shoot immediately on touch
+            execute_skill(0, last_touch_position)  # Skill 0 = SimpleShootSkill
         else:
             is_mouse_pressed = false
             last_touch_position = Vector2.ZERO  # Reset touch position
@@ -70,58 +71,29 @@ func _unhandled_input(event: InputEvent) -> void:
         # Convert screen coordinates to world coordinates
         last_touch_position = screen_to_world(event.position)
 
-func shoot_primary(mobile_touch_position: Vector2 = Vector2.ZERO):
-    # Check cooldown
-    var current_time = Time.get_unix_time_from_system()
-    if current_time - last_shot_time < shot_cooldown:
+## Execute a skill by index
+## @param skill_index: Index of the skill in player.skills array (0 = SimpleShootSkill, 1 = AOEShootSkill)
+## @param mobile_touch_position: Optional touch position for mobile devices
+func execute_skill(skill_index: int, mobile_touch_position: Vector2 = Vector2.ZERO):
+    if not player or player.is_hidden:
         return
     
-    last_shot_time = current_time
+    # Check if skill index is valid
+    if skill_index < 0 or skill_index >= player.skills.size():
+        push_error("player_weapon.gd - execute_skill() - Invalid skill index: " + str(skill_index))
+        return
     
-    var mouse_direction : Vector2 = Vector2.ZERO # Init - Direction of the mouse or touch position
-
+    var skill = player.skills[skill_index]
+    if not skill:
+        push_error("player_weapon.gd - execute_skill() - Skill at index " + str(skill_index) + " is null")
+        return
+    
+    # Get target position
+    var target_position: Vector2 = Vector2.ZERO
     if mobile_touch_position != Vector2.ZERO:
-        mouse_direction = (mobile_touch_position - player.global_position).normalized()
+        target_position = mobile_touch_position
     else:
-        print("player_weapond.gd - shoot_primary() - Mouse position: ", get_global_mouse_position())
-        var mouse_position := get_global_mouse_position()
-        mouse_direction = (mouse_position - player.global_position).normalized()
-        
-    # Prepare bullet data with upgrade effects
-    var bullet_data = {
-        "damage": 5.0,
-        "speed": 300.0,
-        "max_pierce": 1
-    }
+        target_position = get_global_mouse_position()
     
-    # Apply strategy upgrades to bullet data
-    if player.bullet_strategies and player.bullet_strategies.size() > 0:
-        for strategy in player.bullet_strategies:
-            if strategy and strategy.has_method("modify_bullet_data"):
-                bullet_data = strategy.modify_bullet_data(bullet_data)
-    
-    # # Client-side prediction for responsive feedback
-    # if bullet_manager and not multiplayer.is_server():
-    #     bullet_manager.spawn_prediction_bullet(player.global_position, mouse_direction, bullet_data)
-    
-    # Request authoritative bullet spawn from server
-    if bullet_manager:
-        bullet_manager.request_bullet_spawn.rpc(player.global_position, mouse_direction, bullet_data)
-#     else:
-#         # Fallback to old system if bullet manager not available
-#         _fallback_shoot_primary(mouse_direction)
-
-# func _fallback_shoot_primary(mouse_direction: Vector2):
-#     """Fallback to old bullet system if BulletManager not available"""
-#     var spawned_bullet = bullet_scene.instantiate()
-#     get_tree().root.add_child(spawned_bullet)
-    
-#     spawned_bullet.global_position = player.global_position
-#     spawned_bullet.rotation = mouse_direction.angle()
-#     spawned_bullet.shooter_id = player.peer_id  # Set shooter ID to prevent self-damage
-
-#     # Apply strategy upgrades
-#     if player.bullet_strategies and player.bullet_strategies.size() > 0:
-#         for strategy in player.bullet_strategies:
-#             if strategy and strategy.has_method("apply_upgrade"):
-#                 strategy.apply_upgrade(spawned_bullet)
+    # Execute the skill
+    skill.execute(player, target_position, bullet_manager)
