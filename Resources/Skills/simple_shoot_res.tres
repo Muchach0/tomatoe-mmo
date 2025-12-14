@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SimpleShootSkill" load_steps=2 format=3 uid="uid://tsdudnshtwkw"]
+
+[ext_resource type="Script" uid="uid://g2dm4ed4sx1j" path="res://Resources/Skills/SimpleShootSkill.gd" id="1_171mj"]
+
+[resource]
+script = ExtResource("1_171mj")
+enable_trail_particles = true
+skill_name = "Shoot_basic"
+metadata/_custom_type_script = "uid://g2dm4ed4sx1j"

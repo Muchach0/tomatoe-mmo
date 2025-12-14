@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ExplosiveShootSkill" load_steps=3 format=3 uid="uid://2mgrs6od8qqm"]
+
+[ext_resource type="Script" uid="uid://ccq6nh2a13mjx" path="res://Resources/Skills/ExplosiveShootSkill.gd" id="1_j8f7y"]
+[ext_resource type="Texture2D" uid="uid://biphlv3x42ef0" path="res://Art/Sprites/test/fire.png" id="1_ltttw"]
+
+[resource]
+script = ExtResource("1_j8f7y")
+bullet_sprite_texture = ExtResource("1_ltttw")

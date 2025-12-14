@@ -22,10 +22,20 @@ func _ready():
 func _spawn_bullet_callback(data: Dictionary) -> Node:
     """Called by MultiplayerSpawner when creating bullets"""
     var bullet = MULTIPLAYER_BULLET_SCENE.instantiate()
-    bullet.initialize_bullet(data.position, data.direction, data.shooter_id)
+    
+    # Extract visual data from bullet_data if it exists
+    var visual_data = data.get("bullet_data", {})
+    
+    # Initialize bullet with visual customizations
+    bullet.initialize_bullet(data.position, data.direction, data.shooter_id, visual_data)
+    
     bullet.damage = data.get("damage", 5.0)
     bullet.speed = data.get("speed", 300.0)
     bullet.max_pierce = data.get("max_pierce", 1)
+    
+    # Set explosion properties if provided
+    bullet.explosion_radius = data.get("explosion_radius", 0.0)
+    bullet.explosion_damage = data.get("explosion_damage", 0.0)
     
     return bullet
 
@@ -42,14 +52,17 @@ func request_bullet_spawn(position: Vector2, direction: Vector2, bullet_data: Di
         print("BulletManager: Player ", shooter_id, " exceeded bullet limit")
         return
     
-    # Prepare spawn data
+    # Prepare spawn data (include full bullet_data for visual customizations)
     var spawn_data = {
         "position": position,
         "direction": direction,
         "shooter_id": shooter_id,
         "damage": bullet_data.get("damage", 5.0),
         "speed": bullet_data.get("speed", 300.0),
-        "max_pierce": bullet_data.get("max_pierce", 1)
+        "max_pierce": bullet_data.get("max_pierce", 1),
+        "explosion_radius": bullet_data.get("explosion_radius", 0.0),
+        "explosion_damage": bullet_data.get("explosion_damage", 0.0),
+        "bullet_data": bullet_data  # Pass full bullet_data for visual customizations
     }
     
     # Spawn bullet using MultiplayerSpawner

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AOEShootSkill" load_steps=2 format=3 uid="uid://g2li2adevben"]
+
+[ext_resource type="Script" uid="uid://boi8bq5rf77wi" path="res://Resources/Skills/AOEShootSkill.gd" id="1_67ohd"]
+
+[resource]
+script = ExtResource("1_67ohd")
+max_pierce = 5
+metadata/_custom_type_script = "uid://boi8bq5rf77wi"
