@@ -186,7 +186,6 @@ func _on_enemy_died(enemy_group_names: Array[StringName]) -> void:
     """Handle enemy death event from EventBus."""
     # if not multiplayer or not multiplayer.is_server():
     #     return
-    print(multiplayer.get_unique_id(), "- QuestManager - _on_enemy_died() - Enemy died: %s" % enemy_group_names)
     for quest_id in active_quests.keys():
         var quest_data = active_quests[quest_id]
         

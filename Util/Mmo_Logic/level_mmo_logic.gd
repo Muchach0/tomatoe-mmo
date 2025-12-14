@@ -124,28 +124,6 @@ func remove_player(player_id) -> void:
 
 # ===================================================
 # Spawn callback for MultiplayerSpawner
-func _spawn_enemy_callback(data: Dictionary) -> Node:
-    var enemy_type = data.get("enemy_type", "Dummy")
-    var enemy_scene_path = enemy_scenes.get(enemy_type, "res://Prefab/Enemies/Dummy.tscn")
-    
-    # Load and instantiate enemy
-    var enemy_scene = load(enemy_scene_path)
-    if not enemy_scene:
-        print("game_logic.gd - _spawn_enemy_callback() - Could not load enemy scene: %s" % enemy_scene_path)
-        return null
-    
-    var enemy = enemy_scene.instantiate()
-    enemy.global_position = data.position
-    print("game_logic.gd - _spawn_enemy_callback() - Adding enemy to group: ", data)
-    enemy.add_to_group(data.spawner_name)  # Add to group for easy tracking
-    enemy.add_to_group(data.spawner_name_with_id) # Add to group for easy tracking
-    
-    # # Connect enemy death signal if available
-    # if enemy.has_signal("enemy_died"):
-    #     enemy.enemy_died.connect(_on_enemy_died)
-    
-    print("game_logic.gd - _spawn_enemy_callback() - Spawned %s at %s" % [enemy_type, data.position])
-    return enemy    
 
 
 #region VISIBILITY SYNCHRONIZER SECTION =================================================================
@@ -187,6 +165,30 @@ func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict:
 
 
 #region SPAWN ENEMY SECTION =================================================================
+
+func _spawn_enemy_callback(data: Dictionary) -> Node:
+    var enemy_type = data.get("enemy_type", "Dummy")
+    var enemy_scene_path = enemy_scenes.get(enemy_type, "res://Prefab/Enemies/Dummy.tscn")
+    
+    # Load and instantiate enemy
+    var enemy_scene = load(enemy_scene_path)
+    if not enemy_scene:
+        print("game_logic.gd - _spawn_enemy_callback() - Could not load enemy scene: %s" % enemy_scene_path)
+        return null
+    
+    var enemy = enemy_scene.instantiate()
+    enemy.global_position = data.position
+    print("game_logic.gd - _spawn_enemy_callback() - Adding enemy to group: ", data)
+    enemy.add_to_group(data.spawner_name)  # Add to group for easy tracking (quests)
+    enemy.add_to_group(data.spawner_name_with_id) # Add to group for easy tracking (mob_spawner)
+    
+    # # Connect enemy death signal if available
+    # if enemy.has_signal("enemy_died"):
+    #     enemy.enemy_died.connect(_on_enemy_died)
+    
+    print("game_logic.gd - _spawn_enemy_callback() - Spawned %s at %s" % [enemy_type, data.position])
+    return enemy    
+
 
 func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
