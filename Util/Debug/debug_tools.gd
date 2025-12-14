@@ -39,7 +39,6 @@ func detect_instance_index() -> void:
             break
 
 func update_instance_window_rect(window: Window, max_instances_count: int, title_bar_height: int = 30) -> void:
-    print("debug_tools.gd - update_instance_window_rect() - instance_index: " + str(instance_index) + " - max_instances_count: " + str(max_instances_count) + " - window name: " + window.title)
     var screen_rect: Rect2 = Rect2(DisplayServer.screen_get_usable_rect())
     
     # Set window title based on instance type
