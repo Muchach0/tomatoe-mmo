@@ -20,14 +20,14 @@ extends Area2D
 const SPAWN_TIMER_TIME : float = 1.0 # Check every second if we should spawn an enemy
 
 var spawner_name : String = "Spawner_Test_1" # name of the spawner - used to track enemy spawned, and that were killed
+var spawner_name_with_id : String = "Spawner_Test_1_0" # name of the spawner with the unique id - used to track the spawner
 var enemy_scene_array_of_dictionnary : Array[Dictionary] # array of dictionaries containing the name of the enemy, the scene to spawn and the spawn rate
 var max_enemies_to_spawn : int # maximum number of enemies to spawn in the area
 var spawn_time : float # spawn in seconds  - Wait for that time before spawning an enemy after the enemy is killed
 var number_current_enemies : int = 0 # number of enemies spawned in the area
 
 var array_of_time_to_spawn_enemies : Array[float] = [] # array of time to spawn enemies - used to track the time to spawn an enemy after the enemy is killed
-
-
+var unique_id_spawner: int = 0 # unique id of the spawner - used to track the spawner
 
 func _ready() -> void:
     $CollisionShape2D.shape = shape
@@ -39,12 +39,15 @@ func _ready() -> void:
     
     # Reading the data from the resource
     enemy_scene_array_of_dictionnary = enemy_spawner_resource.enemy_scene_array_of_dictionnary
+    unique_id_spawner = randi()
     spawner_name = enemy_spawner_resource.name
+    spawner_name_with_id = spawner_name + "_" + str(unique_id_spawner)
     max_enemies_to_spawn = enemy_spawner_resource.max_enemies_to_spawn
     spawn_time = enemy_spawner_resource.spawn_time
     
     if multiplayer == null or not multiplayer.is_server() or Engine.is_editor_hint():
         return
+    
     EventBus.one_enemy_die.connect(_on_one_enemy_die)
 
     timer.wait_time = SPAWN_TIMER_TIME
@@ -68,7 +71,7 @@ func spawn_enemy_at_random_location() -> void:
     var random_enemy = enemy_spawner_resource.get_random_enemy()
     print("mob_spawner.gd - spawn_enemy_at_random_location() - random enemy: ", random_enemy, " at position: ", random_position, " name: ", random_enemy["name"])
 
-    EventBus.spawn_enemy.emit(spawner_name, random_enemy["name"], random_position)
+    EventBus.spawn_enemy.emit(spawner_name, spawner_name_with_id, random_enemy["name"], random_position)
     
     # enemy_spawner_resource.spawn_enemy(random_position)
     number_current_enemies += 1
@@ -102,7 +105,7 @@ func _on_one_enemy_die(enemy_group_names: Array[StringName]) -> void: # To fix -
     if not multiplayer or not multiplayer.is_server():
         return
     print("mob_spawner.gd - _on_one_enemy_die() - one enemy died - Spawner name: '", spawner_name, "',mob in groups: ", enemy_group_names)
-    if spawner_name in enemy_group_names: # Checking if the name of the spawner is in the mob that die group names
+    if spawner_name_with_id in enemy_group_names: # Checking if the name of the spawner is in the mob that die group names
         number_current_enemies -= 1
         array_of_time_to_spawn_enemies.append(0) # Add an entry in the array with a timer set at 0
         print("mob_spawner.gd - _on_one_enemy_die() - number_current_enemies: ", number_current_enemies,  " - Spawner name: ", spawner_name)

@@ -138,6 +138,7 @@ func _spawn_enemy_callback(data: Dictionary) -> Node:
     enemy.global_position = data.position
     print("game_logic.gd - _spawn_enemy_callback() - Adding enemy to group: ", data)
     enemy.add_to_group(data.spawner_name)  # Add to group for easy tracking
+    enemy.add_to_group(data.spawner_name_with_id) # Add to group for easy tracking
     
     # # Connect enemy death signal if available
     # if enemy.has_signal("enemy_died"):
@@ -187,7 +188,7 @@ func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict:
 
 #region SPAWN ENEMY SECTION =================================================================
 
-func spawn_enemies(spawner_name: String, enemy_name: String, spawn_position: Vector2) -> void:
+func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
         return
     print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", position, " from spawner: ", spawner_name)
@@ -199,7 +200,8 @@ func spawn_enemies(spawner_name: String, enemy_name: String, spawn_position: Vec
         var spawn_data = {
             "enemy_type": enemy_name,
             "position": spawn_position,
-            "spawner_name": spawner_name
+            "spawner_name": spawner_name, 
+            "spawner_name_with_id": spawner_name_with_id
         }
         enemy = enemy_spawner.spawn(spawn_data)
     
