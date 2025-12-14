@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://bbibw8vynhs5h"]
+[gd_scene load_steps=18 format=4 uid="uid://bbibw8vynhs5h"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_foedh"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_iyu8m"]
@@ -11,21 +11,25 @@
 [ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
 [ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
 [ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
+[ext_resource type="Resource" uid="uid://cgx3mde2nyx5f" path="res://Resources/Spawner/tomatoe_wizard_spawner.tres" id="12_qrlry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
 resource_local_to_scene = true
 radius = 406.43
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qrlry"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_d87u1"]
 resource_local_to_scene = true
 radius = 257.32
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_3fwc7"]
 resource_local_to_scene = true
-radius = 76.61
+radius = 180.65
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w2cjm"]
+radius = 500.0
 
 [node name="Shower" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -136,18 +140,23 @@ shape = SubResource("RectangleShape2D_ll5u2")
 [node name="MobSpawner" type="Node" parent="."]
 
 [node name="OrcMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(2748, 741)
+position = Vector2(2286, 606)
 enemy_spawner_resource = ExtResource("8_klr5u")
-shape = SubResource("CircleShape2D_sq5bs")
+shape = SubResource("CircleShape2D_76rxa")
 
 [node name="DinoMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
 position = Vector2(1267, 417)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_qrlry")
+shape = SubResource("CircleShape2D_d87u1")
 
 [node name="DinoMobSpawner2" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(698, 351)
+position = Vector2(687, 284)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_76rxa")
+shape = SubResource("CircleShape2D_3fwc7")
+
+[node name="TomatoeWizardSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
+position = Vector2(991, 1313)
+enemy_spawner_resource = ExtResource("12_qrlry")
+shape = SubResource("CircleShape2D_w2cjm")

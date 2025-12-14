@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("3_36hvu")
 name = "DinoSpawner"
+spawn_time = 5.0
 enemy_scene_array_of_dictionnary = Array[Dictionary]([{
 "name": "Dino",
 "scene": ExtResource("2_8am12"),

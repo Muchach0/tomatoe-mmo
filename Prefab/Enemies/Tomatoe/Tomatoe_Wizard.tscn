@@ -143,7 +143,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvix3"]
-radius = 393.80515
+radius = 84.07288
 
 [node name="Tomatoe_Wizard" type="CharacterBody2D"]
 material = ExtResource("1_6atsj")
@@ -223,5 +223,4 @@ texture = ExtResource("11_gmwnc")
 [node name="AggroArea2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
-visible = false
 shape = SubResource("CircleShape2D_bvix3")

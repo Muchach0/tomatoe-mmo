@@ -6,3 +6,4 @@
 [resource]
 script = ExtResource("1_j8f7y")
 bullet_sprite_texture = ExtResource("1_ltttw")
+bullet_sprite_scale = Vector2(1, 1)

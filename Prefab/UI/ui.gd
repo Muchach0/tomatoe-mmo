@@ -251,6 +251,12 @@ func on_quest_activated(quest_id: String, quest_name: String, quest_resource: Qu
         "rewards_item": rewards_item
     }
 
+    # # Add a button element to test in the tree view
+    # var test_item := tree.create_item(quest_tree_item)
+    # var icon: Texture2D = preload("res://Art/Sprites/icon/reward_icon.png")
+    # # Change the size of the icon
+    # test_item.add_button(0, icon, 0, false)
+
 func on_quest_progress_updated(quest_id: String, quest_name: String, quest_resource: QuestResource, current_progress: int, target_progress: int) -> void:
     print("ui.gd - on_quest_progress_updated() - Quest progress updated: %s" % quest_id)
     

@@ -41,6 +41,7 @@ func _ready():
 
     if sprite and texture_2d:
         sprite.texture = texture_2d
+        sprite.scale = sprite_scale
 
 func initialize_bullet(pos: Vector2, dir: Vector2, owner_id: int, bullet_data: Dictionary = {}):
     """Initialize bullet with position, direction and owner"""
