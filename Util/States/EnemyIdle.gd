@@ -5,6 +5,9 @@ var enemy : Enemy
 
 var state_animation_name: String = "idle"
 
+var rng = RandomNumberGenerator.new() # useful for randomize functions
+var idle_timer : Timer
+
 # When taking damage, we transition to the EnemyFollowing state, and the enemy targets the player that attacked it.
 func on_take_damage(from_player_id: int):
     if multiplayer != null and multiplayer.is_server():
@@ -26,7 +29,20 @@ func Enter():
     if enemy.get_node("AnimationPlayer").has_animation("idle"):
         enemy.get_node("AnimationPlayer").play("idle")
 
+    if enemy.should_wander_on_idle and multiplayer != null and multiplayer.is_server():
+        idle_timer = Timer.new()
+        idle_timer.wait_time = rng.randf_range(3, 10)
+        idle_timer.timeout.connect(on_timer_finished)
+        idle_timer.autostart = true
+        add_child(idle_timer)
+
 func Exit():
+    if enemy.should_wander_on_idle and multiplayer != null and multiplayer.is_server():
+        idle_timer.stop()
+        idle_timer.timeout.disconnect(on_timer_finished)
+        idle_timer.queue_free()
+        idle_timer = null
+
     if enemy.target_changed.is_connected(_on_target_changed):
         enemy.target_changed.disconnect(_on_target_changed)
 
@@ -41,3 +57,13 @@ func _on_target_changed(_target_player: Node) -> void:
         return
     if sm.states.has("EnemyFollowing".to_lower()):
         emit_signal("transitioned", self, "EnemyFollowing")
+
+
+func on_timer_finished():
+    if multiplayer != null and multiplayer.is_server():
+        server_broadcast_exit_state.rpc()
+
+
+@rpc("any_peer", "call_local", "reliable")
+func server_broadcast_exit_state():
+    emit_signal("transitioned", self, "EnemyWandering")

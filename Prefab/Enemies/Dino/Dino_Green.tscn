@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://3iti8rxlsrc2"]
+[gd_scene load_steps=27 format=3 uid="uid://3iti8rxlsrc2"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_lt67r"]
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_8f22t"]
@@ -142,13 +142,47 @@ tracks/0/keys = {
 "values": [18, 19, 20, 21, 22, 23]
 }
 
+[sub_resource type="Animation" id="Animation_578l2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_rb50r"]
+resource_name = "wandering"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7, 8, 9]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gp0gp"]
 _data = {
+&"RESET": SubResource("Animation_578l2"),
 &"attack": SubResource("Animation_s028j"),
 &"die": SubResource("Animation_4eys1"),
 &"hit": SubResource("Animation_lm23f"),
 &"idle": SubResource("Animation_gp0gp"),
-&"walk": SubResource("Animation_axvo1")
+&"walk": SubResource("Animation_axvo1"),
+&"wandering": SubResource("Animation_rb50r")
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rj2wl"]
@@ -204,7 +238,6 @@ shape = SubResource("CapsuleShape2D_p6iod")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("5_4365u")
-initial_state = "EnemyWandering"
 metadata/_custom_type_script = "uid://c78lqfuowj4ou"
 
 [node name="EnemyIdle" type="Node" parent="StateMachine"]
