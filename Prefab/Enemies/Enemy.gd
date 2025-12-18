@@ -60,6 +60,11 @@ var is_attack_on_cooldown = false
 
 # Loot part
 @export var loot_table: LootTable
+
+@onready var sync: MultiplayerSynchronizer = $MultiplayerSynchronizer
+var current_world : String = ""
+
+
 var item_drop: PackedScene = preload("res://Util/Items/item_drop.tscn")
 
 signal enemy_died
@@ -100,6 +105,13 @@ func _ready() -> void:
     # Connect aggro area for player detection
     if aggro_area != null:
         aggro_area.body_entered.connect(_on_aggro_area_body_entered)
+
+    if multiplayer and multiplayer.is_server():
+        sync.add_visibility_filter(visiblity_per_world_function_filter)
+
+        # Default mode updates filters automatically during frames,
+        # but you can also set VISIBILITY_PROCESS_NONE and call update_visibility() manually.
+        # sync.visibility_update_mode = MultiplayerSynchronizer.VISIBILITY_PROCESS_IDLE
 
 func flip_sprite(flip: bool) -> void:
     if not should_flip_sprite: # do nothing if the enemy should not flip the sprite
@@ -353,3 +365,27 @@ func _find_player_by_peer_id(peer_id_to_find: int) -> Node:
     return null
 
 #================ END OF TARGETING PART ================
+
+
+#region Visibility update between world
+func visiblity_per_world_function_filter(peer_id: int) -> bool:
+    print(multiplayer.get_unique_id(), " - Enemy.gd - visiblity_per_world_function_filter - peer_id: ", peer_id, " - current_world: ", current_world, " - EventBus.players: ", EventBus.players)
+
+    if not multiplayer or not multiplayer.is_server():
+        return false
+    
+    if peer_id == 0:
+        return true
+    
+    # 1 - Enemy.gd - visiblity_per_world_function_filter - peer_id: 0 - current_world: forest_world - EventBus.players: { 1854173934: { "name": "Toto", "ready": true, "char_index": 1, "current_world_name": "forest_world", "wave_completed": false, "player_node_name": 1854173934, "init_position": (598.0, 528.0), "zone": ["zoneA"] }, 1224275503: { "name": "Toto", "ready": true, "char_index": 1, "current_world_name": "forest_world", "wave_completed": false, "player_node_name": 1224275503, "init_position": (723.0, 527.0), "zone": ["zoneA"] } }
+
+
+    var player_to_check: Dictionary = EventBus.players.get(peer_id, null)
+
+    if player_to_check == null or "current_world" not in player_to_check:
+        return false
+    if player_to_check["current_world"] != current_world:
+        return false
+    return true
+
+#endregion

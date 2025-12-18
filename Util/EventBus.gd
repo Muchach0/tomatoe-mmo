@@ -1,6 +1,10 @@
 # Event bus to communicate between nodes
 extends Node
 
+const DEFAULT_WORLD_NAME = "forest_world"
+var current_world_player_location = "forest_world"
+var players: Dictionary = {}
+
 signal player_hit
 signal player_died
 signal respawn_player
@@ -9,6 +13,9 @@ signal add_player # Signal to synchronize player data across peers when a new pl
 signal remove_player # Signal to remove player data across peers when a player disconnects
 signal set_player_node_name_and_init_position # Signal to set the player node name for synchronization
 signal set_player_camera # Signal to set the player camera
+
+# Player synchronization signals
+signal spawn_player
 
 signal bullets_init_and_start # Signal sent on server to spawn bullets (the server is running the randomization and send to clients)
 signal start_level # Signal to update the UI with the current level and number of bullets (sent from server)
@@ -71,3 +78,10 @@ signal quest_activated(quest_id: String, quest_name: String, quest_resource: Que
 signal quest_progress_updated(quest_id: String, current_progress: int, target_progress: int) # Signal to notify quest progress updates
 signal quest_completed(quest_id: String, quest_resource: QuestResource) # Signal to notify quest completion
 signal quest_reward_choice_available(player: Player, quest_resource: QuestResource, choice_items: Array[ItemStack]) # Signal to notify that a quest reward choice is available
+
+
+
+# Signal related to global spawners
+signal spawn_player_on_global_spawner # Signal to notify the global spawner that a player should be spawned
+signal spawn_enemy_on_global_spawner # Signal to notify the global spawner that an enemy should be spawned
+signal spawn_item_drop_on_global_spawner # Signal to notify the global spawner that an item drop should be spawned

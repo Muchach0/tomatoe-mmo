@@ -57,6 +57,7 @@ var bonus_number: int = 0 # The number of bonuses picked up by the player
 @onready var current_zone = "zone0" # Starting zone
 
 var inventory: Inventory = Inventory.new()
+var current_world: String = ""
 
 func _ready() -> void:
     # Duplicate the shader material to make individual modifications

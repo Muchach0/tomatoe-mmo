@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="tomatoe-mmo"
-run/main_scene="uid://bbibw8vynhs5h"
+run/main_scene="uid://bpvdttyklmoem"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://bxjx6hdsa7flh"
 

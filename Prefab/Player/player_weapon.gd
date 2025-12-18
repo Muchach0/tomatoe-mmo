@@ -10,6 +10,12 @@ var bullet_scene : PackedScene = preload("res://Prefab/Bullet/Bullet.tscn")
 var is_mouse_pressed: bool = false
 var last_touch_position: Vector2 = Vector2.ZERO
 
+# Double tap detection for mobile
+var last_touch_time: float = 0.0
+var last_touch_pos: Vector2 = Vector2.ZERO
+const DOUBLE_TAP_TIME_THRESHOLD: float = 0.3  # Time in seconds between taps
+const DOUBLE_TAP_DISTANCE_THRESHOLD: float = 50.0  # Maximum distance in pixels between taps
+
 
 func _ready():
     # Find bullet manager in scene
@@ -58,10 +64,28 @@ func _unhandled_input(event: InputEvent) -> void:
     # Mobile: screen touch press/release
     elif event is InputEventScreenTouch:
         if event.pressed:
-            is_mouse_pressed = true
-            # Convert screen coordinates to world coordinates
-            last_touch_position = screen_to_world(event.position)
-            execute_skill(0, last_touch_position)  # Skill 0 = SimpleShootSkill
+            var current_time = Time.get_ticks_msec() / 1000.0  # Convert to seconds
+            var current_pos = event.position
+            var world_pos = screen_to_world(current_pos)
+            
+            # Check if this is a double tap
+            var time_since_last_touch = current_time - last_touch_time
+            var distance_from_last_touch = current_pos.distance_to(last_touch_pos)
+            
+            if time_since_last_touch < DOUBLE_TAP_TIME_THRESHOLD and distance_from_last_touch < DOUBLE_TAP_DISTANCE_THRESHOLD:
+                # Double tap detected - execute skill 1 (AOEShootSkill)
+                execute_skill(1, world_pos)
+                # Reset double tap tracking to prevent triple tap from triggering again
+                last_touch_time = 0.0
+                last_touch_pos = Vector2.ZERO
+            else:
+                # Single tap - execute skill 0 (SimpleShootSkill)
+                is_mouse_pressed = true
+                last_touch_position = world_pos
+                execute_skill(0, last_touch_position)
+                # Update double tap tracking
+                last_touch_time = current_time
+                last_touch_pos = current_pos
         else:
             is_mouse_pressed = false
             last_touch_position = Vector2.ZERO  # Reset touch position
