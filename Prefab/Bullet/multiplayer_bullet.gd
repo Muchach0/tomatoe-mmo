@@ -16,7 +16,7 @@ var start_time: float
 var already_hit: Dictionary = {}
 
 # Network synchronization
-@onready var sync = $MultiplayerSynchronizer
+@onready var multiplayerSynchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var trail_particles: GPUParticles2D = get_node_or_null("TrailParticles")
 @onready var explosion_particles_scene: PackedScene = null  # Can be set for custom explosion particles
@@ -27,11 +27,15 @@ var custom_sprite_texture: Texture2D = null
 var sprite_scale: Vector2 = Vector2(0.5, 0.5)
 var texture_2d: Texture2D = null
 
+# Handle the bullet's visibility based on the current world
+var current_world: String = ""
+
+
 func _ready():
     # Set up multiplayer authority
-    if multiplayer.has_multiplayer_peer():
-        # Only the server should handle physics and lifetime
-        set_physics_process(multiplayer.is_server())
+    # if multiplayer.has_multiplayer_peer():
+    #     # Only the server should handle physics and lifetime
+    #     set_physics_process(multiplayer.is_server())
     
     start_time = Time.get_unix_time_from_system()
     
@@ -42,6 +46,8 @@ func _ready():
     if sprite and texture_2d:
         sprite.texture = texture_2d
         sprite.scale = sprite_scale
+    
+    force_visibility_update()
 
 func initialize_bullet(pos: Vector2, dir: Vector2, owner_id: int, bullet_data: Dictionary = {}):
     """Initialize bullet with position, direction and owner"""
@@ -263,3 +269,23 @@ func create_default_explosion_particles(radius: float) -> GPUParticles2D:
 func destroy_bullet():
     """Destroy bullet across all clients"""
     queue_free()
+
+func get_players_id_in_current_world() -> Array:
+    var players_id_in_current_world: Array = []
+    for player_id in EventBus.players:
+        if EventBus.players[player_id]["current_world"] == current_world:
+            players_id_in_current_world.append(player_id)
+    print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - get_players_id_in_current_world() - ", EventBus.players)
+    return players_id_in_current_world
+
+func force_visibility_update() -> void:
+    if multiplayerSynchronizer == null or not multiplayer or not multiplayer.is_server():
+        return
+    print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Force visibility update for bullet in world: ", current_world)
+    for players_id in EventBus.players:
+        if players_id in get_players_id_in_current_world():
+            multiplayerSynchronizer.set_visibility_for(players_id, true)
+            print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Setting visibility for player: ", players_id, " to true")
+        else:
+            multiplayerSynchronizer.set_visibility_for(players_id, false)
+            print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Setting visibility for player: ", players_id, " to false")

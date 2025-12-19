@@ -49,6 +49,6 @@ func execute(player: Player, target_position: Vector2, bullet_manager: BulletMan
 	bullet_data = apply_bullet_strategies(player, bullet_data)
 	
 	# Request bullet spawn
-	bullet_manager.request_bullet_spawn.rpc(player.global_position, direction, bullet_data)
+	bullet_manager.request_bullet_spawn.rpc(player.global_position, direction, bullet_data, player.current_world)
 
 

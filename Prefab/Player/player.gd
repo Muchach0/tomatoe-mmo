@@ -441,10 +441,13 @@ func move_player_to_destination_world(player_id: int, destination_world: String,
     EventBus.move_player_inside_world.connect(move_player_inside_world)
     return
 
-func move_player_inside_world(spawn_point: Vector2) -> void:
+func move_player_inside_world(spawn_point: Vector2, world_name: String) -> void:
     position = spawn_point
     synced_position = spawn_point
     target_position = spawn_point
+    
+    current_world = world_name
+    EventBus.current_world_player_location = world_name
     return
 
 func sync_visibility_after_player_moved_to_new_world() -> void:

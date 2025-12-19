@@ -95,6 +95,7 @@ func _spawn_item_drop_callback(data: Dictionary) -> Node:
     var item_sprite_path = data.get("item_sprite_path", null)
     var count = data.get("count", 0)
     var spawn_position = data.get("spawn_position", Vector2.ZERO)
+    var current_world_name = data.get("current_world_name", "")
     
     var item_sprite = load(item_sprite_path)
     if not item_sprite:
@@ -108,6 +109,8 @@ func _spawn_item_drop_callback(data: Dictionary) -> Node:
     var item_drop = item_drop_scene.instantiate()
     item_drop.stack = item_stack
     item_drop.global_position = spawn_position
+    item_drop.current_world = current_world_name
+    # item_drop.force_visibility_update()
     return item_drop
 
 #endregion

@@ -5,7 +5,9 @@ extends Node2D
 @onready var item_sprite: Sprite2D = $ItemSprite
 @onready var hitbox: Area2D = $Area2D
 @onready var count_label: Label = $CountLabel
+@onready var multiplayerSynchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 
+var current_world: String = ""
 var stack : ItemStack
 var velocity : Vector2
 
@@ -26,6 +28,7 @@ func _ready():
     velocity_tween.set_trans(Tween.TRANS_BOUNCE)
     velocity_tween.set_ease(Tween.EASE_OUT)
 
+    force_visibility_update()
 
 func update_display():
     item_sprite.texture = stack.item.sprite
@@ -69,3 +72,22 @@ func destroy_item_drop():
     else:
         # Hide the item drop on all clients
         visible = false
+
+func get_players_id_in_current_world() -> Array:
+    var players_id_in_current_world: Array = []
+    for player_id in EventBus.players:
+        if EventBus.players[player_id]["current_world"] == current_world:
+            players_id_in_current_world.append(player_id)
+    return players_id_in_current_world
+
+
+func force_visibility_update() -> void:
+    if multiplayerSynchronizer == null or not multiplayer or not multiplayer.is_server():
+        return
+    print(multiplayer.get_unique_id(), " - item_drop.gd - force_visibility_update() - Force visibility update for item drop in world: ", current_world)
+    for players_id in EventBus.players:
+        if players_id in get_players_id_in_current_world():
+            multiplayerSynchronizer.set_visibility_for(players_id, true)
+        else:
+            multiplayerSynchronizer.set_visibility_for(players_id, false)
+    # sync.update_visibility()

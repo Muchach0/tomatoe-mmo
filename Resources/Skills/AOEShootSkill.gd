@@ -67,4 +67,4 @@ func execute(player: Player, target_position: Vector2, bullet_manager: BulletMan
         var direction = Vector2(cos(angle), sin(angle))
         
         # Request bullet spawn for each bullet
-        bullet_manager.request_bullet_spawn.rpc(player.global_position, direction, base_bullet_data)
+        bullet_manager.request_bullet_spawn.rpc(player.global_position, direction, base_bullet_data, EventBus.current_world_player_location)

@@ -5,5 +5,4 @@
 [resource]
 script = ExtResource("1_ko88g")
 portal_scene_path = "res://Scenes/level_instance_test_1.tscn"
-world_offset = Vector2(2000, 0)
 metadata/_custom_type_script = "uid://vgo2gsdirylf"

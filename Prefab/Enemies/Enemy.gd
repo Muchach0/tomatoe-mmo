@@ -322,7 +322,7 @@ func drop_loot() -> void:
     for stack: ItemStack in loot_table.roll_loot():
         # var spawned_item : ItemDrop = item_drop.instantiate()
         print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
-        EventBus.spawn_item_drop.emit(stack, global_position)
+        EventBus.spawn_item_drop.emit(stack, global_position, current_world)
         # spawned_item.stack = stack
         # spawned_item.global_position = global_position
         # get_tree().current_scene.add_child.call_deferred(spawned_item)

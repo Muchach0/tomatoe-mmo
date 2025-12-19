@@ -44,7 +44,7 @@ func _ready() -> void:
     EventBus.spawn_player.connect(instantiate_player_scene)
     EventBus.respawn_player.connect(instantiate_player_scene)
     get_spawn_points()
-    EventBus.move_player_inside_world.emit(spawn_points[(len(EventBus.players) - 1 ) % 11])
+    EventBus.move_player_inside_world.emit(spawn_points[(len(EventBus.players) - 1 ) % 11], name)
     
 
     EventBus.spawn_enemy.connect(spawn_enemies)
@@ -309,8 +309,10 @@ func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_nam
 #region SPAWN ITEM DROP SECTION =================================================================
 
 # Function connected to the EventBus.spawn_item_drop signal
-func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2) -> void:
+func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2, world_name_from_enemy: String) -> void:
     if not multiplayer.is_server(): # Only the server can spawn item drops
+        return
+    if world_name_from_enemy != name: # Do not spawn the enemy if the world is not the same as the world of the level
         return
     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Spawning item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
 
