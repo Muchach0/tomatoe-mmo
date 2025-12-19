@@ -30,7 +30,7 @@ var current_number_of_retry = 0
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var local_player_info = {"name": "Toto", "ready": true, "char_index": 1}
+var local_player_info = {"name": "Toto", "ready": true, "char_index": 1, "current_world": EventBus.DEFAULT_WORLD_NAME}
 
 var server = null
 var client = null

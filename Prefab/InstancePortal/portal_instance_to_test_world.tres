@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PortalInstanceRessourceClass" load_steps=2 format=3 uid="uid://cpfc6gkslsdel"]
+
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="1_ko88g"]
+
+[resource]
+script = ExtResource("1_ko88g")
+portal_name = "Portal To Test World"
+portal_destination_world = "level_instance_1_world"
+portal_scene_path = "res://Scenes/level_instance_test_1.tscn"
+metadata/_custom_type_script = "uid://vgo2gsdirylf"

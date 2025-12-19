@@ -4,6 +4,8 @@ extends Node
 @onready var enemy_spawner: MultiplayerSpawner = get_node_or_null("EnemySpawner")
 @onready var item_drop_spawner: MultiplayerSpawner = get_node_or_null("ItemDropSpawner")
 
+var worlds_where_enemies_are_present = []
+var item_drop_groups = []
 
 
 const player_scene = preload("res://Prefab/Player/player_ship.tscn") # The player scene to instantiate when a new player connects.
@@ -27,6 +29,7 @@ func _ready() -> void:
     EventBus.spawn_player_on_global_spawner.connect(spawn_player_on_global_spawner)
     EventBus.spawn_enemy_on_global_spawner.connect(spawn_enemy_on_global_spawner)
     EventBus.spawn_item_drop_on_global_spawner.connect(spawn_item_drop_on_global_spawner)
+    EventBus.sync_visibility_after_player_moved_to_new_world.connect(sync_visibility_after_player_moved_to_new_world)
 
 
     player_spawner.spawn_function = _spawn_player_callback
@@ -39,7 +42,7 @@ func _ready() -> void:
 func _spawn_player_callback(data: Dictionary): # called at .spawn()
     print("level_mmo_logic.gd - _spawn_player()  Spawning player with dict: " + str(data))
     var player := player_scene.instantiate()
-    var player_world = data["current_world_name"]
+    var player_world = data["info"]["current_world"]
     # # Rather than changing the authority of the player itself,
     # # change the body and its children (recursively)
     # # to allow the player's position to be synchronized
@@ -69,10 +72,13 @@ func _spawn_enemy_callback(data: Dictionary) -> Node:
     var enemy = enemy_scene.instantiate()
     enemy.global_position = data.position
     enemy.current_world = enemy_world
+    # enemy.sync.update_visibility()
     print(multiplayer.get_unique_id(), " - game_logic.gd - _spawn_enemy_callback() - Adding enemy to group: ", data)
     enemy.add_to_group(data.spawner_name)  # Add to group for easy tracking (quests)
     enemy.add_to_group(data.spawner_name_with_id) # Add to group for easy tracking (mob_spawner)
     enemy.add_to_group(enemy_world)
+    worlds_where_enemies_are_present.append(enemy_world)
+    enemy.force_visibility_update()
     
     # enemy.set_visibility_on_spawn()
 
@@ -127,5 +133,20 @@ func spawn_item_drop_on_global_spawner(data: Dictionary):
 #region 3. Setting visibility for spawned nodes ==================================================================
 
 
-
+func sync_visibility_after_player_moved_to_new_world():
+    if not multiplayer.is_server():
+        return
+    
+    for world in worlds_where_enemies_are_present:
+        var enemies = get_tree().get_nodes_in_group(world)
+        if enemies.size() <= 0:
+            continue
+        for enemy in enemies:
+            if enemy is Enemy:
+                enemy.force_visibility_update()
+    # var item_drops = get_tree().get_nodes_in_group(EventBus.current_world_player_location)
+    # for enemy in enemies:
+    #     enemy.sync.update_visibility()
+    # for item_drop in item_drops:
+    #     item_drop.sync.update_visibility()
 #endregion

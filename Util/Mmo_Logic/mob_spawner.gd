@@ -29,6 +29,8 @@ var number_current_enemies : int = 0 # number of enemies spawned in the area
 var array_of_time_to_spawn_enemies : Array[float] = [] # array of time to spawn enemies - used to track the time to spawn an enemy after the enemy is killed
 var unique_id_spawner: int = 0 # unique id of the spawner - used to track the spawner
 
+var world_name: String = "" # name of the world - used to track the world of the spawner to only spawn enemies in the correct world - set by the level_mmo_logic.gd @onready
+
 func _ready() -> void:
     $CollisionShape2D.shape = shape
     
@@ -71,7 +73,7 @@ func spawn_enemy_at_random_location() -> void:
     var random_enemy = enemy_spawner_resource.get_random_enemy()
     print("mob_spawner.gd - spawn_enemy_at_random_location() - random enemy: ", random_enemy, " at position: ", random_position, " name: ", random_enemy["name"])
 
-    EventBus.spawn_enemy.emit(spawner_name, spawner_name_with_id, random_enemy["name"], random_position)
+    EventBus.spawn_enemy.emit(spawner_name, spawner_name_with_id, random_enemy["name"], random_position, world_name)
     
     # enemy_spawner_resource.spawn_enemy(random_position)
     number_current_enemies += 1
@@ -169,3 +171,6 @@ func _get_quest_manager() -> QuestManager:
 
 func get_spawner_name() -> String:
     return spawner_name
+
+func set_world_name(world_name_to_set: String) -> void:
+    world_name = world_name_to_set

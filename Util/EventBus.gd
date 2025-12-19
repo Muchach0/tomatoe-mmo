@@ -1,8 +1,8 @@
 # Event bus to communicate between nodes
 extends Node
 
-const DEFAULT_WORLD_NAME = "forest_world"
-var current_world_player_location = "forest_world"
+const DEFAULT_WORLD_NAME = "LevelForest"
+var current_world_player_location = "LevelForest"
 var players: Dictionary = {}
 
 signal player_hit
@@ -13,6 +13,7 @@ signal add_player # Signal to synchronize player data across peers when a new pl
 signal remove_player # Signal to remove player data across peers when a player disconnects
 signal set_player_node_name_and_init_position # Signal to set the player node name for synchronization
 signal set_player_camera # Signal to set the player camera
+signal move_player_to_destination_world # Signal to move a player to a destination world
 
 # Player synchronization signals
 signal spawn_player
@@ -85,3 +86,4 @@ signal quest_reward_choice_available(player: Player, quest_resource: QuestResour
 signal spawn_player_on_global_spawner # Signal to notify the global spawner that a player should be spawned
 signal spawn_enemy_on_global_spawner # Signal to notify the global spawner that an enemy should be spawned
 signal spawn_item_drop_on_global_spawner # Signal to notify the global spawner that an item drop should be spawned
+signal sync_visibility_after_player_moved_to_new_world # Signal to sync enemies and items after a player has moved to a new world

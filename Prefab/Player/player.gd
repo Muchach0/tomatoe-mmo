@@ -59,6 +59,8 @@ var bonus_number: int = 0 # The number of bonuses picked up by the player
 var inventory: Inventory = Inventory.new()
 var current_world: String = ""
 
+@onready var visibility_area: Area2D = $VisibilityArea2D # variable to store the visibility area of the player
+
 func _ready() -> void:
     # Duplicate the shader material to make individual modifications
     if material != null:
@@ -67,7 +69,7 @@ func _ready() -> void:
     print("player.gd - _ready() - id: " + str(peer_id) + " - is_multiplayer_authority: " + str(is_multiplayer_authority()))
     EventBus.connect("sync_bonus_count", on_sync_bonus_count)
     EventBus.add_upgrade_to_player.connect(on_add_upgrade_to_player)
-    EventBus.refresh_visibility.connect(on_refresh_visibility)
+    # EventBus.refresh_visibility.connect(on_refresh_visibility)
 
     # Initialize interpolation target
     target_position = position
@@ -90,6 +92,11 @@ func _ready() -> void:
     if skills.size() == 0:
         skills.append(SimpleShootSkill.new())
         skills.append(AOEShootSkill.new())
+
+    if visibility_area != null and multiplayer.is_server(): # only server deals with visibility area
+        visibility_area.body_entered.connect(on_visibility_area_body_entered)
+        visibility_area.body_exited.connect(on_visibility_area_body_exited)
+        EventBus.sync_visibility_after_player_moved_to_new_world.connect(sync_visibility_after_player_moved_to_new_world)
 
     # EventBus.connect("player_respawned", _on_player_respawned)
     # The player follows the mouse cursor automatically, so there's no point
@@ -242,11 +249,11 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
             # TODO: The server should also remove the upgrade from the scene.
     
     
-    # Zone transition detection
-    var zone_name = _isPlayerCrossingAnAreaWithZoneName(area)
-    if zone_name != "":
-        if multiplayer == null or is_multiplayer_authority(): # Only the authority should emit the signal.
-            zone_entering(zone_name)
+    # # Zone transition detection
+    # var zone_name = _isPlayerCrossingAnAreaWithZoneName(area)
+    # if zone_name != "":
+    #     if multiplayer == null or is_multiplayer_authority(): # Only the authority should emit the signal.
+    #         zone_entering(zone_name)
 
 
     pass # Replace with function body.
@@ -257,11 +264,11 @@ func _on_hitbox_area_exited(area: Area2D) -> void:
         if multiplayer == null or is_multiplayer_authority(): # Only the authority should emit the signal.
             is_invincible = false
 
-    # Zone transition detection
-    var zone_name = _isPlayerCrossingAnAreaWithZoneName(area)
-    if zone_name != "":
-        if multiplayer == null or is_multiplayer_authority(): # Only the authority should emit the signal.
-            zone_exiting(zone_name)
+    # # Zone transition detection
+    # var zone_name = _isPlayerCrossingAnAreaWithZoneName(area)
+    # if zone_name != "":
+    #     if multiplayer == null or is_multiplayer_authority(): # Only the authority should emit the signal.
+    #         zone_exiting(zone_name)
 
 
     pass # Replace with function body.
@@ -423,61 +430,118 @@ func _update_sprite_direction_from_motion(direction: Vector2) -> void:
 
 #region VISIBILITY SYNCHRONIZER SECTION =================================================================
 
-# 1.a - A zone is entered on local client
-func zone_entering(zone_name: String) -> void: 
-    # print(peer_id, " - player.gd - zone_entering() - Zone entering: ", zone_name)
-    if not is_multiplayer_authority(): # Only the authority handles the visibility synchronization.
+func sync_visibility_after_player_moved_to_new_world() -> void:
+    if not multiplayer.is_server(): # Only the server handles the visibility synchronization.
         return
-    EventBus.zone_touched.emit(zone_name, true)
+    for body in visibility_area.get_overlapping_bodies():
+        if body is not Player:
+            continue
+        if body.peer_id == peer_id:
+            continue
+        if EventBus.players[body.peer_id]["current_world"] == EventBus.players[peer_id]["current_world"]:
+            on_refresh_visibility.rpc(body.peer_id, true)
+        else:
+            on_refresh_visibility.rpc(body.peer_id, false)
+
+# 1.a - A zone is entered on server area
+func on_visibility_area_body_entered(body: Node2D) -> void: 
+    # print(peer_id, " - player.gd - zone_entering() - Zone entering: ", zone_name)
+    if not multiplayer.is_server(): # Only the authority handles the visibility synchronization.
+        return
+    if body is not Player:
+        return
+    print(multiplayer.get_unique_id(), " - player.gd - on_visibility_area_body_entered() - Body entered: ", body.name, " - body peer id: ", body.peer_id, " - peer id: ", peer_id)
+
+    if body.peer_id == peer_id:
+        return
+    
+    if EventBus.players[body.peer_id]["current_world"] != EventBus.players[peer_id]["current_world"]:
+        return
+    on_refresh_visibility.rpc(body.peer_id, true)
+    # EventBus.zone_touched.emit(peer_id, body.peer_id, true)
     # sync.add_visibility_filter(visibility_filter)
 
 # 1.b - A zone is exited on local client
-func zone_exiting(zone_name: String) -> void: 
+func on_visibility_area_body_exited(body: Node2D) -> void: 
     # print(peer_id, " - player.gd - zone_exiting() - Zone exiting: ", zone_name)
-    if not is_multiplayer_authority(): # Only the authority handles the visibility synchronization.
+    if not multiplayer.is_server(): # Only the authority handles the visibility synchronization.
         return
-    EventBus.zone_touched.emit(zone_name, false)
+    if body is not Player:
+        return
+    if body.peer_id == peer_id:
+        return
+    # EventBus.zone_touched.emit(peer_id, body.peer_id, false)
+    on_refresh_visibility.rpc(body.peer_id, false)
 
+
+
+@rpc("any_peer", "call_local", "reliable")
+func on_refresh_visibility(body_peer_id: int, is_entering: bool) -> void:
+
+    if is_multiplayer_authority(): # Only the authority handles the visibility synchronization.
+        print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - AUTHORITY - Refreshing visibility for peer: ", body_peer_id, " - is entering: ", is_entering)
+        visible = true
+        sync.set_visibility_for(1, true)
+        sync.set_visibility_for(body_peer_id, is_entering)
+        return
+    else:
+        print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - Refreshing visibility for peer: ", body_peer_id, " - is entering: ", is_entering)
+        if is_entering or multiplayer.is_server():
+            visible = true
+        else:
+            visible = false
+            # TODO: should also disable collision with the player
+            # sync.set_visibility_for(body_peer_id, false)
+
+    # if not multiplayer.is_server(): # Only the authority handles the visibility synchronization.
+    #     return
+    # if peer_id == 0 or peer_id == peer_id:
+    #     return
+    # if "zone" not in EventBus.players[peer_id] or "zone" not in EventBus.players[peer_id]:
+    #     return
+    # # EventBus.zone_touched.emit(peer_id, body.peer_id, false)
+    # return
 
 # 5.a. Called on all the clients to refresh the visibility of the players with the new players dict
-func on_refresh_visibility(players_dict: Dictionary) -> void:
-    # if not is_multiplayer_authority():
-    #     return
+# @rpc("any_peer", "call_local", "reliable")
+# func on_refresh_visibility(players_dict: Dictionary) -> void:
+#     # if not is_multiplayer_authority():
+#     #     return
 
-    if is_multiplayer_authority(): # local player is always visible on the server
-        sync.set_visibility_for(1, true)
+#     if is_multiplayer_authority(): # local player is always visible on the server
+#         sync.set_visibility_for(1, true)
     
-    # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - Players: ", players_dict)
+#     # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - Players: ", players_dict)
 
-    for remote_peer_id in players_dict.keys():
-        if remote_peer_id == 0 or remote_peer_id == peer_id:
-            continue
-        if "zone" not in players_dict[remote_peer_id] or "zone" not in players_dict[peer_id]:
-            continue
+#     for remote_peer_id in players_dict.keys():
+#         if remote_peer_id == 0 or remote_peer_id == peer_id:
+#             continue
+#         if "zone" not in players_dict[remote_peer_id] or "zone" not in players_dict[peer_id]:
+#             continue
 
-        # Check if the remote player and the local player have a common zone
-        if has_a_common_zone_with_player(players_dict, remote_peer_id, peer_id): # players in the same zone
-            # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to true")
-            visible = true
-            if is_multiplayer_authority(): 
-                sync.set_visibility_for(remote_peer_id, true)
-        else: # players not in the same zone
-            # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to false")
-            if is_multiplayer_authority():
-                visible = true # local player is always visible
-                sync.set_visibility_for(remote_peer_id, true)
-            else : # remote player
-                visible = false
-    return
+#         # Check if the remote player and the local player have a common zone
+#         if has_a_common_zone_with_player(players_dict, remote_peer_id, peer_id): # players in the same zone
+#             # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to true")
+#             visible = true
+#             if is_multiplayer_authority(): 
+#                 sync.set_visibility_for(remote_peer_id, true)
+#         else: # players not in the same zone
+#             # print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - setting visibility for remote peer id: ", remote_peer_id, " to false")
+#             if is_multiplayer_authority():
+#                 visible = true # local player is always visible
+#                 sync.set_visibility_for(remote_peer_id, true)
+#             else : # remote player
+#                 visible = false
+#     return
 
 
-# 5.b. Helper function to check if two players have a common zone
-func has_a_common_zone_with_player(players_dict: Dictionary, remote_peer_id: int, local_id: int) -> bool:
-    if "zone" not in players_dict[remote_peer_id] or "zone" not in players_dict[local_id]:
-        return false
-    for zone in players_dict[remote_peer_id]["zone"]:
-        if zone in players_dict[local_id]["zone"]:
-            return true
-    return false
+# # 5.b. Helper function to check if two players have a common zone
+# func has_a_common_zone_with_player(players_dict: Dictionary, remote_peer_id: int, local_id: int) -> bool:
+#     if "zone" not in players_dict[remote_peer_id] or "zone" not in players_dict[local_id]:
+#         return false
+#     for zone in players_dict[remote_peer_id]["zone"]:
+#         if zone in players_dict[local_id]["zone"]:
+#             return true
+#     return false
 
 #endregion

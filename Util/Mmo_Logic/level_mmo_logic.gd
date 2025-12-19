@@ -1,14 +1,12 @@
 extends Node2D
 
 
-@export var world_name = "forest" # Name of the world - used to sync or not players / enemies / items.
-
 # Enemy spawner reference (optional - will fallback to direct instantiation if not found)
 # @onready var enemy_spawner: MultiplayerSpawner = get_node_or_null("EnemySpawner")
 # @onready var item_drop_spawner: MultiplayerSpawner = get_node_or_null("ItemDropSpawner")
 # @onready var player_spawner: MultiplayerSpawner = get_node_or_null("PlayerSpawner")
 @onready var spawn_points_parent: Node2D = get_node_or_null("SpawnPoints")
-
+@onready var mob_spawners: Node = get_node_or_null("MobSpawners")
 # const player_scene = preload("res://Prefab/Player/player_ship.tscn") # The player scene to instantiate when a new player connects.
 
 # var players: Dictionary = {} # This will hold player data for synchronization
@@ -38,19 +36,21 @@ func _ready() -> void:
     EventBus.connect("add_player", add_player)
     EventBus.connect("remove_player", remove_player)
     EventBus.connect("set_player_node_name_and_init_position", set_player_node_name_and_init_position)
-    EventBus.connect("zone_touched", on_zone_touched)
+    # EventBus.connect("zone_touched", on_zone_touched)
     # EventBus.connect("bonus_touched", on_bonus_touched_by_player)
     # EventBus.connect("bonus_used", server_handles_bonus_used_by_player)
     # EventBus.connect("one_enemy_die", _on_enemy_died)
     # EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
     EventBus.spawn_player.connect(instantiate_player_scene)
     EventBus.respawn_player.connect(instantiate_player_scene)
+    EventBus.move_player_to_destination_world.connect(move_player_between_world)
     
 
     EventBus.spawn_enemy.connect(spawn_enemies)
 
 
     get_spawn_points()
+    set_world_name_variable_on_mob_spawners()
 
     # # Setup enemy spawner
     # if enemy_spawner:
@@ -91,16 +91,15 @@ func instantiate_player_scene(player_id, player_info, init_position) -> void:
         # print(" level_mmo_logic.gd - instantiate_player_scene() - Spawning on server - get_spawnable_scene: " + str(player_spawner.get_spawnable_scene(0)))
     
     # 
-    if EventBus.current_world_player_location != world_name: # Do not instantiate the player if the player is not in this world.
+    if EventBus.current_world_player_location != name: # Do not instantiate the player if the player is not in this world.
         return
     
     if not init_position: # if the position is not provided (new player), compute the init position
         init_position = spawn_points[(len(EventBus.players) - 1 ) % 11]
         # init_position = PLAYER_INIT_POSITION + len(players) * Vector2(50, 0)
     init_position = init_position # Adding offset of the map
-    EventBus.players[player_id]["current_world"] = EventBus.current_world_player_location
     
-    var data = {"id": player_id, "info": player_info, "position": init_position, "current_world_name": EventBus.current_world_player_location} # Adding a small offset to avoid overlap
+    var data = {"id": player_id, "info": player_info, "position": init_position} # Adding a small offset to avoid overlap
     print("level_mmo_logic.gd - instantiate_player_scene() - data: " + str(data))
     # var new_player_node = player_spawner.spawn(data) # Spawning players with a small offset to avoid overlap
     EventBus.spawn_player_on_global_spawner.emit(data)
@@ -192,41 +191,54 @@ func remove_player(player_id) -> void:
 # ===================================================
 # Spawn callback for MultiplayerSpawner
 
+func move_player_between_world(player_id: int, destination_world: String, _world_offset: Vector2) -> void:
+    if not multiplayer.is_server():
+        return
+    print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - move_player_between_world() - Moving player %d to destination world: %s" % [player_id, destination_world])
+    var player = EventBus.players[player_id]
+    if player == null:
+        return
+    
+    # player.travel_to_destination_world(destination_world)
+
+    # Delete current world and instanciate the new world
+
+
 #endregion
 
 
 #region VISIBILITY SYNCHRONIZER SECTION =================================================================
 
-func on_zone_touched(zone_name, is_entering: bool): # 2. Signal received on the authority client - and send change of zone to server
-    # if is_entering, the player is entering a zone
-    # is not is_entering, the player is exiting a zone
-    update_players_dict_on_server.rpc_id(0, zone_name, is_entering)
+# func on_zone_touched(zone_name, is_entering: bool): # 2. Signal received on the authority client - and send change of zone to server
+#     # if is_entering, the player is entering a zone
+#     # is not is_entering, the player is exiting a zone
+#     update_players_dict_on_server.rpc_id(0, zone_name, is_entering)
     
 
-@rpc("any_peer", "call_local", "reliable") # 3. Update the players dict on the server
-func update_players_dict_on_server(zone_name: String, is_entering: bool) -> void:
-    if !multiplayer.is_server():
-        return
-    var peer_id = multiplayer.get_remote_sender_id()
-    if peer_id not in EventBus.players:
-        print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - update_players_dict_on_server() - Player ID %d not found in players dictionary." % peer_id)
-        return
-    if "zone" not in EventBus.players[peer_id]:
-        EventBus.players[peer_id]["zone"] = [] # Initialize the zone list
+# @rpc("any_peer", "call_local", "reliable") # 3. Update the players dict on the server
+# func update_players_dict_on_server(zone_name: String, is_entering: bool) -> void:
+#     if !multiplayer.is_server():
+#         return
+#     var peer_id = multiplayer.get_remote_sender_id()
+#     if peer_id not in EventBus.players:
+#         print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - update_players_dict_on_server() - Player ID %d not found in players dictionary." % peer_id)
+#         return
+#     if "zone" not in EventBus.players[peer_id]:
+#         EventBus.players[peer_id]["zone"] = [] # Initialize the zone list
     
-    if is_entering and zone_name not in EventBus.players[peer_id]["zone"]:
-        EventBus.players[peer_id]["zone"].append(zone_name)
-    elif not is_entering and zone_name in EventBus.players[peer_id]["zone"]:
-        EventBus.players[peer_id]["zone"].erase(zone_name)
+#     if is_entering and zone_name not in EventBus.players[peer_id]["zone"]:
+#         EventBus.players[peer_id]["zone"].append(zone_name)
+#     elif not is_entering and zone_name in EventBus.players[peer_id]["zone"]:
+#         EventBus.players[peer_id]["zone"].erase(zone_name)
 
-    print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - update_players_dict_on_authority_client - new players dict: ", EventBus.players)
-    broadcast_players_dict_from_serv_then_send_refresh_visibility.rpc(EventBus.players)
+#     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - update_players_dict_on_authority_client - new players dict: ", EventBus.players)
+#     broadcast_players_dict_from_serv_then_send_refresh_visibility.rpc(EventBus.players)
 
 
-@rpc("any_peer", "call_local", "reliable") # 4. Broadcast of change of zone and refresh visibility everywhere
-func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict: Dictionary) -> void:
-    print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - broadcast_players_dict_then_send_refresh_visibility - players dict: ", players_dict)
-    EventBus.refresh_visibility.emit(players_dict)
+# @rpc("any_peer", "call_local", "reliable") # 4. Broadcast of change of zone and refresh visibility everywhere
+# func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict: Dictionary) -> void:
+#     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - broadcast_players_dict_then_send_refresh_visibility - players dict: ", players_dict)
+#     EventBus.refresh_visibility.emit(players_dict)
 
 #endregion
 
@@ -234,6 +246,13 @@ func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict:
 
 
 #region SPAWN ENEMY SECTION =================================================================
+
+func set_world_name_variable_on_mob_spawners() -> void:
+    if not mob_spawners:
+        return
+    for child in mob_spawners.get_children():
+        if child is Area2D and child.has_method("set_world_name"):
+            child.set_world_name(name)
 
 # func _spawn_enemy_callback(data: Dictionary) -> Node:
 #     var enemy_type = data.get("enemy_type", "Dummy")
@@ -259,11 +278,12 @@ func broadcast_players_dict_from_serv_then_send_refresh_visibility(players_dict:
 #     return enemy    
 
 
-func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2) -> void:
+func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
         return
-    print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", position, " from spawner: ", spawner_name)
-
+    if world_name_from_spawner != name: # Do not spawn the enemy if the world is not the same as the world of the level
+        return
+    print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", position, " from spawner: ", spawner_name, " in world: ", world_name_from_spawner)
     # var enemy = null
     
     # if enemy_spawner:
@@ -273,7 +293,7 @@ func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_nam
         "position": spawn_position,
         "spawner_name": spawner_name, 
         "spawner_name_with_id": spawner_name_with_id,
-        "current_world_name": world_name
+        "current_world_name": world_name_from_spawner
     }
     EventBus.spawn_enemy_on_global_spawner.emit(spawn_data)
     # enemy = enemy_spawner.spawn(spawn_data)
@@ -300,7 +320,7 @@ func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2) -> void:
         "item_sprite_path": item_stack.item.sprite.get_path(),
         "count": item_stack.count,
         "spawn_position": spawn_position, 
-        "current_world_name": world_name
+        "current_world_name": name
     }
     EventBus.spawn_item_drop_on_global_spawner.emit(spawn_data)
     # item_drop_spawner.spawn.call_deferred(spawn_data)

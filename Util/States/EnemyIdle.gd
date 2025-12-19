@@ -61,9 +61,9 @@ func _on_target_changed(_target_player: Node) -> void:
 
 func on_timer_finished():
     if multiplayer != null and multiplayer.is_server():
-        server_broadcast_exit_state.rpc()
+        enemy.server_send_state_transition_to_players_in_current_world("EnemyWandering")
 
 
-@rpc("any_peer", "call_local", "reliable")
-func server_broadcast_exit_state():
-    emit_signal("transitioned", self, "EnemyWandering")
+# @rpc("any_peer", "call_local", "reliable")
+# func server_broadcast_exit_state():
+#     emit_signal("transitioned", self, "EnemyWandering")

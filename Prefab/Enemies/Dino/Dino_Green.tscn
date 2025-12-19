@@ -211,6 +211,8 @@ metadata/_custom_type_script = "uid://dwrvjvtfymngy"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_rj2wl")
+visibility_update_mode = 2
+public_visibility = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
