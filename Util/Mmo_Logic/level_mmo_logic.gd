@@ -43,13 +43,13 @@ func _ready() -> void:
     # EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
     EventBus.spawn_player.connect(instantiate_player_scene)
     EventBus.respawn_player.connect(instantiate_player_scene)
-    EventBus.move_player_to_destination_world.connect(move_player_between_world)
+    get_spawn_points()
+    EventBus.move_player_inside_world.emit(spawn_points[(len(EventBus.players) - 1 ) % 11])
     
 
     EventBus.spawn_enemy.connect(spawn_enemies)
 
 
-    get_spawn_points()
     set_world_name_variable_on_mob_spawners()
 
     # # Setup enemy spawner

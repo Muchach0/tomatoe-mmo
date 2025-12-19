@@ -87,3 +87,4 @@ signal spawn_player_on_global_spawner # Signal to notify the global spawner that
 signal spawn_enemy_on_global_spawner # Signal to notify the global spawner that an enemy should be spawned
 signal spawn_item_drop_on_global_spawner # Signal to notify the global spawner that an item drop should be spawned
 signal sync_visibility_after_player_moved_to_new_world # Signal to sync enemies and items after a player has moved to a new world
+signal move_player_inside_world # Signal to move a player inside a world

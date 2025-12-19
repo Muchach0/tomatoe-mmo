@@ -98,6 +98,8 @@ func _ready() -> void:
         visibility_area.body_exited.connect(on_visibility_area_body_exited)
         EventBus.sync_visibility_after_player_moved_to_new_world.connect(sync_visibility_after_player_moved_to_new_world)
 
+    EventBus.move_player_to_destination_world.connect(move_player_to_destination_world)
+
     # EventBus.connect("player_respawned", _on_player_respawned)
     # The player follows the mouse cursor automatically, so there's no point
     # in displaying the mouse cursor.
@@ -429,6 +431,21 @@ func _update_sprite_direction_from_motion(direction: Vector2) -> void:
 
 
 #region VISIBILITY SYNCHRONIZER SECTION =================================================================
+
+func move_player_to_destination_world(player_id: int, destination_world: String, destination_offset: Vector2) -> void:
+    if player_id != peer_id:
+        return
+    current_world = destination_world
+    if EventBus.move_player_inside_world.is_connected(move_player_inside_world):
+        return
+    EventBus.move_player_inside_world.connect(move_player_inside_world)
+    return
+
+func move_player_inside_world(spawn_point: Vector2) -> void:
+    position = spawn_point
+    synced_position = spawn_point
+    target_position = spawn_point
+    return
 
 func sync_visibility_after_player_moved_to_new_world() -> void:
     if not multiplayer.is_server(): # Only the server handles the visibility synchronization.
