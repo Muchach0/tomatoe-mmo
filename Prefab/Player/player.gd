@@ -61,6 +61,8 @@ var current_world: String = ""
 
 @onready var visibility_area: Area2D = $VisibilityArea2D # variable to store the visibility area of the player
 
+const MAX_DISTANCE_TO_TELEPORT: float = 100.0
+
 func _ready() -> void:
     # Duplicate the shader material to make individual modifications
     if material != null:
@@ -165,7 +167,13 @@ func _physics_process(_delta: float) -> void:
             target_position = synced_position
         
         # Interpolate position smoothly instead of snapping
-        position = position.lerp(target_position, interpolation_speed * _delta)
+        if target_position.distance_to(position) < MAX_DISTANCE_TO_TELEPORT:
+            position = position.lerp(target_position, interpolation_speed * _delta)
+        else:
+            # Just teleport player if target position is too different from the current position
+            # This is useful for world transition : we don't want to interpolate the player position if it's too far away.
+            # This is to avoid jittering / aggro of enemies when the player is teleported to a new world.
+            position = target_position
 
     # TODO: Fix state machine later
     # # If the player is not moving, we don't need to update the state machine

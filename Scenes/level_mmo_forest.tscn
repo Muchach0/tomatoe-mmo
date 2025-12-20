@@ -14,15 +14,15 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_khdg0"]
 resource_local_to_scene = true
 radius = 406.43
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qrlry"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
 resource_local_to_scene = true
 radius = 257.32
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_qrlry"]
 resource_local_to_scene = true
 radius = 180.65
 
@@ -119,19 +119,19 @@ shape = SubResource("RectangleShape2D_ll5u2")
 [node name="OrcMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
 position = Vector2(2309, 541)
 enemy_spawner_resource = ExtResource("8_klr5u")
-shape = SubResource("CircleShape2D_sq5bs")
+shape = SubResource("CircleShape2D_khdg0")
 
 [node name="DinoMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
 position = Vector2(1267, 417)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_qrlry")
+shape = SubResource("CircleShape2D_sq5bs")
 
 [node name="DinoMobSpawner2" parent="MobSpawners" instance=ExtResource("6_foedh")]
 position = Vector2(687, 284)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_76rxa")
+shape = SubResource("CircleShape2D_qrlry")
 
 [node name="PortalInstance" parent="." instance=ExtResource("9_khdg0")]
 position = Vector2(931, 415)

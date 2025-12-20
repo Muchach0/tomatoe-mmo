@@ -370,28 +370,6 @@ func _find_player_by_peer_id(peer_id_to_find: int) -> Node:
 
 
 #region Visibility update between world
-# func visiblity_per_world_function_filter(peer_id: int) -> bool:
-#     print(multiplayer.get_unique_id(), " - Enemy.gd - visiblity_per_world_function_filter - peer_id: ", peer_id, " - current_world: ", current_world, " - EventBus.players: ", EventBus.players)
-
-#     if not multiplayer or not multiplayer.is_server():
-#         return false
-    
-#     if peer_id == 0:
-#         return true
-    
-#     # 1 - Enemy.gd - visiblity_per_world_function_filter - peer_id: 0 - current_world: forest_world - EventBus.players: { 1854173934: { "name": "Toto", "ready": true, "char_index": 1, "current_world_name": "forest_world", "wave_completed": false, "player_node_name": 1854173934, "init_position": (598.0, 528.0), "zone": ["zoneA"] }, 1224275503: { "name": "Toto", "ready": true, "char_index": 1, "current_world_name": "forest_world", "wave_completed": false, "player_node_name": 1224275503, "init_position": (723.0, 527.0), "zone": ["zoneA"] } }
-
-
-#     var player_to_check: Dictionary = EventBus.players.get(peer_id, null)
-#     var result = true
-
-    
-#     if player_to_check == null or "current_world" not in player_to_check:
-#         result = false
-#     if player_to_check["current_world"] != current_world:
-#         result = false
-#     print(multiplayer.get_unique_id(), " - Enemy.gd - visiblity_per_world_function_filter - result: ", result)
-#     return result
 
 func get_players_id_in_current_world() -> Array:
     var players_id_in_current_world: Array = []
@@ -405,14 +383,12 @@ func server_send_state_transition_to_players_in_current_world(new_state_name: St
         return
     var players_id_in_current_world = get_players_id_in_current_world()
     for player_id in players_id_in_current_world:
-        print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition_to_players_in_current_world - Sending state transition to player: ", player_id, " - new_state_name: ", new_state_name)
         server_send_state_transition.rpc_id(player_id, new_state_name)
     # The server should also transition the state locally
     server_send_state_transition(new_state_name)
 
 @rpc("authority", "call_local", "reliable")
 func server_send_state_transition(new_state_name: String) -> void:
-    print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition - Receiving state transition from server: ", new_state_name, " - current state: ", $StateMachine.current_state.name)
     $StateMachine.current_state.emit_signal("transitioned", $StateMachine.current_state, new_state_name)
 #endregion
 
