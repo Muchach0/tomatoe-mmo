@@ -32,7 +32,7 @@ func upgrade_touched_by_player_broadcast(upgrade_name: String, upgrade_identifie
 
     # if multiplayer != null and multiplayer.is_server():
     print("[SERVER]:upgrade_manager.gd - upgrade_touched_by_player_broadcast() - Deleting the upgrade '", upgrade_name, "' from the server")
-    var upgrade_node = get_node_or_null(NodePath("/root/Shower/" + upgrade_name))
+    var upgrade_node = get_node_or_null(NodePath(upgrade_name))
     if upgrade_node == null:
         print("[SERVER]:upgrade_manager.gd - upgrade_touched_by_player_broadcast() - Upgrade node not found: ", upgrade_name)
         return

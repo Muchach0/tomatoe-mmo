@@ -1,0 +1,36 @@
+[gd_scene load_steps=9 format=3 uid="uid://bpvdttyklmoem"]
+
+[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="1_r150o"]
+[ext_resource type="Script" uid="uid://d27pkmcy3fpe7" path="res://Util/Mmo_Logic/world_spawner.gd" id="1_rgh2o"]
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="2_50glp"]
+[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_idj7w"]
+[ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="3_kln2b"]
+[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/world_forest.tres" id="3_vy5pj"]
+[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/world_test_1.tres" id="4_bmxlf"]
+[ext_resource type="Script" uid="uid://cd7k5dtqi0bol" path="res://Util/Mmo_Logic/global_spawners_logic.gd" id="5_pbw6q"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_rgh2o")
+world_scene_ressource_list = Array[ExtResource("2_50glp")]([ExtResource("3_vy5pj"), ExtResource("4_bmxlf")])
+default_world_scene_ressource = ExtResource("3_vy5pj")
+
+[node name="Manager" parent="." instance=ExtResource("1_r150o")]
+
+[node name="UI" parent="." instance=ExtResource("2_idj7w")]
+
+[node name="PlayerCamera" parent="." instance=ExtResource("3_kln2b")]
+
+[node name="Spawners" type="Node" parent="."]
+script = ExtResource("5_pbw6q")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Spawners"]
+_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
+spawn_path = NodePath("../..")
+
+[node name="EnemySpawner" type="MultiplayerSpawner" parent="Spawners"]
+_spawnable_scenes = PackedStringArray("uid://cpndxvp5ubsl8", "uid://b0anaegxvegyc", "uid://dbowps5qkmhfv", "uid://d0sopd70yisiq", "uid://bpqw8x1m3r7ck", "uid://3iti8rxlsrc2", "uid://mdb5hoqaf1rq")
+spawn_path = NodePath("../..")
+
+[node name="ItemDropSpawner" type="MultiplayerSpawner" parent="Spawners"]
+_spawnable_scenes = PackedStringArray("uid://c2y8g8aps26he")
+spawn_path = NodePath("../..")

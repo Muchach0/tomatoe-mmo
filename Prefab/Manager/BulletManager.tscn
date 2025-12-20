@@ -8,7 +8,7 @@ script = ExtResource("1_npuix")
 
 [node name="BulletSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://bvn2x3y4k5l6m")
-spawn_path = NodePath("../..")
+spawn_path = NodePath("..")
 
 [node name="BulletPool" type="Node" parent="."]
 script = ExtResource("2_dpa37")

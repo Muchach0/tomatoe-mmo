@@ -60,6 +60,11 @@ var is_attack_on_cooldown = false
 
 # Loot part
 @export var loot_table: LootTable
+
+@onready var sync: MultiplayerSynchronizer = $MultiplayerSynchronizer
+var current_world : String = ""
+
+
 var item_drop: PackedScene = preload("res://Util/Items/item_drop.tscn")
 
 signal enemy_died
@@ -100,6 +105,15 @@ func _ready() -> void:
     # Connect aggro area for player detection
     if aggro_area != null:
         aggro_area.body_entered.connect(_on_aggro_area_body_entered)
+
+    if multiplayer and multiplayer.is_server():
+        # sync.add_visibility_filter(visiblity_per_world_function_filter)
+        # Ensure visibilities are computed immediately.
+        force_visibility_update()
+
+        # Default mode updates filters automatically during frames,
+        # but you can also set VISIBILITY_PROCESS_NONE and call update_visibility() manually.
+        # sync.visibility_update_mode = MultiplayerSynchronizer.VISIBILITY_PROCESS_IDLE
 
 func flip_sprite(flip: bool) -> void:
     if not should_flip_sprite: # do nothing if the enemy should not flip the sprite
@@ -308,7 +322,7 @@ func drop_loot() -> void:
     for stack: ItemStack in loot_table.roll_loot():
         # var spawned_item : ItemDrop = item_drop.instantiate()
         print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
-        EventBus.spawn_item_drop.emit(stack, global_position)
+        EventBus.spawn_item_drop.emit(stack, global_position, current_world)
         # spawned_item.stack = stack
         # spawned_item.global_position = global_position
         # get_tree().current_scene.add_child.call_deferred(spawned_item)
@@ -353,3 +367,37 @@ func _find_player_by_peer_id(peer_id_to_find: int) -> Node:
     return null
 
 #================ END OF TARGETING PART ================
+
+
+#region Visibility update between world
+
+func get_players_id_in_current_world() -> Array:
+    var players_id_in_current_world: Array = []
+    for player_id in EventBus.players:
+        if EventBus.players[player_id]["current_world"] == current_world:
+            players_id_in_current_world.append(player_id)
+    return players_id_in_current_world
+
+func server_send_state_transition_to_players_in_current_world(new_state_name: String) -> void:
+    if not multiplayer or not multiplayer.is_server():
+        return
+    var players_id_in_current_world = get_players_id_in_current_world()
+    for player_id in players_id_in_current_world:
+        server_send_state_transition.rpc_id(player_id, new_state_name)
+    # The server should also transition the state locally
+    server_send_state_transition(new_state_name)
+
+@rpc("authority", "call_local", "reliable")
+func server_send_state_transition(new_state_name: String) -> void:
+    $StateMachine.current_state.emit_signal("transitioned", $StateMachine.current_state, new_state_name)
+#endregion
+
+func force_visibility_update() -> void:
+    if sync == null or not multiplayer or not multiplayer.is_server():
+        return
+    for players_id in EventBus.players:
+        if players_id in get_players_id_in_current_world():
+            sync.set_visibility_for(players_id, true)
+        else:
+            sync.set_visibility_for(players_id, false)
+    # sync.update_visibility()

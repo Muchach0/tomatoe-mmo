@@ -301,6 +301,7 @@ shape = SubResource("CircleShape2D_rj2wl")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_rj2wl")
+public_visibility = false
 
 [node name="Shadow" type="Sprite2D" parent="."]
 z_index = -1

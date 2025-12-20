@@ -20,7 +20,8 @@ func _ready():
 func display_inventory(inventory: Inventory):
     if _inventory != inventory:
         if _inventory != null:
-            inventory.updated.disconnect(on_inventory_update)
+            if inventory.updated.is_connected(on_inventory_update):
+                inventory.updated.disconnect(on_inventory_update)
         inventory.updated.connect(on_inventory_update)
     _inventory = inventory
     on_inventory_update()

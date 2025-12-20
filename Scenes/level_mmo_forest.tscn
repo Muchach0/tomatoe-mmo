@@ -1,42 +1,33 @@
-[gd_scene load_steps=18 format=4 uid="uid://bbibw8vynhs5h"]
+[gd_scene load_steps=15 format=4 uid="uid://bbibw8vynhs5h"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_foedh"]
-[ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_iyu8m"]
-[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="3_klr5u"]
-[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="4_3asne"]
 [ext_resource type="TileSet" uid="uid://j1200pbdngie" path="res://Art/Tileset/tileset_level_mmo_forest.tres" id="5_rexd0"]
 [ext_resource type="PackedScene" uid="uid://u0e5l8v2mytq" path="res://Prefab/Spawner/Mob_Spawner.tscn" id="6_foedh"]
 [ext_resource type="Resource" uid="uid://1vs1pmnvy7sx" path="res://Resources/Spawner/dino_spawner.tres" id="8_3asne"]
 [ext_resource type="Resource" uid="uid://bqy38kmcvt3tk" path="res://Resources/Spawner/orc_spawner.tres" id="8_klr5u"]
 [ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
+[ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="9_khdg0"]
 [ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
+[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/world_test_1.tres" id="10_khdg0"]
 [ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
-[ext_resource type="Resource" uid="uid://cgx3mde2nyx5f" path="res://Resources/Spawner/tomatoe_wizard_spawner.tres" id="12_qrlry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_khdg0"]
 resource_local_to_scene = true
 radius = 406.43
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_d87u1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
 resource_local_to_scene = true
 radius = 257.32
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_3fwc7"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_qrlry"]
 resource_local_to_scene = true
 radius = 180.65
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_w2cjm"]
-radius = 500.0
-
-[node name="Shower" type="Node2D"]
+[node name="LevelForest" type="Node2D"]
 script = ExtResource("1_foedh")
-
-[node name="PlayerCamera" parent="." instance=ExtResource("2_iyu8m")]
-
-[node name="UI" parent="." instance=ExtResource("3_klr5u")]
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
@@ -47,13 +38,13 @@ position = Vector2(598, 528)
 position = Vector2(723, 527)
 
 [node name="3" type="Node2D" parent="SpawnPoints"]
-position = Vector2(303, 526)
+position = Vector2(625, 594)
 
 [node name="4" type="Node2D" parent="SpawnPoints"]
 position = Vector2(928, 518)
 
 [node name="5" type="Node2D" parent="SpawnPoints"]
-position = Vector2(420, 529)
+position = Vector2(745, 569)
 
 [node name="6" type="Node2D" parent="SpawnPoints"]
 position = Vector2(838, 520)
@@ -75,20 +66,6 @@ position = Vector2(520, 622)
 
 [node name="12" type="Node2D" parent="SpawnPoints"]
 position = Vector2(842, 629)
-
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
-spawn_path = NodePath("..")
-
-[node name="EnemySpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cpndxvp5ubsl8", "uid://b0anaegxvegyc", "uid://dbowps5qkmhfv", "uid://d0sopd70yisiq", "uid://bpqw8x1m3r7ck", "uid://3iti8rxlsrc2", "uid://mdb5hoqaf1rq")
-spawn_path = NodePath("..")
-
-[node name="ItemDropSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://c2y8g8aps26he")
-spawn_path = NodePath("..")
-
-[node name="Manager" parent="." instance=ExtResource("4_3asne")]
 
 [node name="TileMapLayer_Background" type="TileMapLayer" parent="."]
 z_index = -100
@@ -137,26 +114,25 @@ position = Vector2(1264, 443)
 position = Vector2(1236.8125, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
 
-[node name="MobSpawner" type="Node" parent="."]
+[node name="MobSpawners" type="Node" parent="."]
 
-[node name="OrcMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(2286, 606)
+[node name="OrcMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
+position = Vector2(2309, 541)
 enemy_spawner_resource = ExtResource("8_klr5u")
-shape = SubResource("CircleShape2D_76rxa")
+shape = SubResource("CircleShape2D_khdg0")
 
-[node name="DinoMobSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
+[node name="DinoMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
 position = Vector2(1267, 417)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_d87u1")
+shape = SubResource("CircleShape2D_sq5bs")
 
-[node name="DinoMobSpawner2" parent="MobSpawner" instance=ExtResource("6_foedh")]
+[node name="DinoMobSpawner2" parent="MobSpawners" instance=ExtResource("6_foedh")]
 position = Vector2(687, 284)
 enemy_spawner_resource = ExtResource("8_3asne")
 quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_3fwc7")
+shape = SubResource("CircleShape2D_qrlry")
 
-[node name="TomatoeWizardSpawner" parent="MobSpawner" instance=ExtResource("6_foedh")]
-position = Vector2(991, 1313)
-enemy_spawner_resource = ExtResource("12_qrlry")
-shape = SubResource("CircleShape2D_w2cjm")
+[node name="PortalInstance" parent="." instance=ExtResource("9_khdg0")]
+position = Vector2(931, 415)
+world_scene_ressource = ExtResource("10_khdg0")

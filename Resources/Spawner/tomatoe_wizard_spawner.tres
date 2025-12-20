@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://cgx3mde2nyx5f"]
+
+[ext_resource type="PackedScene" uid="uid://dbowps5qkmhfv" path="res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn" id="1_3g5gw"]
+[ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="3_yv3d5"]
+
+[resource]
+script = ExtResource("3_yv3d5")
+name = "TomatoeWizardSpawner"
+max_enemies_to_spawn = 20
+spawn_time = 5.0
+enemy_scene_array_of_dictionnary = Array[Dictionary]([{
+"name": "Tomatoe_Wizard",
+"scene": ExtResource("1_3g5gw"),
+"spawn_rate": 0.5
+}])
+metadata/_custom_type_script = "uid://bad6ch318s8w6"

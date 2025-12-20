@@ -1,15 +1,14 @@
-[gd_scene load_steps=13 format=4 uid="uid://c1487i5d7y1yh"]
+[gd_scene load_steps=12 format=4 uid="uid://c1487i5d7y1yh"]
 
-[ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_ll5u2"]
-[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_obgea"]
-[ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="2_tpf4k"]
-[ext_resource type="Texture2D" uid="uid://bp6f3dqf4at4o" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetFloor.png" id="6_bvf05"]
-[ext_resource type="Texture2D" uid="uid://c66ksft4jpsko" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetVillageAbandoned.png" id="7_i677c"]
-[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="9_qfg4i"]
-[ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="10_yqvot"]
+[ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_acb70"]
+[ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="5_xvb6q"]
+[ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="5_ylh7w"]
+[ext_resource type="Texture2D" uid="uid://bp6f3dqf4at4o" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetFloor.png" id="6_xxlbr"]
+[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/world_forest.tres" id="6_ylh7w"]
+[ext_resource type="Texture2D" uid="uid://c66ksft4jpsko" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetVillageAbandoned.png" id="7_sc3u1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmg7a"]
-texture = ExtResource("10_yqvot")
+texture = ExtResource("5_xvb6q")
 21:0/0 = 0
 22:0/0 = 0
 23:0/0 = 0
@@ -306,7 +305,7 @@ texture = ExtResource("10_yqvot")
 8:19/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i677c"]
-texture = ExtResource("6_bvf05")
+texture = ExtResource("6_xxlbr")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -767,7 +766,7 @@ texture = ExtResource("6_bvf05")
 19:25/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mcox1"]
-texture = ExtResource("7_i677c")
+texture = ExtResource("7_sc3u1")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1012,12 +1011,8 @@ sources/2 = SubResource("TileSetAtlasSource_mcox1")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(955, 1313)
 
-[node name="Shower" type="Node2D"]
-script = ExtResource("1_ll5u2")
-
-[node name="PlayerCamera" parent="." instance=ExtResource("2_tpf4k")]
-
-[node name="UI" parent="." instance=ExtResource("2_obgea")]
+[node name="LevelInstanceTest1" type="Node2D"]
+script = ExtResource("1_acb70")
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
@@ -1057,16 +1052,6 @@ position = Vector2(520, 622)
 [node name="12" type="Node2D" parent="SpawnPoints"]
 position = Vector2(842, 629)
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
-spawn_path = NodePath("..")
-
-[node name="EnemySpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cpndxvp5ubsl8", "uid://b0anaegxvegyc", "uid://dbowps5qkmhfv", "uid://d0sopd70yisiq", "uid://bpqw8x1m3r7ck", "uid://3iti8rxlsrc2", "uid://mdb5hoqaf1rq")
-spawn_path = NodePath("..")
-
-[node name="Manager" parent="." instance=ExtResource("9_qfg4i")]
-
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -100
 texture_filter = 1
@@ -1075,12 +1060,14 @@ tile_map_data = PackedByteArray("AAACAAAAAAAGAAgAAAADAAAAAAAGAAgAAAAEAAAAAAAGAAg
 tile_set = SubResource("TileSet_sqv62")
 
 [node name="AreaZoneA" type="Area2D" parent="." groups=["zoneA"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaZoneA"]
 position = Vector2(705.5, 751.5)
 shape = SubResource("RectangleShape2D_ll5u2")
 
 [node name="AreaZoneB" type="Area2D" parent="." groups=["zoneB"]]
+visible = false
 position = Vector2(986, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaZoneB"]
@@ -1088,8 +1075,13 @@ position = Vector2(356, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
 
 [node name="AreaZoneC" type="Area2D" parent="." groups=["zoneC"]]
+visible = false
 position = Vector2(986, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaZoneC"]
 position = Vector2(1042, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
+
+[node name="PortalInstance" parent="." instance=ExtResource("5_ylh7w")]
+position = Vector2(699, 341)
+world_scene_ressource = ExtResource("6_ylh7w")

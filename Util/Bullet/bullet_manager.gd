@@ -37,10 +37,13 @@ func _spawn_bullet_callback(data: Dictionary) -> Node:
     bullet.explosion_radius = data.get("explosion_radius", 0.0)
     bullet.explosion_damage = data.get("explosion_damage", 0.0)
     
+    bullet.current_world = data.get("current_world", "")
+    # bullet.force_visibility_update()
+    
     return bullet
 
 @rpc("any_peer", "call_local", "reliable")
-func request_bullet_spawn(position: Vector2, direction: Vector2, bullet_data: Dictionary):
+func request_bullet_spawn(position: Vector2, direction: Vector2, bullet_data: Dictionary, current_world: String):
     """Client requests bullet spawn - server validates and spawns"""
     if not multiplayer.is_server():
         return
@@ -62,7 +65,8 @@ func request_bullet_spawn(position: Vector2, direction: Vector2, bullet_data: Di
         "max_pierce": bullet_data.get("max_pierce", 1),
         "explosion_radius": bullet_data.get("explosion_radius", 0.0),
         "explosion_damage": bullet_data.get("explosion_damage", 0.0),
-        "bullet_data": bullet_data  # Pass full bullet_data for visual customizations
+        "bullet_data": bullet_data,  # Pass full bullet_data for visual customizations
+        "current_world": current_world
     }
     
     # Spawn bullet using MultiplayerSpawner

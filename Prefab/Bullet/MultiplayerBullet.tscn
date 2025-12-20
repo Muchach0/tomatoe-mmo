@@ -3,9 +3,6 @@
 [ext_resource type="Script" uid="uid://cmlns0d6yp2xr" path="res://Prefab/Bullet/multiplayer_bullet.gd" id="1_abc123"]
 [ext_resource type="Texture2D" uid="uid://bdvaqre0d5u28" path="res://Art/Sprites/test/fire_trail.png" id="2_def456"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
-radius = 8.0
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bullet"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -14,8 +11,15 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
+radius = 8.0
+
 [node name="MultiplayerBullet" type="Area2D"]
 script = ExtResource("1_abc123")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bullet")
+public_visibility = false
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
@@ -23,11 +27,6 @@ texture = ExtResource("2_def456")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_bullet")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bullet")
-
-[node name="VisibilityNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

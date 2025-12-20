@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WorldSceneRessourceClass" load_steps=2 format=3 uid="uid://cpfc6gkslsdel"]
+
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="1_bfcso"]
+
+[resource]
+script = ExtResource("1_bfcso")
+world_scene_path = "res://Scenes/level_instance_test_1.tscn"
+world_offset = Vector2(2000, 0)
+metadata/_custom_type_script = "uid://vgo2gsdirylf"

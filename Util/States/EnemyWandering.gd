@@ -23,7 +23,6 @@ func randomize_wander_and_add_timer():
 # When taking damage, we transition to the EnemyFollowing state, and the enemy targets the player that attacked it.
 func on_take_damage(from_player_id: int):
     if multiplayer != null and multiplayer.is_server():
-        print("EnemyWandering.gd - on_take_damage - Enemy has taken damage")
         enemy.set_target_peer.rpc(from_player_id)
 
 func Enter():
@@ -70,7 +69,7 @@ func Exit():
 
 func on_timer_finished():
     if multiplayer != null and multiplayer.is_server():
-        server_broadcast_exit_state.rpc()
+        enemy.server_send_state_transition_to_players_in_current_world("EnemyIdle")
     
 
 # ===================== TARGETING HANDLING =====================
@@ -87,6 +86,6 @@ func _on_target_changed(_target_player: Node) -> void:
 
 
 
-@rpc("any_peer", "call_local", "reliable")
-func server_broadcast_exit_state():
-    emit_signal("transitioned", self, "EnemyIdle")
+# @rpc("any_peer", "call_local", "reliable")
+# func server_broadcast_exit_state():
+#     emit_signal("transitioned", self, "EnemyIdle")
