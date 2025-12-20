@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
 [ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="9_khdg0"]
 [ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
-[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/portal_instance_to_test_world.tres" id="10_khdg0"]
+[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/world_test_1.tres" id="10_khdg0"]
 [ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
@@ -38,13 +38,13 @@ position = Vector2(598, 528)
 position = Vector2(723, 527)
 
 [node name="3" type="Node2D" parent="SpawnPoints"]
-position = Vector2(303, 526)
+position = Vector2(625, 594)
 
 [node name="4" type="Node2D" parent="SpawnPoints"]
 position = Vector2(928, 518)
 
 [node name="5" type="Node2D" parent="SpawnPoints"]
-position = Vector2(420, 529)
+position = Vector2(745, 569)
 
 [node name="6" type="Node2D" parent="SpawnPoints"]
 position = Vector2(838, 520)
@@ -135,4 +135,4 @@ shape = SubResource("CircleShape2D_76rxa")
 
 [node name="PortalInstance" parent="." instance=ExtResource("9_khdg0")]
 position = Vector2(931, 415)
-portal_ressource = ExtResource("10_khdg0")
+world_scene_ressource = ExtResource("10_khdg0")

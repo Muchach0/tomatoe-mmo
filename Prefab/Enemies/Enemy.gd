@@ -405,10 +405,14 @@ func server_send_state_transition_to_players_in_current_world(new_state_name: St
         return
     var players_id_in_current_world = get_players_id_in_current_world()
     for player_id in players_id_in_current_world:
+        print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition_to_players_in_current_world - Sending state transition to player: ", player_id, " - new_state_name: ", new_state_name)
         server_send_state_transition.rpc_id(player_id, new_state_name)
+    # The server should also transition the state locally
+    server_send_state_transition(new_state_name)
 
 @rpc("authority", "call_local", "reliable")
 func server_send_state_transition(new_state_name: String) -> void:
+    print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition - Receiving state transition from server: ", new_state_name, " - current state: ", $StateMachine.current_state.name)
     $StateMachine.current_state.emit_signal("transitioned", $StateMachine.current_state, new_state_name)
 #endregion
 

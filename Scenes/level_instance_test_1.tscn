@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_acb70"]
 [ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="5_xvb6q"]
 [ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="5_ylh7w"]
-[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/portal_instance_to_forest_world.tres" id="6_acb70"]
 [ext_resource type="Texture2D" uid="uid://bp6f3dqf4at4o" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetFloor.png" id="6_xxlbr"]
+[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/world_forest.tres" id="6_ylh7w"]
 [ext_resource type="Texture2D" uid="uid://c66ksft4jpsko" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetVillageAbandoned.png" id="7_sc3u1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmg7a"]
@@ -1084,4 +1084,4 @@ shape = SubResource("RectangleShape2D_ll5u2")
 
 [node name="PortalInstance" parent="." instance=ExtResource("5_ylh7w")]
 position = Vector2(699, 341)
-portal_ressource = ExtResource("6_acb70")
+world_scene_ressource = ExtResource("6_ylh7w")

@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="PortalInstanceRessourceClass" load_steps=2 format=3 uid="uid://du6p0pmqq7l7u"]
-
-[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="1_r4iu7"]
-
-[resource]
-script = ExtResource("1_r4iu7")
-portal_scene_path = "res://Scenes/level_mmo_forest.tscn"
-metadata/_custom_type_script = "uid://vgo2gsdirylf"
