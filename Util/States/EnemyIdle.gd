@@ -11,7 +11,7 @@ var idle_timer : Timer
 # When taking damage, we transition to the EnemyFollowing state, and the enemy targets the player that attacked it.
 func on_take_damage(from_player_id: int):
     if multiplayer != null and multiplayer.is_server():
-        print("EnemyIdle.gd - on_take_damage - Enemy has taken damage")
+        # print("EnemyIdle.gd - on_take_damage - Enemy has taken damage")
         enemy.set_target_peer.rpc(from_player_id)
 
 

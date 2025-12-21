@@ -147,7 +147,7 @@ func start_red_glow() -> void:
 # This is in 'remotesync' mode because we want also to use that function on the master.
 @rpc("any_peer", "call_local", "reliable")
 func sync_damage(damage: int, from_player_id:int, health_from_server: int) -> void:
-    print("Enemy.gd - sync_damage - damage: ", damage, " - from_player_id: ", from_player_id, " - health_from_server: ", health_from_server)
+    # print("Enemy.gd - sync_damage - damage: ", damage, " - from_player_id: ", from_player_id, " - health_from_server: ", health_from_server)
     health = health_from_server
 
     if animation_player != null:
@@ -318,10 +318,10 @@ func drop_loot() -> void:
     # Do nothing if the loot table is null or we are not in server mode
     if loot_table == null or not multiplayer or not multiplayer.is_server():
         return
-    print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Dropping loot")
+    # print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Dropping loot")
     for stack: ItemStack in loot_table.roll_loot():
         # var spawned_item : ItemDrop = item_drop.instantiate()
-        print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
+        # print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
         EventBus.spawn_item_drop.emit(stack, global_position, current_world)
         # spawned_item.stack = stack
         # spawned_item.global_position = global_position
@@ -376,7 +376,6 @@ func server_send_state_transition_to_players_in_current_world(new_state_name: St
         return
     var players_id_in_current_world = Helper.get_players_id_in_current_world(current_world)
     for player_id in players_id_in_current_world:
-        print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition_to_players_in_current_world - Sending state transition to player: ", player_id, " - new state: ", new_state_name)
         server_send_state_transition.rpc_id(player_id, new_state_name)
     # The server should also transition the state locally
     server_send_state_transition(new_state_name)

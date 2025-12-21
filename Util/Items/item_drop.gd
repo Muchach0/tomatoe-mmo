@@ -59,20 +59,12 @@ func destroy_item_drop():
         # Hide the item drop on all clients
         visible = false
 
-func get_players_id_in_current_world() -> Array:
-    var players_id_in_current_world: Array = []
-    for player_id in EventBus.players:
-        if EventBus.players[player_id]["current_world"] == current_world:
-            players_id_in_current_world.append(player_id)
-    return players_id_in_current_world
-
-
 func force_visibility_update() -> void:
     if multiplayerSynchronizer == null or not multiplayer or not multiplayer.is_server():
         return
     print(multiplayer.get_unique_id(), " - item_drop.gd - force_visibility_update() - Force visibility update for item drop in world: ", current_world)
     for players_id in EventBus.players:
-        if players_id in get_players_id_in_current_world():
+        if players_id in Helper.get_players_id_in_current_world(current_world):
             multiplayerSynchronizer.set_visibility_for(players_id, true)
         else:
             multiplayerSynchronizer.set_visibility_for(players_id, false)

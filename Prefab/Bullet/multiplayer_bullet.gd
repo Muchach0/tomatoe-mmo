@@ -270,22 +270,12 @@ func destroy_bullet():
     """Destroy bullet across all clients"""
     queue_free()
 
-func get_players_id_in_current_world() -> Array:
-    var players_id_in_current_world: Array = []
-    for player_id in EventBus.players:
-        if EventBus.players[player_id]["current_world"] == current_world:
-            players_id_in_current_world.append(player_id)
-    print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - get_players_id_in_current_world() - ", EventBus.players)
-    return players_id_in_current_world
 
 func force_visibility_update() -> void:
     if multiplayerSynchronizer == null or not multiplayer or not multiplayer.is_server():
         return
-    print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Force visibility update for bullet in world: ", current_world)
     for players_id in EventBus.players:
-        if players_id in get_players_id_in_current_world():
+        if players_id in Helper.get_players_id_in_current_world(current_world):
             multiplayerSynchronizer.set_visibility_for(players_id, true)
-            print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Setting visibility for player: ", players_id, " to true")
         else:
             multiplayerSynchronizer.set_visibility_for(players_id, false)
-            print(multiplayer.get_unique_id(), " - multiplayer_bullet.gd - force_visibility_update() - Setting visibility for player: ", players_id, " to false")
