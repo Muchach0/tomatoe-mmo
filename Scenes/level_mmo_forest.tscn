@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
 [ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="9_khdg0"]
 [ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
-[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/world_test_1.tres" id="10_khdg0"]
+[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Resources/Worlds/world_test_1.tres" id="10_khdg0"]
 [ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]

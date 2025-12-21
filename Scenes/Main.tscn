@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="1_r150o"]
 [ext_resource type="Script" uid="uid://d27pkmcy3fpe7" path="res://Util/Mmo_Logic/world_spawner.gd" id="1_rgh2o"]
-[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="2_50glp"]
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/WorldSceneRessourceClass.gd" id="2_50glp"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_idj7w"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="3_kln2b"]
-[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/world_forest.tres" id="3_vy5pj"]
-[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Prefab/InstancePortal/world_test_1.tres" id="4_bmxlf"]
+[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Resources/Worlds/world_forest.tres" id="3_vy5pj"]
+[ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Resources/Worlds/world_test_1.tres" id="4_bmxlf"]
 [ext_resource type="Script" uid="uid://cd7k5dtqi0bol" path="res://Util/Mmo_Logic/global_spawners_logic.gd" id="5_pbw6q"]
 
 [node name="Main" type="Node2D"]

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="5_xvb6q"]
 [ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/InstancePortal/PortalInstance.tscn" id="5_ylh7w"]
 [ext_resource type="Texture2D" uid="uid://bp6f3dqf4at4o" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetFloor.png" id="6_xxlbr"]
-[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Prefab/InstancePortal/world_forest.tres" id="6_ylh7w"]
+[ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Resources/Worlds/world_forest.tres" id="6_ylh7w"]
 [ext_resource type="Texture2D" uid="uid://c66ksft4jpsko" path="res://Art/Tileset/Ninja Adventure - Asset Pack/Tilesets/TilesetVillageAbandoned.png" id="7_sc3u1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmg7a"]

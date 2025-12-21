@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WorldSceneRessourceClass" load_steps=2 format=3 uid="uid://du6p0pmqq7l7u"]
 
-[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/PortalInstanceRessourceClass.gd" id="1_d5t3u"]
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/InstancePortal/WorldSceneRessourceClass.gd" id="1_d5t3u"]
 
 [resource]
 script = ExtResource("1_d5t3u")
