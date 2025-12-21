@@ -371,18 +371,12 @@ func _find_player_by_peer_id(peer_id_to_find: int) -> Node:
 
 #region Visibility update between world
 
-func get_players_id_in_current_world() -> Array:
-    var players_id_in_current_world: Array = []
-    for player_id in EventBus.players:
-        if EventBus.players[player_id]["current_world"] == current_world:
-            players_id_in_current_world.append(player_id)
-    return players_id_in_current_world
-
 func server_send_state_transition_to_players_in_current_world(new_state_name: String) -> void:
     if not multiplayer or not multiplayer.is_server():
         return
-    var players_id_in_current_world = get_players_id_in_current_world()
+    var players_id_in_current_world = Helper.get_players_id_in_current_world(current_world)
     for player_id in players_id_in_current_world:
+        print(multiplayer.get_unique_id(), " - Enemy.gd - server_send_state_transition_to_players_in_current_world - Sending state transition to player: ", player_id, " - new state: ", new_state_name)
         server_send_state_transition.rpc_id(player_id, new_state_name)
     # The server should also transition the state locally
     server_send_state_transition(new_state_name)
@@ -396,7 +390,7 @@ func force_visibility_update() -> void:
     if sync == null or not multiplayer or not multiplayer.is_server():
         return
     for players_id in EventBus.players:
-        if players_id in get_players_id_in_current_world():
+        if players_id in Helper.get_players_id_in_current_world(current_world):
             sync.set_visibility_for(players_id, true)
         else:
             sync.set_visibility_for(players_id, false)

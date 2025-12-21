@@ -59,12 +59,12 @@ func Physics_Update(_delta: float):
         # # Check if we should transition to melee attack
         var distance_to_player = direction.length()
         # if enemy.can_perform_melee_attack() and enemy.is_player_in_melee_range():
-        #     transition_state("EnemyMeleeAttack")
+        #     enemy.server_send_state_transition_to_players_in_current_world("EnemyMeleeAttack")
         #     return
         
         # Check if we should transition to ranged attack (if enemy can shoot)
         if enemy.can_shoot_bullets and distance_to_player > enemy.melee_attack_range and distance_to_player <= 300.0:
-            transition_state("EnemyRangedAttack")
+            enemy.server_send_state_transition_to_players_in_current_world("EnemyRangedAttack")
             return
         
         # if multiplayer:
@@ -106,4 +106,4 @@ func player_died(player_id):
 func player_in_melee_range(is_player_in_range: bool):
     if not is_player_in_range:
         return
-    transition_state("EnemyMeleeAttack")
+    enemy.server_send_state_transition_to_players_in_current_world("EnemyMeleeAttack")

@@ -20,6 +20,7 @@ config/icon="uid://bxjx6hdsa7flh"
 EventBus="*res://Util/EventBus.gd"
 Items="*res://Util/Items/items.gd"
 DebugToolWindow="*res://Util/Debug/debug_tools.gd"
+Helper="*res://Util/Helper/Helper.gd"
 
 [display]
 
