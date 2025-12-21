@@ -28,6 +28,9 @@ func _ready():
     velocity_tween.set_trans(Tween.TRANS_BOUNCE)
     velocity_tween.set_ease(Tween.EASE_OUT)
 
+    if multiplayer.is_server():
+        EventBus.sync_visibility_after_player_moved_to_new_world.connect(force_visibility_update)
+
     force_visibility_update()
 
 func update_display():
