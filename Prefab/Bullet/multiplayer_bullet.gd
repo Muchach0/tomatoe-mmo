@@ -99,7 +99,7 @@ func apply_visual_customizations(bullet_data: Dictionary):
 
 func _physics_process(delta: float) -> void:
     # Only server processes physics
-    if multiplayer == null:
+    if not multiplayer:
         return
     if not multiplayer.is_server():
         return
