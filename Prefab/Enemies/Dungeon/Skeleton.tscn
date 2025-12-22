@@ -13,6 +13,14 @@
 [ext_resource type="PackedScene" uid="uid://hlkjer88mbpu" path="res://Prefab/Components/HealthComponent.tscn" id="11_6l6xk"]
 [ext_resource type="Texture2D" uid="uid://hrdmj1kjxrht" path="res://Art/Sprites/recolor/shadow_circle_recolor.png" id="12_2wk8x"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rj2wl"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite2D:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_r1yq7"]
 radius = 32.0
 height = 144.0
@@ -151,14 +159,6 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_rj2wl"]
 radius = 3458.7512
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rj2wl"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Sprite2D:scale")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-
 [node name="Skelleton" type="CharacterBody2D"]
 y_sort_enabled = true
 material = ExtResource("1_0qxta")
@@ -169,6 +169,9 @@ MAX_DEFAULT_HEALTH = 25
 should_flip_sprite = true
 can_melee_attack = false
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_rj2wl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -241,9 +244,6 @@ position = Vector2(0, -168)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
 visible = false
 shape = SubResource("CircleShape2D_rj2wl")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_rj2wl")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 z_index = -1

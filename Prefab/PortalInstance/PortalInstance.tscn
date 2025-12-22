@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://050xdik1016p"]
 
 [ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="1_fcqpk"]
-[ext_resource type="Script" uid="uid://b84ba6oap6gji" path="res://Prefab/InstancePortal/portal_instance.gd" id="1_uak37"]
+[ext_resource type="Script" uid="uid://b84ba6oap6gji" path="res://Prefab/PortalInstance/portal_instance.gd" id="1_uak37"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uak37"]
 

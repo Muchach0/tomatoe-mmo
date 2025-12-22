@@ -72,6 +72,8 @@ signal player_in_melee_range
 signal take_damage_signal # Signal to notify the enemy that it has taken damage.
 signal target_changed(target_player: Node) # Signal emitted when the target player changes
 
+var is_enemy_dead: bool = false
+
 func _ready() -> void:
     if timer != null:
         timer.timeout.connect(delete_enemy)
@@ -183,6 +185,9 @@ func take_damage(damage: int, from_player_id: int) -> void:
 # Not sure if that should be part of the enemy script or the EnemyDying script. 
 # Keeping it here for now as it is related to the enemy damage above.
 func die(_from_player_id: int) -> void:
+    if is_enemy_dead:
+        return
+    is_enemy_dead = true
     # current_state = State.DYING
     collision_shape.set_deferred("disabled", true) # Disabling the collision shape when the ennemy is dying
     # hitbox_collision_shape.set_deferred("disabled", true) # Disabling the hitbox when the ennemy is dying
@@ -322,7 +327,8 @@ func drop_loot() -> void:
     for stack: ItemStack in loot_table.roll_loot():
         # var spawned_item : ItemDrop = item_drop.instantiate()
         # print(multiplayer.get_unique_id(), " - Enemy.gd - drop_loot - Spawning item: ", stack.item.item_name, " - count: ", stack.count)
-        EventBus.spawn_item_drop.emit(stack, global_position, current_world)
+        print(multiplayer.get_unique_id(), "Enemy.gd - drop_loot() - Spawning item: ", stack.item.item_name, " - count: ", stack.count, " - position: ", position, " - current_world: ", current_world)
+        EventBus.spawn_item_drop.emit(stack, position, current_world)
         # spawned_item.stack = stack
         # spawned_item.global_position = global_position
         # get_tree().current_scene.add_child.call_deferred(spawned_item)

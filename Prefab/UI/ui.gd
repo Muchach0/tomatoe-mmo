@@ -154,7 +154,7 @@ func on_update_wave_ui(level_number: int, wave_number: int, TOTAL_WAVES: int, en
 
 func on_wave_cleared(wave_number: int, TOTAL_WAVES: int) -> void:
     wave_completed_label.show()
-    if wave_number >= TOTAL_WAVES:
+    if wave_number >= TOTAL_WAVES - 1:
         wave_completed_label.text = "Boss incoming!!"
     else:
         wave_completed_label.text = "Wave %d completed!" % [wave_number]

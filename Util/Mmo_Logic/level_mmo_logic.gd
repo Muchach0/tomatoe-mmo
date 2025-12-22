@@ -13,7 +13,6 @@ extends Node2D
 
 var spawn_points = []
 
-
 # # Enemy scene paths
 # var enemy_scenes = {
 #     "Dummy": "res://Prefab/Enemies/Dummy.tscn",
@@ -283,14 +282,15 @@ func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_nam
         return
     if world_name_from_spawner != name: # Do not spawn the enemy if the world is not the same as the world of the level
         return
-    print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", position, " from spawner: ", spawner_name, " in world: ", world_name_from_spawner)
+    var global_spawn_position = spawn_position + position # Adding the world offset to the spawn position
+    print("level_mmo_logic.gd - _on_spawn_enemy() - Spawning enemy: ", enemy_name, " at position: ", global_spawn_position, " from spawner: ", spawner_name, " in world: ", world_name_from_spawner)
     # var enemy = null
     
     # if enemy_spawner:
         # Use MultiplayerSpawner if available
     var spawn_data = {
         "enemy_type": enemy_name,
-        "position": spawn_position,
+        "position": global_spawn_position, # Adding the world offset to the spawn position
         "spawner_name": spawner_name, 
         "spawner_name_with_id": spawner_name_with_id,
         "current_world_name": world_name_from_spawner
@@ -314,6 +314,7 @@ func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2, world_na
         return
     if world_name_from_enemy != name: # Do not spawn the enemy if the world is not the same as the world of the level
         return
+
     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Spawning item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
 
     var item_drop_node = null
@@ -321,7 +322,7 @@ func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2, world_na
         "item_name": item_stack.item.item_name,
         "item_sprite_path": item_stack.item.sprite.get_path(),
         "count": item_stack.count,
-        "spawn_position": spawn_position, 
+        "spawn_position": spawn_position, # Here, there is no need to add world offset, as the enemy is spawned by the Global spawner, which is a level above the World level
         "current_world_name": name
     }
     EventBus.spawn_item_drop_on_global_spawner.emit(spawn_data)

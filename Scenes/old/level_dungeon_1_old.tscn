@@ -1,47 +1,45 @@
-[gd_scene load_steps=18 format=4 uid="uid://dn6tnu3axqpxf"]
+[gd_scene load_steps=16 format=4 uid="uid://b53gse3cl0fhg"]
 
-[ext_resource type="Script" uid="uid://cowvolnrf8vgn" path="res://Util/Game_Logic/level_1_game_logic.gd" id="1_8yhm2"]
-[ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_1fal7"]
-[ext_resource type="PackedScene" uid="uid://4t0v4wxi1jn6" path="res://Prefab/Upgrades/speed_upgrade.tscn" id="9_xub2v"]
-[ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="10_chwpn"]
-[ext_resource type="Script" uid="uid://ml68vemh2d58" path="res://Util/Upgrade/SpeedBoostStrategy.gd" id="10_x5u8r"]
-[ext_resource type="Texture2D" uid="uid://cksc370vxgcc5" path="res://Art/Sprites/test/carrot.png" id="11_nwpk5"]
-[ext_resource type="PackedScene" uid="uid://cpjfn3h6rvp5d" path="res://Prefab/Upgrades/damage_upgrade.tscn" id="12_lk3dh"]
-[ext_resource type="Script" uid="uid://dwuqfrf7ultv5" path="res://Util/Upgrade/DamageBoostStrategy.gd" id="13_ts4pv"]
-[ext_resource type="Texture2D" uid="uid://dfhk7eqfescwu" path="res://Art/Sprites/test/fish.png" id="14_7sml1"]
-[ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="15_bd6hb"]
+[ext_resource type="Script" uid="uid://cowvolnrf8vgn" path="res://Util/Game_Logic/level_dungeon_1_game_logic.gd" id="1_af7a1"]
+[ext_resource type="PackedScene" uid="uid://4t0v4wxi1jn6" path="res://Prefab/Upgrades/speed_upgrade.tscn" id="2_w8025"]
+[ext_resource type="Script" uid="uid://ml68vemh2d58" path="res://Util/Upgrade/SpeedBoostStrategy.gd" id="3_mu4sx"]
+[ext_resource type="Texture2D" uid="uid://cksc370vxgcc5" path="res://Art/Sprites/test/carrot.png" id="4_r1q2b"]
+[ext_resource type="PackedScene" uid="uid://cpjfn3h6rvp5d" path="res://Prefab/Upgrades/damage_upgrade.tscn" id="5_t3ffg"]
+[ext_resource type="Script" uid="uid://dwuqfrf7ultv5" path="res://Util/Upgrade/DamageBoostStrategy.gd" id="6_274cn"]
+[ext_resource type="Texture2D" uid="uid://dfhk7eqfescwu" path="res://Art/Sprites/test/fish.png" id="7_0drpy"]
+[ext_resource type="Texture2D" uid="uid://lhtw2mljp0wr" path="res://Art/Sprites/recolor/tileset_dungeon_recolor.png" id="8_th700"]
 
 [sub_resource type="Resource" id="Resource_y1vuu"]
 resource_local_to_scene = true
-script = ExtResource("10_x5u8r")
+script = ExtResource("3_mu4sx")
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [sub_resource type="Resource" id="Resource_ffjdm"]
 resource_local_to_scene = true
-script = ExtResource("10_x5u8r")
+script = ExtResource("3_mu4sx")
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [sub_resource type="Resource" id="Resource_0nudk"]
 resource_local_to_scene = true
-script = ExtResource("13_ts4pv")
-texture = ExtResource("14_7sml1")
+script = ExtResource("6_274cn")
+texture = ExtResource("7_0drpy")
 upgrade_text = "Damage"
 metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
 
 [sub_resource type="Resource" id="Resource_reuqd"]
 resource_local_to_scene = true
-script = ExtResource("13_ts4pv")
-texture = ExtResource("14_7sml1")
+script = ExtResource("6_274cn")
+texture = ExtResource("7_0drpy")
 upgrade_text = "Damage"
 metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
 
 [sub_resource type="Resource" id="Resource_ttlqr"]
 resource_local_to_scene = true
-script = ExtResource("10_x5u8r")
+script = ExtResource("3_mu4sx")
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmg7a"]
-texture = ExtResource("10_chwpn")
+texture = ExtResource("8_th700")
 21:0/0 = 0
 22:0/0 = 0
 23:0/0 = 0
@@ -341,10 +339,8 @@ texture = ExtResource("10_chwpn")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_wmg7a")
 
-[node name="Shower" type="Node2D"]
-script = ExtResource("1_8yhm2")
-
-[node name="UI" parent="." instance=ExtResource("2_1fal7")]
+[node name="LevelDungeon1" type="Node2D"]
+script = ExtResource("1_af7a1")
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
@@ -384,35 +380,25 @@ position = Vector2(520, 622)
 [node name="12" type="Node2D" parent="SpawnPoints"]
 position = Vector2(842, 629)
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://6o6eiydhbvdn")
-spawn_path = NodePath("..")
-
-[node name="EnemySpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cpndxvp5ubsl8", "uid://b0anaegxvegyc", "uid://dbowps5qkmhfv", "uid://d0sopd70yisiq", "uid://bpqw8x1m3r7ck", "uid://3iti8rxlsrc2", "uid://mdb5hoqaf1rq")
-spawn_path = NodePath("..")
-
-[node name="SpeedUpgrade" parent="." instance=ExtResource("9_xub2v")]
+[node name="SpeedUpgrade" parent="." instance=ExtResource("2_w8025")]
 position = Vector2(794, 915)
 bullet_strategy = SubResource("Resource_y1vuu")
 
-[node name="SpeedUpgrade2" parent="." instance=ExtResource("9_xub2v")]
+[node name="SpeedUpgrade2" parent="." instance=ExtResource("2_w8025")]
 position = Vector2(872, 907)
 bullet_strategy = SubResource("Resource_ffjdm")
 
-[node name="DamageUpgrade" parent="." instance=ExtResource("12_lk3dh")]
+[node name="DamageUpgrade" parent="." instance=ExtResource("5_t3ffg")]
 position = Vector2(724, 913)
 bullet_strategy = SubResource("Resource_0nudk")
 
-[node name="DamageUpgrade2" parent="." instance=ExtResource("12_lk3dh")]
+[node name="DamageUpgrade2" parent="." instance=ExtResource("5_t3ffg")]
 position = Vector2(637, 907)
 bullet_strategy = SubResource("Resource_reuqd")
 
-[node name="SpeedUpgrade3" parent="." instance=ExtResource("9_xub2v")]
+[node name="SpeedUpgrade3" parent="." instance=ExtResource("2_w8025")]
 position = Vector2(562, 901)
 bullet_strategy = SubResource("Resource_ttlqr")
-
-[node name="Manager" parent="." instance=ExtResource("15_bd6hb")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -100

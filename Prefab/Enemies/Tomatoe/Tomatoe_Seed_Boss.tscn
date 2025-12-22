@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://bpqw8x1m3r7ck"]
+[gd_scene load_steps=28 format=3 uid="uid://bpqw8x1m3r7ck"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_seed_boss"]
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_seed_boss"]
+[ext_resource type="Resource" uid="uid://w78iumuh4tgp" path="res://Resources/Items/LootTables/tomatoe_king_loot.tres" id="3_8j4bu"]
 [ext_resource type="Texture2D" uid="uid://bywqgddjnsqp2" path="res://Art/Sprites/tomatoe/tomatoe_king_v3.png" id="3_40nuy"]
 [ext_resource type="Script" uid="uid://b73sir6xbr0gt" path="res://Util/Components/hurtbox.gd" id="4_seed_boss"]
 [ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="5_seed_boss"]
@@ -13,6 +14,14 @@
 [ext_resource type="Script" uid="uid://bfyarrfnc1tlo" path="res://Util/States/EnemyDying.gd" id="11_seed_boss"]
 [ext_resource type="PackedScene" uid="uid://hlkjer88mbpu" path="res://Prefab/Components/HealthComponent.tscn" id="12_seed_boss"]
 [ext_resource type="Texture2D" uid="uid://hrdmj1kjxrht" path="res://Art/Sprites/recolor/shadow_circle_recolor.png" id="13_8j4bu"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_seed_boss"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite2D:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_seed_boss_main"]
 radius = 50.0
@@ -236,14 +245,6 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_seed_boss_aggro"]
 radius = 1290.5748
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_seed_boss"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Sprite2D:scale")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-
 [node name="SeedBoss" type="CharacterBody2D"]
 y_sort_enabled = true
 material = ExtResource("1_seed_boss")
@@ -258,7 +259,13 @@ can_shoot_bullets = true
 bullet_damage = 1.0
 bullet_speed = 300.0
 can_melee_attack = false
+loot_table = ExtResource("3_8j4bu")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_seed_boss")
+visibility_update_mode = 2
+public_visibility = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -333,9 +340,6 @@ scale = Vector2(1.2, 1.2)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
 visible = false
 shape = SubResource("CircleShape2D_seed_boss_aggro")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_seed_boss")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 z_index = -1

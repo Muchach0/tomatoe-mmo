@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://bdea61fmwtews"]
+
+[ext_resource type="Script" uid="uid://bgymhixcxv6ed" path="res://Util/Items/item.gd" id="1_0bn1q"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_8kvbr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbb6g"]
+atlas = ExtResource("2_8kvbr")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ireuk"]
+atlas = SubResource("AtlasTexture_bbb6g")
+region = Rect2(688, 32, 16, 16)
+
+[resource]
+script = ExtResource("1_0bn1q")
+item_name = "Crown"
+sprite = SubResource("AtlasTexture_ireuk")
+metadata/_custom_type_script = "uid://bgymhixcxv6ed"

@@ -22,8 +22,11 @@ func _ready() -> void:
         world_scene_path = world_scene_ressource.world_scene_path
         world_offset = world_scene_ressource.world_offset
 
-    if area_2d != null:
+    if portal_visible and portal_enabled and area_2d != null:
         area_2d.body_entered.connect(on_body_entered)
+
+    if not portal_visible and not portal_enabled and sprite_2d != null:
+        disable_portal()
 
 
 func on_body_entered(body: Node2D) -> void:
@@ -36,3 +39,31 @@ func player_travel_to_destination_world(player: Node2D) -> void:
         return
     var player_id = player.peer_id
     EventBus.move_player_to_destination_world.emit(player_id, world_scene_path, world_offset)
+
+func disable_portal() -> void:
+    if area_2d != null:
+        area_2d.set_deferred("disabled", true)
+        if area_2d.body_entered.is_connected(on_body_entered):
+            area_2d.body_entered.disconnect(on_body_entered)
+    if sprite_2d != null:
+        sprite_2d.set_deferred("visible", false)
+    if portal_enabled:
+        portal_enabled = false
+    if portal_locked:
+        portal_locked = false
+    if portal_locked_by_player_id != 0:
+        portal_locked_by_player_id = 0
+
+func enable_portal() -> void:
+    if area_2d != null:
+        area_2d.set_deferred("disabled", false)
+        if not area_2d.body_entered.is_connected(on_body_entered):
+            area_2d.body_entered.connect(on_body_entered)
+    if sprite_2d != null:
+        sprite_2d.set_deferred("visible", true)
+    if portal_enabled:
+        portal_enabled = true
+    if portal_locked:
+        portal_locked = false
+    if portal_locked_by_player_id != 0:
+        portal_locked_by_player_id = 0

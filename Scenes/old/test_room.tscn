@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=3 uid="uid://c5ymybfjm8kfm"]
 
-[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/game_logic.gd" id="1_8fp34"]
+[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/old/game_logic.gd" id="1_8fp34"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_q5jsk"]
 [ext_resource type="Texture2D" uid="uid://e7ev8a2nskv2" path="res://Art/Sprites/background_space_wide_screen.png" id="5_tu1ko"]
 [ext_resource type="Material" uid="uid://5slcagwnqqij" path="res://Art/Shaders/Glowing.tres" id="6_f78ry"]
@@ -38,23 +38,16 @@ properties/0/replication_mode = 1
 [sub_resource type="Resource" id="Resource_y1vuu"]
 resource_local_to_scene = true
 script = ExtResource("15_f78ry")
-speed_multiplier = 1.5
-texture = ExtResource("16_raqwp")
-upgrade_text = "Speed"
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [sub_resource type="Resource" id="Resource_ffjdm"]
 resource_local_to_scene = true
 script = ExtResource("15_f78ry")
-speed_multiplier = 1.5
-texture = ExtResource("16_raqwp")
-upgrade_text = "Speed"
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [sub_resource type="Resource" id="Resource_0nudk"]
 resource_local_to_scene = true
 script = ExtResource("18_c1ea3")
-damage_bonus = 2.0
 texture = ExtResource("19_0jots")
 upgrade_text = "Damage"
 metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
@@ -62,7 +55,6 @@ metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
 [sub_resource type="Resource" id="Resource_reuqd"]
 resource_local_to_scene = true
 script = ExtResource("18_c1ea3")
-damage_bonus = 2.0
 texture = ExtResource("19_0jots")
 upgrade_text = "Damage"
 metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
@@ -70,9 +62,6 @@ metadata/_custom_type_script = "uid://dwuqfrf7ultv5"
 [sub_resource type="Resource" id="Resource_ttlqr"]
 resource_local_to_scene = true
 script = ExtResource("15_f78ry")
-speed_multiplier = 1.5
-texture = ExtResource("16_raqwp")
-upgrade_text = "Speed"
 metadata/_custom_type_script = "uid://ml68vemh2d58"
 
 [node name="Shower" type="Node2D"]

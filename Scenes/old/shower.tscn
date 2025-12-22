@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://b6kmyh7ke24y5"]
 
-[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/game_logic.gd" id="1_wiec7"]
+[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/old/game_logic.gd" id="1_wiec7"]
 [ext_resource type="PackedScene" uid="uid://r4el6umoyi8v" path="res://Prefab/BulletShower/bullets.tscn" id="2_ho31t"]
 [ext_resource type="PackedScene" uid="uid://6o6eiydhbvdn" path="res://Prefab/Player/player_ship.tscn" id="3_d1ke8"]
 [ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="4_wlcma"]

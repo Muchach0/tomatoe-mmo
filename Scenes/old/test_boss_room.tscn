@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=4 uid="uid://rfb2rx2gik1s"]
 
-[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/game_logic.gd" id="1_sqv62"]
+[ext_resource type="Script" uid="uid://drujhi3kyvi2u" path="res://Util/Game_Logic/old/game_logic.gd" id="1_sqv62"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_xmh30"]
 [ext_resource type="Texture2D" uid="uid://e7ev8a2nskv2" path="res://Art/Sprites/background_space_wide_screen.png" id="3_wmg7a"]
 [ext_resource type="Material" uid="uid://5slcagwnqqij" path="res://Art/Shaders/Glowing.tres" id="4_n5lmp"]
