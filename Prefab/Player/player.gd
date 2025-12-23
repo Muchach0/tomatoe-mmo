@@ -101,6 +101,8 @@ func _ready() -> void:
         EventBus.sync_visibility_after_player_moved_to_new_world.connect(sync_visibility_after_player_moved_to_new_world)
 
     EventBus.move_player_to_destination_world.connect(move_player_to_destination_world)
+    
+    on_refresh_visibility(1, true) # Refresh visibility for the player with the server.
 
     # EventBus.connect("player_respawned", _on_player_respawned)
     # The player follows the mouse cursor automatically, so there's no point
