@@ -30,6 +30,7 @@ func _ready() -> void:
     EventBus.spawn_enemy_on_global_spawner.connect(spawn_enemy_on_global_spawner)
     EventBus.spawn_item_drop_on_global_spawner.connect(spawn_item_drop_on_global_spawner)
     EventBus.sync_visibility_after_player_moved_to_new_world.connect(sync_visibility_after_player_moved_to_new_world)
+    EventBus.remove_player.connect(despawn_player_on_global_spawner)
 
 
     player_spawner.spawn_function = _spawn_player_callback
@@ -133,7 +134,34 @@ func spawn_item_drop_on_global_spawner(data: Dictionary):
 
 #endregion
 
-#region 3. Setting visibility for spawned nodes ==================================================================
+#region 3. DESPAWNING PLAYERS ==================================================================
+
+func despawn_player_on_global_spawner(player_id: int) -> void:
+    if not multiplayer.is_server():
+        return
+    
+    # Find the player node using Helper function
+    var player_node = Helper.find_player_by_peer_id(player_id)
+    
+    if player_node:
+        print(multiplayer.get_unique_id(), " - global_spawners_logic.gd - despawn_player_on_global_spawner() - Found and removing player node for peer_id: ", player_id)
+        
+        # Remove from groups
+        if player_node.current_world != "":
+            player_node.remove_from_group(player_node.current_world)
+        
+        # Queue free the player node
+        # Note: MultiplayerSpawner should handle automatic cleanup when peer disconnects,
+        # but we ensure proper group cleanup here
+        player_node.queue_free()
+    else:
+        print(multiplayer.get_unique_id(), " - global_spawners_logic.gd - despawn_player_on_global_spawner() - Could not find player node for peer_id: ", player_id)
+
+
+
+#endregion
+
+#region 4. Setting visibility for spawned nodes ==================================================================
 
 
 func sync_visibility_after_player_moved_to_new_world():

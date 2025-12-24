@@ -158,19 +158,18 @@ func set_player_node_name_and_init_position(player_id, player_node_name, init_po
 func delete_player_node_on_server(player_id) -> void:
     if !multiplayer.is_server():
         return
-    if player_id in EventBus.players:
-        var player_node_name = EventBus.players[player_id].get("player_node_name")
-        if player_node_name:
-            var player_node = get_node_or_null(NodePath(player_node_name))
-            if player_node:
-                player_node.queue_free()  # Free the player node if it exists
-                print("game_logic.gd - delete_player_on_server() - Player node %s removed." % player_node_name)
-            else:
-                print("game_logic.gd - delete_player_on_server() - Player node %s not found." % player_node_name)
-        else:
-            print("game_logic.gd - delete_player_on_server() - Player node name not found for ID %d." % player_id)
-    else:
-        print("game_logic.gd - delete_player_on_server() - Player ID %d not found in players dictionary." % player_id)
+    
+    var found_player: Player = Helper.find_player_by_peer_id(player_id)
+    
+
+    if not found_player:
+        print("game_logic.gd - delete_player_on_server() - Could not find player node for ID %d." % player_id)
+        return
+    
+    if found_player.current_world != "":
+        found_player.remove_from_group(found_player.current_world)
+    found_player.queue_free()
+    print("game_logic.gd - delete_player_on_server() - Player removed for ID %d." % player_id)
 
 # Called on signal _on_player_disconnected
 func remove_player(player_id) -> void:
@@ -317,7 +316,6 @@ func on_spawn_item_drop(item_stack: ItemStack, spawn_position: Vector2, world_na
 
     print(multiplayer.get_unique_id(), " - level_mmo_logic.gd - on_spawn_item_drop() - Spawning item drop: ", item_stack.item.item_name, " at position: ", spawn_position)
 
-    var item_drop_node = null
     var spawn_data = {
         "item_name": item_stack.item.item_name,
         "item_sprite_path": item_stack.item.sprite.get_path(),
