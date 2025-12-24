@@ -27,7 +27,13 @@ enum VisibilityMode {ALWAYS , TOUCHSCREEN_ONLY }
 
 @export var visibility_mode := VisibilityMode.ALWAYS
 
-# Use Input Actions
+# MOVEMENT: Controls player movement (uses input actions)
+# FIRING: Controls player firing direction (does not use input actions)
+enum JoystickType {MOVEMENT, FIRING}
+
+@export var joystick_type := JoystickType.MOVEMENT
+
+# Use Input Actions (only for movement joystick)
 @export var use_input_actions := true
 
 # Project -> Project Settings -> Input Map
@@ -69,6 +75,9 @@ func _ready() -> void:
     if not DisplayServer.is_touchscreen_available() and visibility_mode == VisibilityMode.TOUCHSCREEN_ONLY:
         hide()
     add_to_group("virtual_joystick")
+    # Firing joysticks should not use input actions to avoid interfering with movement
+    if joystick_type == JoystickType.FIRING:
+        use_input_actions = false
 
 func get_active_touch_index() -> int:
     return _touch_index
@@ -138,7 +147,8 @@ func _update_joystick(touch_position: Vector2) -> void:
         _pressed = false
         _output = Vector2.ZERO
     
-    if use_input_actions:
+    # Only update input actions for movement joystick
+    if use_input_actions and joystick_type == JoystickType.MOVEMENT:
         _update_input_actions()
 
 func _update_input_actions():

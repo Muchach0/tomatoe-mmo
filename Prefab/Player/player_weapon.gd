@@ -10,6 +10,10 @@ var bullet_scene : PackedScene = preload("res://Prefab/Bullet/Bullet.tscn")
 var is_mouse_pressed: bool = false
 var last_touch_position: Vector2 = Vector2.ZERO
 
+# Firing joystick state
+var firing_joystick: VirtualJoystick = null
+var is_firing_joystick_pressed: bool = false
+
 # Double tap detection for mobile
 var last_touch_time: float = 0.0
 var last_touch_pos: Vector2 = Vector2.ZERO
@@ -22,6 +26,19 @@ func _ready():
     bullet_manager = get_tree().get_first_node_in_group("bullet_manager")
     if not bullet_manager:
         push_error("BulletManager not found! Make sure it's added to the scene and in 'bullet_manager' group.")
+    
+    # Find firing joystick in scene
+    _find_firing_joystick()
+
+# Find the firing joystick from the virtual_joystick group
+func _find_firing_joystick() -> void:
+    var joysticks = get_tree().get_nodes_in_group("virtual_joystick")
+    for joystick in joysticks:
+        if joystick is VirtualJoystick and joystick.joystick_type == VirtualJoystick.JoystickType.FIRING:
+            firing_joystick = joystick
+            print("player_weapon.gd - Found firing joystick: ", joystick.name)
+            return
+    print("player_weapon.gd - Warning: No firing joystick found in scene")
 
 # Convert screen coordinates to world coordinates
 func screen_to_world(screen_pos: Vector2) -> Vector2:
@@ -29,11 +46,32 @@ func screen_to_world(screen_pos: Vector2) -> Vector2:
     var canvas_transform = viewport.get_canvas_transform().affine_inverse()
     return canvas_transform * screen_pos
 
+# Convert joystick direction to target position relative to player
+func joystick_direction_to_target_position(joystick_direction: Vector2) -> Vector2:
+    if joystick_direction.length_squared() < 0.01:
+        return Vector2.ZERO
+    # Use a reasonable firing distance (e.g., 500 pixels from player)
+    var firing_distance: float = 500.0
+    return player.global_position + joystick_direction.normalized() * firing_distance
+
 func _process(_delta):
-    # Continuous firing while mouse/touch is held down
-    if is_mouse_pressed and not player.is_hidden:
-        # Only handle input if we are the authority (or single player)
-        if multiplayer == null or is_multiplayer_authority():
+    # Only handle input if we are the authority (or single player)
+    if multiplayer == null or is_multiplayer_authority():
+        # Try to find firing joystick if not found yet
+        if firing_joystick == null:
+            _find_firing_joystick()
+        
+        # Check firing joystick state
+        if firing_joystick != null:
+            is_firing_joystick_pressed = firing_joystick.is_pressed()
+            if is_firing_joystick_pressed and not player.is_hidden:
+                var joystick_output = firing_joystick.get_output()
+                if joystick_output.length_squared() > 0.01:  # Only fire if joystick has meaningful input
+                    var target_position = joystick_direction_to_target_position(joystick_output)
+                    execute_skill(0, target_position)  # Skill 0 = SimpleShootSkill
+        
+        # Continuous firing while mouse/touch is held down (only if firing joystick is not active)
+        if is_mouse_pressed and not is_firing_joystick_pressed and not player.is_hidden:
             # Use current touch position for mobile, current mouse position for PC
             if last_touch_position != Vector2.ZERO:
                 execute_skill(0, last_touch_position)  # Skill 0 = SimpleShootSkill
@@ -63,6 +101,11 @@ func _unhandled_input(event: InputEvent) -> void:
     
     # Mobile: screen touch press/release
     elif event is InputEventScreenTouch:
+        # Check if touch is on firing joystick - if so, let the joystick handle it
+        if firing_joystick != null and firing_joystick.contains_point(event.position):
+            # Let the firing joystick handle this touch
+            return
+        
         if event.pressed:
             var current_time = Time.get_ticks_msec() / 1000.0  # Convert to seconds
             var current_pos = event.position
@@ -91,9 +134,15 @@ func _unhandled_input(event: InputEvent) -> void:
             last_touch_position = Vector2.ZERO  # Reset touch position
     
     # Mobile: screen drag to update touch position during continuous firing
-    elif event is InputEventScreenDrag and is_mouse_pressed:
-        # Convert screen coordinates to world coordinates
-        last_touch_position = screen_to_world(event.position)
+    elif event is InputEventScreenDrag:
+        # Check if drag is on firing joystick - if so, let the joystick handle it
+        if firing_joystick != null and firing_joystick.contains_point(event.position):
+            # Let the firing joystick handle this drag
+            return
+        
+        if is_mouse_pressed:
+            # Convert screen coordinates to world coordinates
+            last_touch_position = screen_to_world(event.position)
 
 ## Execute a skill by index
 ## @param skill_index: Index of the skill in player.skills array (0 = SimpleShootSkill, 1 = AOEShootSkill)

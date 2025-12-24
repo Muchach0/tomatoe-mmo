@@ -14,7 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Control1" type="Control" parent="."]
+[node name="Control_JoystickMovement" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -23,7 +23,7 @@ offset_top = -256.0
 offset_right = 256.0
 grow_vertical = 0
 
-[node name="VirtualJoystick" type="Control" parent="Control1"]
+[node name="VirtualJoystick" type="Control" parent="Control_JoystickMovement"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -36,7 +36,7 @@ script = ExtResource("1_ph4ed")
 pressed_color = Color(0.764706, 0.764706, 0.764706, 1)
 metadata/_custom_type_script = "uid://g85kccb56rkg"
 
-[node name="Base" type="TextureRect" parent="Control1/VirtualJoystick"]
+[node name="Base" type="TextureRect" parent="Control_JoystickMovement/VirtualJoystick"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -50,7 +50,62 @@ offset_bottom = 63.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Tip" type="TextureRect" parent="Control1/VirtualJoystick/Base"]
+[node name="Tip" type="TextureRect" parent="Control_JoystickMovement/VirtualJoystick/Base"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_tkw83")
+
+[node name="Control_JoystickFire" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -256.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="VirtualJoystick" type="Control" parent="Control_JoystickFire"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -257.0
+offset_right = 256.0
+offset_bottom = -1.0
+grow_vertical = 0
+script = ExtResource("1_ph4ed")
+pressed_color = Color(0.764706, 0.764706, 0.764706, 1)
+joystick_type = 1
+metadata/_custom_type_script = "uid://g85kccb56rkg"
+
+[node name="Base" type="TextureRect" parent="Control_JoystickFire/VirtualJoystick"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -65.0
+offset_right = 64.0
+offset_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tip" type="TextureRect" parent="Control_JoystickFire/VirtualJoystick/Base"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
