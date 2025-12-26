@@ -29,6 +29,7 @@ signal game_over_screen_text_and_visibility # Signal to notify the UI that the g
 signal update_wave_ui # Signal to notify the UI that the wave number and enemy count should be updated
 signal restart_button_pressed # Signal to notify the UI that the restart button has been pressed
 signal wave_cleared # Signal to notify the UI that the wave has been cleared
+signal update_global_timer_label # Signal to notify the UI that the global timer label should be updated
 
 # Signal linked to bonus
 signal bonus_touched # Signal to notify the game logic that a player touched a bonus
@@ -88,3 +89,13 @@ signal spawn_enemy_on_global_spawner # Signal to notify the global spawner that 
 signal spawn_item_drop_on_global_spawner # Signal to notify the global spawner that an item drop should be spawned
 signal sync_visibility_after_player_moved_to_new_world # Signal to sync enemies and items after a player has moved to a new world
 signal move_player_inside_world # Signal to move a player inside a world
+
+
+# Signal related to stages and global timers
+signal stage_finished # Signal to notify the game logic that a stage has finished
+signal go_to_boss_room_button_pressed
+signal hide_go_boss_room_button # Signal to notify the UI that the go to boss room button should be hidden
+signal return_to_forest_button_pressed # Signal to notify that the return to forest button has been pressed
+signal show_return_to_forest_button # Signal to notify the UI that the return to forest button should be shown
+signal hide_return_to_forest_button # Signal to notify the UI that the return to forest button should be hidden
+signal update_level_number # Signal to notify the UI that the level number should be updated

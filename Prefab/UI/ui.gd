@@ -30,6 +30,16 @@ extends CanvasLayer
 # Quest Tree
 @onready var tree: Tree = $ControlQuests/Control/VBoxContainer/Tree
 
+# Global timer related labels
+@onready var global_timer_label: Label = $GlobalTimerLabel
+@onready var timer_finished_go_boss_room_screen: Control = $TimerFinishedGoBossRoom
+@onready var go_boss_room_button: Button = $TimerFinishedGoBossRoom/Control2/Button
+
+# Return to forest related UI
+@onready var return_to_forest_screen: Control = $ReturnToMainWorldScreen
+@onready var return_to_forest_button: Button = $ReturnToMainWorldScreen/Control2/Button
+
+
 var number_of_players: int = 0
 const THEME: Theme = preload("res://Art/Font/my_theme.tres")
 const ITEM_ICON_SIZE: int = 16
@@ -60,6 +70,7 @@ func _ready() -> void:
     # Wave related signals
     EventBus.connect("update_wave_ui", on_update_wave_ui)
     EventBus.connect("wave_cleared", on_wave_cleared)
+    EventBus.update_level_number.connect(on_update_level_number)
 
     restart_button.pressed.connect(on_restart_button_pressed)
 
@@ -76,6 +87,16 @@ func _ready() -> void:
     tree_root = tree.create_item()
     tree_root.set_text(0, "Quests")
     tree.item_mouse_selected.connect(_on_tree_item_mouse_selected) # Be able to click to toggle the collapse of the tree item
+
+    # Global timer related signals
+    EventBus.connect("update_global_timer_label", on_update_global_timer_label)
+    EventBus.stage_finished.connect(on_stage_finished)
+    go_boss_room_button.pressed.connect(on_go_boss_room_button_pressed)
+    EventBus.hide_go_boss_room_button.connect(on_hide_go_boss_room_button)
+    # Return to forest related signals
+    return_to_forest_button.pressed.connect(on_return_to_forest_button_pressed)
+    EventBus.show_return_to_forest_button.connect(on_show_return_to_forest_button)
+    EventBus.hide_return_to_forest_button.connect(on_hide_return_to_forest_button)
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -144,6 +165,8 @@ func on_audio_win_play() -> void:
 #     level_label.text = "Level: %d" % level_number
 #     wave_label.text = "Wave: %d - Enemy killed: %d / %d" % [wave_number, enemy_killed, enemy_total]
 
+func on_update_level_number(level_number: int) -> void:
+    level_label.text = " Level: %d" % level_number
 
 func on_update_wave_ui(level_number: int, wave_number: int, TOTAL_WAVES: int, enemy_killed: int, enemy_total: int) -> void:
     level_label.text = " Level: %d" % level_number
@@ -302,3 +325,38 @@ func _on_tree_item_mouse_selected(position: Vector2, mouse_button_index: int) ->
                 item.collapsed = not item.collapsed
 
 #endregion: Quest Tree
+
+
+#regionstart Global Timer related functions
+
+func on_update_global_timer_label(time_left: String) -> void:
+    global_timer_label.text = time_left
+    global_timer_label.visible = true
+
+func on_stage_finished() -> void:
+    print("ui.gd - on_stage_finished() - Stage finished")
+    global_timer_label.text = "Stage finished"
+    timer_finished_go_boss_room_screen.visible = true
+    global_timer_label.visible = false
+
+func on_go_boss_room_button_pressed() -> void:
+    print("ui.gd - on_go_boss_room_button_pressed() - Go to the boss room button pressed")
+    EventBus.go_to_boss_room_button_pressed.emit()
+
+func on_hide_go_boss_room_button() -> void:
+    timer_finished_go_boss_room_screen.visible = false
+    global_timer_label.visible = false
+
+func on_return_to_forest_button_pressed() -> void:
+    print("ui.gd - on_return_to_forest_button_pressed() - Return to forest button pressed")
+    EventBus.return_to_forest_button_pressed.emit()
+
+func on_show_return_to_forest_button() -> void:
+    print("ui.gd - on_show_return_to_forest_button() - Showing return to forest button")
+    return_to_forest_screen.visible = true
+
+func on_hide_return_to_forest_button() -> void:
+    print("ui.gd - on_hide_return_to_forest_button() - Hiding return to forest button")
+    return_to_forest_screen.visible = false
+
+#endregion: Global Timer related functions

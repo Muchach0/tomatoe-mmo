@@ -267,6 +267,8 @@ func finish_game(is_win:= true) -> void:
         # if current_wave >= TOTAL_WAVES:
         # EventBus.game_over_screen_text_and_visibility.emit("Level completed! Victory!", "Restart", true)
         enable_portal_instance() # Enable the portal instance when the game is won
+        # Show return to forest button when dungeon level is completed
+        EventBus.show_return_to_forest_button.emit()
         # else:
         #     EventBus.game_over_screen_text_and_visibility.emit("Victory!", "Next Level", true)
         # init_bullet_count += INCREMENT_BULLET_COUNT

@@ -85,6 +85,116 @@ theme = ExtResource("3_17e3r")
 theme_override_font_sizes/font_size = 256
 text = "Restart"
 
+[node name="TimerFinishedGoBossRoom" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.224949, 0.224949)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="TimerFinishedGoBossRoom"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="TimerFinishedGoBossRoom/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -324.5
+offset_top = -313.0
+offset_right = 324.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Timer finished"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="TimerFinishedGoBossRoom"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TimerFinishedGoBossRoom/Control2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -494.0
+offset_right = 494.0
+offset_bottom = 321.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Go to the boss room"
+
+[node name="ReturnToMainWorldScreen" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.224949, 0.224949)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="ReturnToMainWorldScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="ReturnToMainWorldScreen/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -324.5
+offset_top = -313.0
+offset_right = 324.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Boss room cleared!"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="ReturnToMainWorldScreen"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ReturnToMainWorldScreen/Control2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -494.0
+offset_right = 494.0
+offset_bottom = 321.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Return to main world"
+
 [node name="WaveLabel" type="Label" parent="."]
 visible = false
 anchors_preset = 5
@@ -392,5 +502,16 @@ theme_override_styles/hovered_selected_focus = SubResource("StyleBoxEmpty_tc14e"
 theme_override_styles/selected = SubResource("StyleBoxEmpty_shvhy")
 select_mode = 1
 auto_tooltip = false
+
+[node name="GlobalTimerLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.5
+offset_right = 35.5
+offset_bottom = 40.0
+grow_horizontal = 2
+theme = ExtResource("3_17e3r")
+text = "2:00"
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]
