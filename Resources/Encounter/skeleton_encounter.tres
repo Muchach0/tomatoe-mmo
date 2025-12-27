@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EncounterResource" load_steps=4 format=3 uid="uid://qmfrjnhqlve0"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_43bq1"]
+[ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="2_tqrlk"]
+[ext_resource type="Resource" uid="uid://bggj8e3y3mkp5" path="res://Resources/Spawner/skeleton_spawner.tres" id="3_tqrlk"]
+
+[resource]
+script = ExtResource("2_tqrlk")
+spawner = ExtResource("3_tqrlk")
+metadata/_custom_type_script = "uid://bukxiy3yqj8sb"

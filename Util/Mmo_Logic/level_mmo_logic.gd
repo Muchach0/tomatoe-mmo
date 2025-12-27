@@ -6,7 +6,7 @@ extends Node2D
 # @onready var item_drop_spawner: MultiplayerSpawner = get_node_or_null("ItemDropSpawner")
 # @onready var player_spawner: MultiplayerSpawner = get_node_or_null("PlayerSpawner")
 @onready var spawn_points_parent: Node2D = get_node_or_null("SpawnPoints")
-@onready var mob_spawners: Node = get_node_or_null("MobSpawners")
+@onready var mob_spawners: Node = get_node_or_null("Encounter_Area_Manager")
 # const player_scene = preload("res://Prefab/Player/player_ship.tscn") # The player scene to instantiate when a new player connects.
 
 # var players: Dictionary = {} # This will hold player data for synchronization
@@ -276,7 +276,7 @@ func set_world_name_variable_on_mob_spawners() -> void:
 #     return enemy    
 
 
-func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String) -> void:
+func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String, enemy_scene_path: String) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
         return
     if world_name_from_spawner != name: # Do not spawn the enemy if the world is not the same as the world of the level
@@ -292,7 +292,8 @@ func spawn_enemies(spawner_name: String, spawner_name_with_id: String, enemy_nam
         "position": global_spawn_position, # Adding the world offset to the spawn position
         "spawner_name": spawner_name, 
         "spawner_name_with_id": spawner_name_with_id,
-        "current_world_name": world_name_from_spawner
+        "current_world_name": world_name_from_spawner, 
+        "enemy_scene_path": enemy_scene_path
     }
     EventBus.spawn_enemy_on_global_spawner.emit(spawn_data)
     # enemy = enemy_spawner.spawn(spawn_data)

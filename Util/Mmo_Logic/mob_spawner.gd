@@ -6,8 +6,8 @@ extends Area2D
 
 
 
-@export var enemy_spawner_resource: EnemySpawnerResourceClass
-@export var quest_resources: Array[QuestResource] = []  # Optional list of quests that start when player enters this spawner's area
+var enemy_spawner_resource: EnemySpawnerResourceClass
+var quest_resources_list: Array[QuestResource] = []  # Optional list of quests that start when player enters this spawner's area
 @export var shape: Shape2D: # shape of the area to spawn the enemies - should be added on the worlds view node.
     set(value):
         shape = value
@@ -39,6 +39,11 @@ func _ready() -> void:
         body_entered.connect(_on_body_entered)
         body_exited.connect(_on_body_exited)
     
+
+
+func activate_encounter() -> void:
+    if not multiplayer.is_server():
+        return
     # Reading the data from the resource
     enemy_scene_array_of_dictionnary = enemy_spawner_resource.enemy_scene_array_of_dictionnary
     unique_id_spawner = randi()
@@ -62,6 +67,7 @@ func _ready() -> void:
         spawn_enemy_at_random_location()
 
 
+
 func spawn_enemy_at_random_location() -> void:
     # Get a random location inside the shape of the area
     var collision_shape = $CollisionShape2D
@@ -73,7 +79,9 @@ func spawn_enemy_at_random_location() -> void:
     var random_enemy = enemy_spawner_resource.get_random_enemy()
     print("mob_spawner.gd - spawn_enemy_at_random_location() - random enemy: ", random_enemy, " at position: ", random_position, " name: ", random_enemy["name"])
 
-    EventBus.spawn_enemy.emit(spawner_name, spawner_name_with_id, random_enemy["name"], random_position, world_name)
+    var enemy_scene_path = random_enemy["scene"].resource_path
+    print("mob_spawner.gd - spawn_enemy_at_random_location() - enemy scene path: ", enemy_scene_path)
+    EventBus.spawn_enemy.emit(spawner_name, spawner_name_with_id, random_enemy["name"], random_position, world_name, enemy_scene_path)
     
     # enemy_spawner_resource.spawn_enemy(random_position)
     number_current_enemies += 1
@@ -130,11 +138,11 @@ func _on_body_entered(body: Node2D) -> void:
         return
 
     # If this spawner has quest resources, activate them
-    if not quest_resources.is_empty():
+    if not quest_resources_list.is_empty():
         var quest_manager = _get_quest_manager()
         if quest_manager:
             var player = body as Player
-            for quest_resource in quest_resources:
+            for quest_resource in quest_resources_list:
                 if quest_resource != null:
                     quest_manager.activate_quest_from_spawner(quest_resource, self, player)
                     print("MobSpawner - Player entered area, activating quest: %s" % quest_resource.quest_name)

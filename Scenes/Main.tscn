@@ -40,6 +40,7 @@ spawn_path = NodePath("../..")
 
 [node name="GlobalTimerManager" type="Node" parent="."]
 script = ExtResource("10_bmxlf")
+duration = 10.0
 
 [node name="UiTickTimer" type="Timer" parent="GlobalTimerManager"]
 autostart = true

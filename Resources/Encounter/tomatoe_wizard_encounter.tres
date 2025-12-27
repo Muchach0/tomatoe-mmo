@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EncounterResource" load_steps=4 format=3 uid="uid://dy84l78fy8osa"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_y1nui"]
+[ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="2_eakvc"]
+[ext_resource type="Resource" uid="uid://cgx3mde2nyx5f" path="res://Resources/Spawner/tomatoe_wizard_spawner.tres" id="3_eakvc"]
+
+[resource]
+script = ExtResource("2_eakvc")
+spawner = ExtResource("3_eakvc")
+metadata/_custom_type_script = "uid://bukxiy3yqj8sb"

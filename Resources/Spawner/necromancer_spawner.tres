@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://d2pflca0ejcae"]
+
+[ext_resource type="PackedScene" uid="uid://dl603q4umttiw" path="res://Prefab/Enemies/Dungeon/Necromancer.tscn" id="1_0fso4"]
+[ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="2_xopgl"]
+
+[resource]
+script = ExtResource("2_xopgl")
+enemy_scene_array_of_dictionnary = Array[Dictionary]([{
+"name": "Necromancer",
+"scene": ExtResource("1_0fso4"),
+"spawn_rate": 0.5
+}])
+metadata/_custom_type_script = "uid://bad6ch318s8w6"

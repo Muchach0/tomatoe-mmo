@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EncounterBundleResource" load_steps=6 format=3 uid="uid://d13uxpoek7btx"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_gbcp6"]
+[ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="2_rrh4f"]
+[ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="2_xd2fv"]
+[ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="3_o8mdk"]
+[ext_resource type="Resource" uid="uid://1vs1pmnvy7sx" path="res://Resources/Spawner/dino_spawner.tres" id="5_0i8ii"]
+
+[resource]
+script = ExtResource("2_rrh4f")
+spawner = ExtResource("5_0i8ii")
+quests = Array[ExtResource("1_gbcp6")]([ExtResource("2_xd2fv"), ExtResource("3_o8mdk")])
+metadata/_custom_type_script = "uid://bukxiy3yqj8sb"

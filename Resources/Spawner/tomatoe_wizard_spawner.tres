@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("3_yv3d5")
 name = "TomatoeWizardSpawner"
-max_enemies_to_spawn = 20
+max_enemies_to_spawn = 5
 spawn_time = 5.0
 enemy_scene_array_of_dictionnary = Array[Dictionary]([{
 "name": "Tomatoe_Wizard",

@@ -40,16 +40,18 @@ var wave_config = {
     5: {"enemy_count": 1, "enemy_types": ["Tomatoe_Seed_Boss"]},
 }
 
-# # Enemy scene paths
-# var enemy_scenes = {
-#     "Dummy": "res://Prefab/Enemies/Dummy.tscn",
-#     "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
-#     "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
-#     "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
-#     "Dino_green": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
-#     "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
-#     "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
-# }
+
+# Enemy scene paths
+var enemy_scenes = {
+    "Dummy": "res://Prefab/Enemies/Dummy.tscn",
+    "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
+    "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
+    "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
+    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
+    "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
+    "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
+}
+
 
 # bool to store if a game with bullets is currently running
 # We hide the player connecting in case a round is already running, necessary as the bullets are instantiated locally on round start.
@@ -535,15 +537,16 @@ func spawn_enemies_in_wave(enemy_types: Array, count: int) -> void:
         var spawner_name_with_id = GLOBAL_SPAWNER_NAME_WITH_ID
         var enemy_name = enemy_type
         var world_name_from_spawner = current_world_name
+        var enemy_scene_path = enemy_scenes.get(enemy_type, "res://Prefab/Enemies/Dummy.tscn")
 
-        spawn_enemies_on_global_spawner(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner)
+        spawn_enemies_on_global_spawner(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner, enemy_scene_path)
 
-func spawn_enemies_on_global_spawner(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String) -> void:
+func spawn_enemies_on_global_spawner(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String, enemy_scene_path: String) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
         return
     if world_name_from_spawner != current_world_name: # Do not spawn the enemy if the world is not the same as the world of the level
         return
-    level_mmo_logic.spawn_enemies(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner)
+    level_mmo_logic.spawn_enemies(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner, enemy_scene_path)
 
 
 

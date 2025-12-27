@@ -1,31 +1,49 @@
-[gd_scene load_steps=16 format=4 uid="uid://bbibw8vynhs5h"]
+[gd_scene load_steps=22 format=4 uid="uid://bbibw8vynhs5h"]
 
 [ext_resource type="Script" uid="uid://cwoo2kd1e6wg4" path="res://Util/Mmo_Logic/level_mmo_logic.gd" id="1_foedh"]
+[ext_resource type="Script" uid="uid://7io87kcl1bk5" path="res://Util/Mmo_Logic/encounter_manager.gd" id="3_sq5bs"]
+[ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="4_qrlry"]
+[ext_resource type="Resource" uid="uid://d13uxpoek7btx" path="res://Resources/Encounter/green_dino_encounter.tres" id="5_76rxa"]
 [ext_resource type="TileSet" uid="uid://j1200pbdngie" path="res://Art/Tileset/tileset_level_mmo_forest.tres" id="5_rexd0"]
 [ext_resource type="PackedScene" uid="uid://u0e5l8v2mytq" path="res://Prefab/Spawner/Mob_Spawner.tscn" id="6_foedh"]
-[ext_resource type="Resource" uid="uid://1vs1pmnvy7sx" path="res://Resources/Spawner/dino_spawner.tres" id="8_3asne"]
-[ext_resource type="Resource" uid="uid://bqy38kmcvt3tk" path="res://Resources/Spawner/orc_spawner.tres" id="8_klr5u"]
-[ext_resource type="Resource" uid="uid://lliewqym0gve" path="res://Resources/Quests/dino_kill_10_quest.tres" id="9_3asne"]
+[ext_resource type="Resource" uid="uid://d2x2tsroecuv6" path="res://Resources/Encounter/orc_encounter.tres" id="6_w2cjm"]
+[ext_resource type="Resource" uid="uid://dy84l78fy8osa" path="res://Resources/Encounter/tomatoe_wizard_encounter.tres" id="7_d87u1"]
+[ext_resource type="Resource" uid="uid://qmfrjnhqlve0" path="res://Resources/Encounter/skeleton_encounter.tres" id="8_qrlry"]
+[ext_resource type="Resource" uid="uid://djh5glnvksau6" path="res://Resources/Encounter/necromancer_encounter.tres" id="9_76rxa"]
 [ext_resource type="PackedScene" uid="uid://050xdik1016p" path="res://Prefab/PortalInstance/PortalInstance.tscn" id="9_khdg0"]
-[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="9_sq5bs"]
 [ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Resources/Worlds/world_test_1.tres" id="10_khdg0"]
-[ext_resource type="Resource" uid="uid://vftb35ieovlj" path="res://Resources/Quests/dino_pick_up_10_skulls_quest.tres" id="11_qrlry"]
 [ext_resource type="Resource" uid="uid://7pntt1jbp7jf" path="res://Resources/Worlds/world_dungeon_1.tres" id="11_sq5bs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ll5u2"]
 size = Vector2(1474.375, 2168)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sq5bs"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
 resource_local_to_scene = true
 radius = 406.43
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qrlry"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_w2cjm"]
 resource_local_to_scene = true
 radius = 257.32
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_76rxa"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_d87u1"]
 resource_local_to_scene = true
 radius = 180.65
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3fwc7"]
+resource_local_to_scene = true
+radius = 461.55
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pnibc"]
+resource_local_to_scene = true
+radius = 461.55
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rjpkx"]
+resource_local_to_scene = true
+radius = 461.55
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pesdp"]
+resource_local_to_scene = true
+radius = 461.55
 
 [node name="LevelForest" type="Node2D"]
 script = ExtResource("1_foedh")
@@ -122,24 +140,37 @@ position = Vector2(1264, 443)
 position = Vector2(1236.8125, 749)
 shape = SubResource("RectangleShape2D_ll5u2")
 
-[node name="MobSpawners" type="Node" parent="."]
+[node name="Encounter_Area_Manager" type="Node" parent="."]
+script = ExtResource("3_sq5bs")
+encounter_resources = Array[ExtResource("4_qrlry")]([ExtResource("5_76rxa"), ExtResource("6_w2cjm"), ExtResource("7_d87u1"), ExtResource("8_qrlry"), ExtResource("9_76rxa")])
 
-[node name="OrcMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
+[node name="NearRuinSpawner" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
 position = Vector2(2309, 541)
-enemy_spawner_resource = ExtResource("8_klr5u")
-shape = SubResource("CircleShape2D_sq5bs")
-
-[node name="DinoMobSpawner" parent="MobSpawners" instance=ExtResource("6_foedh")]
-position = Vector2(1267, 417)
-enemy_spawner_resource = ExtResource("8_3asne")
-quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
-shape = SubResource("CircleShape2D_qrlry")
-
-[node name="DinoMobSpawner2" parent="MobSpawners" instance=ExtResource("6_foedh")]
-position = Vector2(687, 284)
-enemy_spawner_resource = ExtResource("8_3asne")
-quest_resources = Array[ExtResource("9_sq5bs")]([ExtResource("9_3asne"), ExtResource("11_qrlry")])
 shape = SubResource("CircleShape2D_76rxa")
+
+[node name="DinoMobSpawner" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(1267, 417)
+shape = SubResource("CircleShape2D_w2cjm")
+
+[node name="DinoMobSpawner2" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(687, 284)
+shape = SubResource("CircleShape2D_d87u1")
+
+[node name="DinoMobSpawner3" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(835, 1446)
+shape = SubResource("CircleShape2D_3fwc7")
+
+[node name="DinoMobSpawner4" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(2521, 1685)
+shape = SubResource("CircleShape2D_pnibc")
+
+[node name="DinoMobSpawner5" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(987, 2574)
+shape = SubResource("CircleShape2D_rjpkx")
+
+[node name="DinoMobSpawner6" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
+position = Vector2(2992, 2627)
+shape = SubResource("CircleShape2D_pesdp")
 
 [node name="PortalInstance" parent="." instance=ExtResource("9_khdg0")]
 position = Vector2(931, 415)
