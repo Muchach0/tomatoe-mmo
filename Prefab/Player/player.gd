@@ -63,6 +63,16 @@ var current_world: String = ""
 
 const MAX_DISTANCE_TO_TELEPORT: float = 100.0
 
+
+# Experience related variables
+@export var attribute_data: AttributeData  
+@export var class_data: ClassData    
+@export var level_table: LevelTable 
+@export var level : int = 1 # The current level of the player
+@export var current_xp : int = 0 # The current XP of the player
+@export var skill_points : int = 0 # The current skill points of the player
+
+
 func _ready() -> void:
     # Duplicate the shader material to make individual modifications
     if material != null:
@@ -97,6 +107,10 @@ func _ready() -> void:
     if multiplayer != null and is_multiplayer_authority():
         EventBus.attach_inventory_to_ui.emit(inventory)
         EventBus.attach_skills_to_ui.emit(skills)
+        EventBus.xp_gathered.connect(add_xp)
+        assert(attribute_data != null, "assign an AttributeData resource")
+        assert(class_data != null, "assign a ClassData resource")
+        assert(level_table != null, "assign a LevelTable resource")
 
     if visibility_area != null and multiplayer.is_server(): # only server deals with visibility area
         visibility_area.body_entered.connect(on_visibility_area_body_entered)
@@ -111,6 +125,8 @@ func _ready() -> void:
     # The player follows the mouse cursor automatically, so there's no point
     # in displaying the mouse cursor.
     # Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+
 
 func setup_camera() -> void:
     # Only enable camera for the local player (the one with multiplayer authority)
@@ -577,4 +593,33 @@ func on_refresh_visibility(body_peer_id: int, is_entering: bool) -> void:
 #             return true
 #     return false
 
+#endregion
+
+
+#region Experience related functions
+
+func _check_level_up() -> void:
+    var levels_gained := 0
+    while current_xp >= level_table.xp_to_next(level) and level < level_table.max_level:
+        var xp_required = level_table.xp_to_next(level)
+        current_xp -= xp_required
+        level += 1
+        levels_gained += 1
+ 
+        var res = class_data.apply_level_up(attribute_data, 1)
+        if res.has("skill_points_awarded"):
+            skill_points += int(res["skill_points_awarded"])
+ 
+        EventBus.leveled_up.emit(level, 1, res.get("skill_points_awarded", 0))
+ 
+    if levels_gained > 1:
+        EventBus.leveled_up.emit(level, levels_gained, skill_points)
+    EventBus.xp_changed.emit(current_xp, level_table.xp_to_next(level))
+ 
+func add_xp(amount: int) -> void:
+    if amount <= 0:
+        return
+    current_xp += amount
+    EventBus.xp_changed.emit(current_xp, level_table.xp_to_next(level))
+    _check_level_up()
 #endregion

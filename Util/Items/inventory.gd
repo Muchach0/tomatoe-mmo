@@ -18,6 +18,12 @@ func _init():
 func add_item(new_stack: ItemStack) -> ItemStack:
     # print("inventory.gd - add_item() - Inventory: ", _to_string())
     # print("inventory.gd - add_item() - Adding item: ", new_stack._to_string())
+    
+    # Handle experience items differently - emit xp_gathered signal instead of adding to inventory
+    if not new_stack.is_empty() and new_stack.item.item_name == "Experience":
+        EventBus.xp_gathered.emit(new_stack.count)
+        return ItemStack.new(Items.EMPTY)
+    
     for stack in items:
         if new_stack.is_empty():
             break

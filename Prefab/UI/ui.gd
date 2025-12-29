@@ -41,6 +41,10 @@ extends CanvasLayer
 
 @onready var control_inventory: Control = $ControlInventory
 
+# Experience related UI
+@onready var experience_bar: ProgressBar = $ExperienceBar/ProgressBar
+@onready var experience_label: Label = $ExperienceBar/ProgressBar/Label
+
 var number_of_players: int = 0
 const THEME: Theme = preload("res://Art/Font/my_theme.tres")
 const ITEM_ICON_SIZE: int = 16
@@ -101,6 +105,10 @@ func _ready() -> void:
 
     # Inventory related signals
     EventBus.show_inventory_ui.connect(on_show_inventory_ui)
+
+    # Experience related signals
+    EventBus.leveled_up.connect(on_leveled_up)
+    EventBus.xp_changed.connect(on_xp_changed)
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -372,3 +380,17 @@ func on_show_inventory_ui(is_toggled: bool) -> void:
     control_inventory.visible = is_toggled
 
 #endregion
+
+
+#region Experience related functions
+
+func on_leveled_up(level: int, _levels_gained: int, _skill_points: int) -> void:
+    print("ui.gd - on_leveled_up() - Leveled up: %d" % level)
+    experience_label.text = "Lv. %d" % level
+
+func on_xp_changed(current_xp: int, xp_to_next: int) -> void:
+    print("ui.gd - on_xp_changed() - XP changed: %d" % current_xp)
+    experience_bar.max_value = xp_to_next
+    experience_bar.value = current_xp
+
+#endregion: Experience related functions

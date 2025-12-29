@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://6o6eiydhbvdn"]
+[gd_scene load_steps=24 format=3 uid="uid://6o6eiydhbvdn"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_th7s3"]
 [ext_resource type="Script" uid="uid://8ij4vk5yqwtt" path="res://Prefab/Player/player.gd" id="2_1ilgc"]
@@ -8,7 +8,10 @@
 [ext_resource type="Script" uid="uid://c78lqfuowj4ou" path="res://Util/States/State_machine.gd" id="4_nm4y3"]
 [ext_resource type="Script" uid="uid://dbfkhxnw14hba" path="res://Util/States/PlayerIdle.gd" id="5_1i7sn"]
 [ext_resource type="Resource" uid="uid://2mgrs6od8qqm" path="res://Resources/Skills/explosive_shoot.tres" id="5_67qtb"]
+[ext_resource type="Resource" uid="uid://bat7m8otv3dv7" path="res://Util/Experience/attribute_data_default.tres" id="6_120su"]
 [ext_resource type="Script" uid="uid://dtsmo3xvihwhe" path="res://Util/States/PlayerWandering.gd" id="6_yhkhf"]
+[ext_resource type="Resource" uid="uid://bym337x4yyb4l" path="res://Util/Experience/class_data_strength.tres" id="7_7b130"]
+[ext_resource type="Resource" uid="uid://cbq8vpg2oavb" path="res://Util/Experience/level_table_default.tres" id="8_uuq2u"]
 [ext_resource type="Texture2D" uid="uid://bj7quaj4iga24" path="res://Art/Sprites/force_field_2.png" id="9_b7j42"]
 [ext_resource type="Texture2D" uid="uid://hrdmj1kjxrht" path="res://Art/Sprites/recolor/shadow_circle_recolor.png" id="9_i6bba"]
 [ext_resource type="Script" uid="uid://cdb1s57g8n15q" path="res://Prefab/Player/player_weapon.gd" id="10_i6bba"]
@@ -47,6 +50,9 @@ scale = Vector2(2, 2)
 motion_mode = 1
 script = ExtResource("2_1ilgc")
 skills = Array[ExtResource("3_67qtb")]([ExtResource("4_8lvd7"), ExtResource("5_67qtb")])
+attribute_data = ExtResource("6_120su")
+class_data = ExtResource("7_7b130")
+level_table = ExtResource("8_uuq2u")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_0jxdt")

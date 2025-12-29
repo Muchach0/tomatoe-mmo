@@ -105,3 +105,9 @@ signal update_level_number # Signal to notify the UI that the level number shoul
 # Signal related to skills
 signal attach_skills_to_ui(skills: Array[Skill]) # Signal to notify the UI that the skills should be attached to the player
 signal skills_changed() # Handling of change of skills
+
+
+# Experience related signals
+signal xp_gathered(amount: int) # Signal to notify the UI that the XP has been gathered
+signal leveled_up(level: int, levels_gained: int, skill_points: int) # Signal to notify the UI that the player has leveled up
+signal xp_changed(current_xp: int, xp_to_next: int) # Signal to notify the UI that the XP has changed

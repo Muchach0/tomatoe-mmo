@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="LevelTable" load_steps=2 format=3 uid="uid://cbq8vpg2oavb"]
+
+[ext_resource type="Script" uid="uid://ccswpie0g3lpn" path="res://Util/Experience/level_table.gd" id="1_ri5ns"]
+
+[resource]
+script = ExtResource("1_ri5ns")
+metadata/_custom_type_script = "uid://ccswpie0g3lpn"

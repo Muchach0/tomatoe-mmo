@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://c6vho6rwvu82i"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c6vho6rwvu82i"]
 
 [ext_resource type="FontFile" uid="uid://cwypv4coonmk7" path="res://Art/Font/Montserrat-Bold.ttf" id="1_hpgfv"]
 
@@ -71,6 +71,9 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mn27a"]
+bg_color = Color(0.3019608, 0.60784316, 0.9019608, 1)
+
 [resource]
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
@@ -100,6 +103,7 @@ Label/colors/font_outline_color = Color(0.91764706, 0.30980393, 0.21176471, 1)
 Label/constants/outline_size = 12
 Label/font_sizes/font_size = 32
 Label/fonts/font = ExtResource("1_hpgfv")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_mn27a")
 RichTextLabel/colors/font_outline_color = Color(0.91764706, 0.30980393, 0.21176471, 1)
 RichTextLabel/constants/outline_size = 12
 RichTextLabel/font_sizes/font_size = 32
