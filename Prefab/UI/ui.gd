@@ -250,17 +250,17 @@ func on_quest_activated(quest_id: String, quest_name: String, quest_resource: Qu
         tree_root.set_text(0, "Quests")
     
     # Create quest tree item
-    var quest_tree_item := tree.create_item(tree_root)
-    quest_tree_item.set_text(0, quest_name)
-    quest_tree_item.collapsed = false
+    # var quest_tree_item := tree.create_item(tree_root)
+    # quest_tree_item.set_text(0, quest_name)
+    # quest_tree_item.collapsed = false
     
     # Create progress item
-    var progress_item := tree.create_item(quest_tree_item)
+    var progress_item := tree.create_item(tree_root)
     progress_item.set_text(0, "%s: 0/%d" % [quest_resource.quest_description, quest_resource.target_count])
     progress_item.collapsed = false
     
     # Create rewards container
-    var rewards_item := tree.create_item(quest_tree_item)
+    var rewards_item := tree.create_item(progress_item)
     rewards_item.set_text(0, "Rewards")
     rewards_item.collapsed = true
     
@@ -269,7 +269,7 @@ func on_quest_activated(quest_id: String, quest_name: String, quest_resource: Qu
     
     # Store tree items for later updates
     quest_tree_items[quest_id] = {
-        "quest_item": quest_tree_item,
+        # "quest_item": quest_tree_item,
         "progress_item": progress_item,
         "rewards_item": rewards_item
     }
@@ -301,7 +301,7 @@ func on_quest_completed(quest_id: String, quest_name: String, quest_resource: Qu
         return
     
     var quest_data = quest_tree_items[quest_id]
-    var quest_item = quest_data["quest_item"]
+    var quest_item = quest_data["progress_item"]
     
     if quest_item:
         # Remove the quest item from its parent (tree_root)
