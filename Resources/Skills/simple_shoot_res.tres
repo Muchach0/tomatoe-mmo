@@ -1,9 +1,15 @@
-[gd_resource type="Resource" script_class="SimpleShootSkill" load_steps=2 format=3 uid="uid://tsdudnshtwkw"]
+[gd_resource type="Resource" script_class="SimpleShootSkill" load_steps=4 format=3 uid="uid://tsdudnshtwkw"]
 
 [ext_resource type="Script" uid="uid://g2dm4ed4sx1j" path="res://Resources/Skills/SimpleShootSkill.gd" id="1_171mj"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_mehvd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gx3wt"]
+atlas = ExtResource("2_mehvd")
+region = Rect2(16, 352, 16, 16)
 
 [resource]
 script = ExtResource("1_171mj")
 enable_trail_particles = true
 skill_name = "Shoot_basic"
+skill_icon = SubResource("AtlasTexture_gx3wt")
 metadata/_custom_type_script = "uid://g2dm4ed4sx1j"

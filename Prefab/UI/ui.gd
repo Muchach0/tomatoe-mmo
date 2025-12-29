@@ -39,6 +39,7 @@ extends CanvasLayer
 @onready var return_to_forest_screen: Control = $ReturnToMainWorldScreen
 @onready var return_to_forest_button: Button = $ReturnToMainWorldScreen/Control2/Button
 
+@onready var control_inventory: Control = $ControlInventory
 
 var number_of_players: int = 0
 const THEME: Theme = preload("res://Art/Font/my_theme.tres")
@@ -97,6 +98,9 @@ func _ready() -> void:
     return_to_forest_button.pressed.connect(on_return_to_forest_button_pressed)
     EventBus.show_return_to_forest_button.connect(on_show_return_to_forest_button)
     EventBus.hide_return_to_forest_button.connect(on_hide_return_to_forest_button)
+
+    # Inventory related signals
+    EventBus.show_inventory_ui.connect(on_show_inventory_ui)
 
 
 func on_player_added(_player_id, _player_info) -> void:
@@ -327,7 +331,7 @@ func _on_tree_item_mouse_selected(position: Vector2, mouse_button_index: int) ->
 #endregion: Quest Tree
 
 
-#regionstart Global Timer related functions
+#region Global Timer related functions
 
 func on_update_global_timer_label(time_left: String) -> void:
     global_timer_label.text = time_left
@@ -360,3 +364,11 @@ func on_hide_return_to_forest_button() -> void:
     return_to_forest_screen.visible = false
 
 #endregion: Global Timer related functions
+
+
+#region Inventory related functions
+
+func on_show_inventory_ui(is_toggled: bool) -> void:
+    control_inventory.visible = is_toggled
+
+#endregion

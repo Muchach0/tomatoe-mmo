@@ -8,6 +8,8 @@ class_name Skill extends Resource
 ## Cooldown time in seconds before the skill can be used again
 @export var cooldown: float = 0.1
 
+@export var skill_icon : Texture2D = AtlasTexture.new()
+
 ## Last time the skill was used (Unix timestamp)
 var last_used_time: float = 0.0
 

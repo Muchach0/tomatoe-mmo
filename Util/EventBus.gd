@@ -74,6 +74,7 @@ signal item_picked_up(item: Item, count: int) # Signal to notify that an item wa
 
 # Signal related to inventory
 signal attach_inventory_to_ui # Signal to notify the UI that the inventory should be attached to the player
+signal show_inventory_ui(is_toggled: bool) # Signal to notify the UI that the inventory should be shown or hidden
 
 # Signal related to quests
 signal quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) # Signal to notify quest activation
@@ -99,3 +100,8 @@ signal return_to_forest_button_pressed # Signal to notify that the return to for
 signal show_return_to_forest_button # Signal to notify the UI that the return to forest button should be shown
 signal hide_return_to_forest_button # Signal to notify the UI that the return to forest button should be hidden
 signal update_level_number # Signal to notify the UI that the level number should be updated
+
+
+# Signal related to skills
+signal attach_skills_to_ui(skills: Array[Skill]) # Signal to notify the UI that the skills should be attached to the player
+signal skills_changed()

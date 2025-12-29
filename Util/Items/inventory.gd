@@ -4,7 +4,7 @@ extends Node2D
 
 signal updated
 
-const SIZE := 8
+const SIZE := 16
 
 var items : Array[ItemStack] = []
 
