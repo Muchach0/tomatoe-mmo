@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://boi8bq5rf77wi" path="res://Resources/Skills/AOEShootSkill.gd" id="1_67ohd"]
 [ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_asgn4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ylqcx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_asgn4"]
 atlas = ExtResource("2_asgn4")
 region = Rect2(112, 352, 16, 16)
 
 [resource]
 script = ExtResource("1_67ohd")
 max_pierce = 5
-skill_icon = SubResource("AtlasTexture_ylqcx")
+icon = SubResource("AtlasTexture_asgn4")
 metadata/_custom_type_script = "uid://boi8bq5rf77wi"

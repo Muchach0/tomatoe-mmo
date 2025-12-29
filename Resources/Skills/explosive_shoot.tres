@@ -4,12 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://biphlv3x42ef0" path="res://Art/Sprites/test/fire.png" id="1_ltttw"]
 [ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="3_x6qta"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ejk4d"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_x6qta"]
 atlas = ExtResource("3_x6qta")
-region = Rect2(96, 352, 16, 16)
+region = Rect2(64, 352, 16, 16)
 
 [resource]
 script = ExtResource("1_j8f7y")
 bullet_sprite_texture = ExtResource("1_ltttw")
 bullet_sprite_scale = Vector2(1, 1)
-skill_icon = SubResource("AtlasTexture_ejk4d")
+icon = SubResource("AtlasTexture_x6qta")

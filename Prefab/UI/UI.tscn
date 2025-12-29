@@ -346,6 +346,7 @@ stream = ExtResource("6_3qnsr")
 stream = ExtResource("7_ty01m")
 
 [node name="ControlInventory" type="Control" parent="."]
+visible = false
 z_index = -7
 layout_mode = 3
 anchors_preset = 14

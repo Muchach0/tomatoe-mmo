@@ -86,14 +86,17 @@ func _ready() -> void:
     if health_bar != null:
         health_bar.value = number_of_life
 
-    if multiplayer != null and is_multiplayer_authority():
-        EventBus.attach_inventory_to_ui.emit(inventory)
+
     # add_sync_visibility_filter()
 
     # Initialize default skills if not already set
     if skills.size() == 0:
         skills.append(SimpleShootSkill.new())
         skills.append(AOEShootSkill.new())
+
+    if multiplayer != null and is_multiplayer_authority():
+        EventBus.attach_inventory_to_ui.emit(inventory)
+        EventBus.attach_skills_to_ui.emit(skills)
 
     if visibility_area != null and multiplayer.is_server(): # only server deals with visibility area
         visibility_area.body_entered.connect(on_visibility_area_body_entered)

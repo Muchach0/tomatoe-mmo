@@ -1,7 +1,8 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://caa8wit84xh8x"]
 
-[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="1_60cek"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8axin"]
+load_path = "res://.godot/imported/1_bit_pack.png-2bb4cf58b03067c1dc8aa59558692477.ctex"
 
 [resource]
-atlas = ExtResource("1_60cek")
+atlas = SubResource("CompressedTexture2D_8axin")
 region = Rect2(752, 80, 16, 16)

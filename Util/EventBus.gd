@@ -104,4 +104,4 @@ signal update_level_number # Signal to notify the UI that the level number shoul
 
 # Signal related to skills
 signal attach_skills_to_ui(skills: Array[Skill]) # Signal to notify the UI that the skills should be attached to the player
-signal skills_changed()
+signal skills_changed() # Handling of change of skills

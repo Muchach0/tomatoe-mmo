@@ -29,5 +29,8 @@ func display_skills(skills: Array[Skill]):
 
 func on_skills_update():
     for index in skill_slots.size():
-        var skill : Skill = _skills[index]
-        skill_slots[index].skill = skill
+        if index >= _skills.size():
+            skill_slots[index].skill = null
+        else:
+            var skill : Skill = _skills[index]
+            skill_slots[index].skill = skill
