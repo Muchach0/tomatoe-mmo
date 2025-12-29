@@ -9,17 +9,15 @@
 script = ExtResource("1_swkyy")
 item = ExtResource("2_swkyy")
 count = 1
-weight = 1.0
 metadata/_custom_type_script = "uid://bgy7iyrc6gbay"
 
 [sub_resource type="Resource" id="Resource_0cvcb"]
 script = ExtResource("1_swkyy")
 item = ExtResource("3_tekbm")
 count = 1
-weight = 1.0
 metadata/_custom_type_script = "uid://bgy7iyrc6gbay"
 
 [resource]
 script = ExtResource("3_0cvcb")
-item_rolls = Array[ExtResource("1_swkyy")]([SubResource("Resource_tekbm"), SubResource("Resource_0cvcb")])
+guaranteed_rolls = Array[ExtResource("1_swkyy")]([SubResource("Resource_tekbm"), SubResource("Resource_0cvcb")])
 roll_times = 2

@@ -5,21 +5,19 @@
 [ext_resource type="Resource" uid="uid://de1nh0d2xa232" path="res://Resources/Items/Materials/experience.tres" id="3_c2ch2"]
 [ext_resource type="Script" uid="uid://c2pfvpqeobe1r" path="res://Util/Items/loot_table.gd" id="8_uh3fh"]
 
-[sub_resource type="Resource" id="Resource_ypivd"]
+[sub_resource type="Resource" id="Resource_c2ch2"]
 script = ExtResource("1_it53f")
 item = ExtResource("2_3ryxs")
 count = 1
-weight = 1.0
 metadata/_custom_type_script = "uid://bgy7iyrc6gbay"
 
 [sub_resource type="Resource" id="Resource_xo0pq"]
 script = ExtResource("1_it53f")
 item = ExtResource("3_c2ch2")
-count = 20
-weight = 1.0
+count = 10
 metadata/_custom_type_script = "uid://bgy7iyrc6gbay"
 
 [resource]
 script = ExtResource("8_uh3fh")
-item_rolls = Array[ExtResource("1_it53f")]([SubResource("Resource_ypivd"), SubResource("Resource_xo0pq")])
+guaranteed_rolls = Array[ExtResource("1_it53f")]([SubResource("Resource_c2ch2"), SubResource("Resource_xo0pq")])
 roll_times = 2
