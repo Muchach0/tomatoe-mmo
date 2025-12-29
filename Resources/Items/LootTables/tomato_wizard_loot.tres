@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LootTable" load_steps=5 format=3 uid="uid://pq6vjxebwe7n"]
+
+[ext_resource type="Script" uid="uid://bgy7iyrc6gbay" path="res://Util/Items/item_roll.gd" id="1_uulm2"]
+[ext_resource type="Resource" uid="uid://bcac8sy1w0tos" path="res://Resources/Items/Materials/wizard_hat.tres" id="2_uulm2"]
+[ext_resource type="Script" uid="uid://c2pfvpqeobe1r" path="res://Util/Items/loot_table.gd" id="3_qnl5y"]
+
+[sub_resource type="Resource" id="Resource_tekbm"]
+script = ExtResource("1_uulm2")
+item = ExtResource("2_uulm2")
+count = 1
+weight = 1.0
+metadata/_custom_type_script = "uid://bgy7iyrc6gbay"
+
+[resource]
+script = ExtResource("3_qnl5y")
+item_rolls = Array[ExtResource("1_uulm2")]([SubResource("Resource_tekbm")])

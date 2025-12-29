@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="EncounterResource" load_steps=4 format=3 uid="uid://djh5glnvksau6"]
+[gd_resource type="Resource" script_class="EncounterResource" load_steps=5 format=3 uid="uid://djh5glnvksau6"]
 
 [ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_cb2l8"]
+[ext_resource type="Resource" uid="uid://0p2qc5pn4fb1" path="res://Resources/Quests/necro_pick_up_8_cloak_quest.tres" id="2_dc0rk"]
 [ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="2_hshvg"]
 [ext_resource type="Resource" uid="uid://d2pflca0ejcae" path="res://Resources/Spawner/necromancer_spawner.tres" id="3_hshvg"]
 
 [resource]
 script = ExtResource("2_hshvg")
 spawner = ExtResource("3_hshvg")
+quests = Array[ExtResource("1_cb2l8")]([ExtResource("2_dc0rk")])
 metadata/_custom_type_script = "uid://bukxiy3yqj8sb"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://chb28ss7a3nnw"]
+
+[ext_resource type="Script" uid="uid://bgymhixcxv6ed" path="res://Util/Items/item.gd" id="1_u4a45"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_5p0ia"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbb6g"]
+atlas = ExtResource("2_5p0ia")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ireuk"]
+atlas = SubResource("AtlasTexture_bbb6g")
+region = Rect2(672, 112, 16, 16)
+
+[resource]
+script = ExtResource("1_u4a45")
+item_name = "Axe"
+sprite = SubResource("AtlasTexture_ireuk")
+metadata/_custom_type_script = "uid://bgymhixcxv6ed"

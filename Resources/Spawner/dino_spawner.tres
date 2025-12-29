@@ -1,15 +1,30 @@
-[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://1vs1pmnvy7sx"]
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=6 format=3 uid="uid://1vs1pmnvy7sx"]
 
 [ext_resource type="PackedScene" uid="uid://3iti8rxlsrc2" path="res://Prefab/Enemies/Dino/Dino_Green.tscn" id="2_8am12"]
+[ext_resource type="PackedScene" uid="uid://b2wwo2hw131wy" path="res://Prefab/Enemies/Dino/Dino_Blue.tscn" id="2_tbgkt"]
 [ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="3_36hvu"]
+[ext_resource type="PackedScene" uid="uid://c70ti11wq8y26" path="res://Prefab/Enemies/Dino/Dino_Red.tscn" id="3_hnok4"]
+[ext_resource type="PackedScene" uid="uid://c737787m408nh" path="res://Prefab/Enemies/Dino/Dino_Yellow.tscn" id="4_2avdh"]
 
 [resource]
 script = ExtResource("3_36hvu")
 name = "DinoSpawner"
-spawn_time = 5.0
+spawn_time = 2.0
 enemy_scene_array_of_dictionnary = Array[Dictionary]([{
 "name": "Dino",
 "scene": ExtResource("2_8am12"),
+"spawn_rate": 1.0
+}, {
+"name": "Dino",
+"scene": ExtResource("2_tbgkt"),
+"spawn_rate": 1.0
+}, {
+"name": "Dino",
+"scene": ExtResource("3_hnok4"),
+"spawn_rate": 1.0
+}, {
+"name": "Dino",
+"scene": ExtResource("4_2avdh"),
 "spawn_rate": 1.0
 }])
 metadata/_custom_type_script = "uid://bad6ch318s8w6"

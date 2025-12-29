@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=3 format=3 uid="uid://44nm0fnsej6e"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_hp1jn"]
+[ext_resource type="Resource" uid="uid://bcac8sy1w0tos" path="res://Resources/Items/Materials/wizard_hat.tres" id="2_hp1jn"]
+
+[resource]
+script = ExtResource("1_hp1jn")
+quest_name = "Hats!"
+quest_description = "Get Wizards hats"
+quest_type = 1
+target_item = ExtResource("2_hp1jn")
+target_count = 5
+reward_experience = 10
+metadata/_custom_type_script = "uid://bnvfwn654nhh2"

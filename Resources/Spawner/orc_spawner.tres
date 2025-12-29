@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("3_gbvp1")
 name = "MobSpawnerOrc"
-spawn_time = 5.0
+spawn_time = 10.0
 enemy_scene_array_of_dictionnary = Array[Dictionary]([{
 "name": "Orc",
 "scene": ExtResource("1_0ic8j"),

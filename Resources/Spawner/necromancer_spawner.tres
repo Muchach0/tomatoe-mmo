@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("2_xopgl")
+name = "NecromancerSpawner"
+spawn_time = 5.0
 enemy_scene_array_of_dictionnary = Array[Dictionary]([{
 "name": "Necromancer",
 "scene": ExtResource("1_0fso4"),

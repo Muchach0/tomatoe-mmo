@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=3 format=3 uid="uid://cxkpj06e656ek"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_f342j"]
+[ext_resource type="Resource" uid="uid://chb28ss7a3nnw" path="res://Resources/Items/Materials/axe.tres" id="2_f342j"]
+
+[resource]
+script = ExtResource("1_f342j")
+quest_name = "Orcs"
+quest_description = "Pick up orcs axes"
+quest_type = 1
+target_item = ExtResource("2_f342j")
+target_count = 5
+reward_experience = 10
+metadata/_custom_type_script = "uid://bnvfwn654nhh2"
