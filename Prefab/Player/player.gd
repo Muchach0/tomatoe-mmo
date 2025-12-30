@@ -408,7 +408,7 @@ func reset_player(new_position: Vector2) -> void:
 
     level = 1
     current_xp = 0
-    EventBus.xp_gathered.emit(current_xp)
+    EventBus.xp_changed.emit(current_xp, level_table.xp_to_next(level))
     skill_points = 0
     inventory = Inventory.new()
     # $DetectionArea.monitoring = true
