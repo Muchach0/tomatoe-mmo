@@ -46,6 +46,7 @@ signal ai_request_failed # Signal to notify the UI that the AI request has faile
 # Audio related signals
 signal audio_explosion_play # Signal to notify the UI that the audio explosion should be played
 signal audio_win_play # Signal to notify the UI that the audio win should be played
+signal audio_shoot_play # Signal to notify the AudioManager that a shooting sound should be played
 
 
 # Signal linked to upgrades

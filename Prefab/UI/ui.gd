@@ -7,12 +7,6 @@ extends CanvasLayer
 @onready var is_a_game_running_label: Label = $IsAGameRunningLabel
 @onready var bonus_label: Label = $BonusLabel
 
-# Audio part
-@onready var audio_bonus_picked_up: AudioStreamPlayer = $"AudioManager/BonusPickUpAudioStreamPlayer"
-@onready var audio_bonus_used: AudioStreamPlayer = $"AudioManager/BonusUsedAudioStreamPlayer"
-@onready var audio_explosion: AudioStreamPlayer = $AudioManager/ExplosionAudioStreamPlayer
-@onready var audio_win: AudioStreamPlayer = $AudioManager/WinAudioStreamPlayer
-
 
 @onready var ai_response_label: Label = $AiResponseLabel
 @onready var ai_request_failed_label: Label = $AiRequestFailedLabel
@@ -61,8 +55,7 @@ func _ready() -> void:
     EventBus.connect("remove_player", on_remove_player)
     # EventBus.connect("start_level", on_start_level)
     EventBus.connect("is_server_running_a_busy_round", on_joining_server_running_a_busy_round)
-    EventBus.connect("sync_bonus_count", on_sync_bonus_count)
-    EventBus.connect("bonus_used", on_bonus_used)
+
 
     # AI Test
     EventBus.connect("ai_response_received", on_ai_response_received)
@@ -127,14 +120,7 @@ func on_joining_server_running_a_busy_round(should_display_label: bool) -> void:
     else:
         is_a_game_running_label.hide()
 
-func on_sync_bonus_count(bonus_number: int, is_bonus_picked_up: bool = false) -> void:
-    bonus_label.text = " Shield: %d" % bonus_number
-    if is_bonus_picked_up:
-        audio_bonus_picked_up.play()  # Play the bonus picked up sound
-    # Update the UI with the current bonus count.
 
-func on_bonus_used() -> void:
-    audio_bonus_used.play()  # Play the bonus used sound
 
 func on_ai_response_received(response: String) -> void:
     ai_response_label.text = response
@@ -164,12 +150,6 @@ func on_game_over_screen_text_and_visibility(label_text: String, button_text: St
     game_over_screen.visible = is_visible
 
 
-# Audio related signals
-func on_audio_explosion_play() -> void:
-    audio_explosion.play()
-
-func on_audio_win_play() -> void:
-    audio_win.play()
 
 
 # func on_start_level(level_number, wave_number, enemy_killed, enemy_total) -> void:

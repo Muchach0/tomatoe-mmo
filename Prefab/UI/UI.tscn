@@ -1,12 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://jdgl6gpb80es"]
+[gd_scene load_steps=17 format=3 uid="uid://jdgl6gpb80es"]
 
 [ext_resource type="Script" uid="uid://cp1qex37r1rrc" path="res://Prefab/UI/ui.gd" id="1_gtstx"]
 [ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="2_bqg0t"]
 [ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="3_17e3r"]
-[ext_resource type="AudioStream" uid="uid://cv1200f5e67ib" path="res://Art/Sounds/explosion.wav" id="4_wheuw"]
-[ext_resource type="AudioStream" uid="uid://3i1neqbgutxm" path="res://Art/Sounds/pickupCoin.wav" id="5_fiall"]
-[ext_resource type="AudioStream" uid="uid://cejnvkaruohkw" path="res://Art/Sounds/bonusPickUp.wav" id="6_3qnsr"]
-[ext_resource type="AudioStream" uid="uid://b34dfti6a06rt" path="res://Art/Sounds/bonusUsed.wav" id="7_ty01m"]
 [ext_resource type="Script" uid="uid://dncevmkgy25gn" path="res://Prefab/UI/Inventory/inventory_display.gd" id="8_fiall"]
 [ext_resource type="PackedScene" uid="uid://d0hb815m3rp0f" path="res://Prefab/UI/Inventory/ItemSlot.tscn" id="9_3qnsr"]
 [ext_resource type="PackedScene" uid="uid://bm5t38lfaxw62" path="res://Prefab/UI/Skills/SkillSlot.tscn" id="10_18pal"]
@@ -330,20 +326,6 @@ offset_top = 216.0
 offset_right = 170.0
 offset_bottom = 239.0
 text = "AI Request Failed LABEL"
-
-[node name="AudioManager" type="Node" parent="."]
-
-[node name="ExplosionAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("4_wheuw")
-
-[node name="WinAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("5_fiall")
-
-[node name="BonusPickUpAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("6_3qnsr")
-
-[node name="BonusUsedAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("7_ty01m")
 
 [node name="ControlInventory" type="Control" parent="."]
 visible = false
