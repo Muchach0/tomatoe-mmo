@@ -76,7 +76,7 @@ func _ready() -> void:
     # EventBus.connect("bonus_touched", on_bonus_touched_by_player)
     # EventBus.connect("bonus_used", server_handles_bonus_used_by_player)
     EventBus.connect("one_enemy_die", _on_enemy_died)
-    EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
+    # EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
     
     # Setup enemy spawner
     # if enemy_spawner:

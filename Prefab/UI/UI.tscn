@@ -174,7 +174,9 @@ size_flags_horizontal = 0
 size_flags_vertical = 1
 theme = ExtResource("3_17e3r")
 theme_override_font_sizes/font_size = 256
-text = "Boss room cleared!"
+text = "Boss room cleared!
+END OF THE DEMO
+THANKS FOR PLAYING !"
 horizontal_alignment = 1
 
 [node name="Control2" type="Control" parent="ReturnToMainWorldScreen"]

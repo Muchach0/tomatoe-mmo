@@ -12,15 +12,15 @@ class_name PortalInstance
 @onready var area_2d: Area2D = $Area2D
 @onready var sprite_2d: Sprite2D = $Sprite2D
 
-var world_scene_path: String = ""
-var world_offset: Vector2 = Vector2.ZERO
+# var world_scene_path: String = ""
+# var world_offset: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-    if world_scene_ressource != null:
+    # if world_scene_ressource != null:
         # loading info from resource file to variables
-        world_scene_path = world_scene_ressource.world_scene_path
-        world_offset = world_scene_ressource.world_offset
+        # world_scene_path = world_scene_ressource.world_scene_path
+        # world_offset = world_scene_ressource.world_offset
 
     if portal_visible and portal_enabled and area_2d != null:
         area_2d.body_entered.connect(on_body_entered)
@@ -38,7 +38,7 @@ func player_travel_to_destination_world(player: Node2D) -> void:
     if player == null:
         return
     var player_id = player.peer_id
-    EventBus.move_player_to_destination_world.emit(player_id, world_scene_path, world_offset)
+    EventBus.move_player_to_destination_world.emit(player_id, world_scene_ressource)
 
 func disable_portal() -> void:
     if area_2d != null:

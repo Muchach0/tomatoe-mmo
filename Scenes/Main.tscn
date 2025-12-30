@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="1_r150o"]
 [ext_resource type="Script" uid="uid://d27pkmcy3fpe7" path="res://Util/Mmo_Logic/world_spawner.gd" id="1_rgh2o"]
-[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/PortalInstance/WorldSceneRessourceClass.gd" id="2_50glp"]
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Resources/Worlds/WorldSceneRessourceClass.gd" id="2_50glp"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_idj7w"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="3_kln2b"]
 [ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Resources/Worlds/world_forest.tres" id="3_vy5pj"]
@@ -40,6 +40,7 @@ spawn_path = NodePath("../..")
 
 [node name="GlobalTimerManager" type="Node" parent="."]
 script = ExtResource("10_bmxlf")
+duration = 180.0
 
 [node name="UiTickTimer" type="Timer" parent="GlobalTimerManager"]
 autostart = true

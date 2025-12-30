@@ -3,10 +3,11 @@ extends Node
 
 const DEFAULT_WORLD_NAME = "LevelForest"
 var current_world_player_location = "LevelForest"
+var current_world_scene : Node2D = null
 var players: Dictionary = {}
 
 signal player_hit
-signal player_died
+signal player_died(peer_id: int)
 signal respawn_player
 signal star_touched
 signal add_player # Signal to synchronize player data across peers when a new player connects
@@ -47,6 +48,7 @@ signal ai_request_failed # Signal to notify the UI that the AI request has faile
 signal audio_explosion_play # Signal to notify the UI that the audio explosion should be played
 signal audio_win_play # Signal to notify the UI that the audio win should be played
 signal audio_shoot_play # Signal to notify the AudioManager that a shooting sound should be played
+signal audio_player_hit # Signal to notify the AudioManager that a player hit sound should be played
 
 
 # Signal linked to upgrades

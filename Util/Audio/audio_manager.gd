@@ -82,7 +82,7 @@ func _connect_to_event_bus() -> void:
 	EventBus.audio_shoot_play.connect(_on_shoot_play)
 	
 	# # Player events
-	# EventBus.player_hit.connect(_on_player_hit)
+	EventBus.audio_player_hit.connect(_on_player_hit)
 	# EventBus.player_died.connect(_on_player_died)
 	
 	# Enemy events

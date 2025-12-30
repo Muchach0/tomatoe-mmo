@@ -25,10 +25,11 @@ func move_player_to_boss_room() -> void:
     if multiplayer.is_server(): # server doesn't have a player
         return
     var player_id = multiplayer.get_unique_id()
-    var world_scene_path = boss_room_world_resources_list[current_phase].world_scene_path
-    var world_offset = boss_room_world_resources_list[current_phase].world_offset
+    var world_resource = boss_room_world_resources_list[current_phase]
+    # var world_scene_path = boss_room_world_resources_list[current_phase].world_scene_path
+    # var world_offset = boss_room_world_resources_list[current_phase].world_offset
 
-    EventBus.move_player_to_destination_world.emit(player_id, world_scene_path, world_offset)
+    EventBus.move_player_to_destination_world.emit(player_id, world_resource)
     EventBus.hide_go_boss_room_button.emit()
 
 func on_return_to_forest_button_pressed() -> void:
@@ -44,7 +45,8 @@ func move_player_to_forest() -> void:
     if multiplayer.is_server(): # server doesn't have a player, so we don't need to move it to the forest
         return
     var player_id = multiplayer.get_unique_id()
-    var world_scene_path = default_forest_world_ressource.world_scene_path
-    var world_offset = default_forest_world_ressource.world_offset
-    EventBus.move_player_to_destination_world.emit(player_id, world_scene_path, world_offset)
+    var world_resource = default_forest_world_ressource
+    # var world_scene_path = default_forest_world_ressource.world_scene_path
+    # var world_offset = default_forest_world_ressource.world_offset
+    EventBus.move_player_to_destination_world.emit(player_id, world_resource)
     EventBus.hide_return_to_forest_button.emit()

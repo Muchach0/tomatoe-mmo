@@ -103,6 +103,9 @@ func _ready() -> void:
     EventBus.leveled_up.connect(on_leveled_up)
     EventBus.xp_changed.connect(on_xp_changed)
 
+    # Player dying related signals
+    EventBus.player_died.connect(on_player_died)
+
 
 func on_player_added(_player_id, _player_info) -> void:
     number_of_players += 1
@@ -111,6 +114,11 @@ func on_player_added(_player_id, _player_info) -> void:
 func on_remove_player(_player_id) -> void:
     number_of_players -= 1
     network_label.text = "Player connected: %d " % number_of_players
+
+func on_player_died(player_id: int) -> void:
+    if player_id != multiplayer.get_unique_id():
+        return
+    on_game_over_screen_text_and_visibility("You died", "Restart", true)
 
 
 func on_joining_server_running_a_busy_round(should_display_label: bool) -> void:
@@ -178,6 +186,7 @@ func on_wave_cleared(wave_number: int, TOTAL_WAVES: int) -> void:
 
 func on_restart_button_pressed() -> void:
     print("ui.gd - on_restart_button_pressed() - Restart button pressed by player %d" % multiplayer.get_unique_id())
+    on_game_over_screen_text_and_visibility("Game restarted", "Restart", false)
     EventBus.restart_button_pressed.emit()
 
 

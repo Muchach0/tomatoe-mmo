@@ -15,9 +15,9 @@ var touching := 0
 
 @onready var sprite_size: Vector2 = ($Sprite2D.texture.get_size() * scale) / 2
 
-var number_of_life := INIT_NUMBER_OF_LIFE
+@export var number_of_life: int = INIT_NUMBER_OF_LIFE
 var is_invincible: bool = false # used with safe zone, can be used later to make the player invincible for a short time after being hit.
-var is_hidden: bool = false # used when the player should be hidden
+@export var is_hidden: bool = false # used when the player should be hidden
 
 var init_position = position
 @export var synced_position := Vector2()
@@ -121,6 +121,10 @@ func _ready() -> void:
     
     on_refresh_visibility(1, true) # Refresh visibility for the player with the server - useful for the first time the player connects to the server.
 
+
+
+    EventBus.restart_button_pressed.connect(on_restart_button_pressed)
+
     # EventBus.connect("player_respawned", _on_player_respawned)
     # The player follows the mouse cursor automatically, so there's no point
     # in displaying the mouse cursor.
@@ -195,6 +199,13 @@ func _physics_process(_delta: float) -> void:
             # This is useful for world transition : we don't want to interpolate the player position if it's too far away.
             # This is to avoid jittering / aggro of enemies when the player is teleported to a new world.
             position = target_position
+        
+        health_bar.value = number_of_life
+        visible = not is_hidden
+        $Sprite2D.visible = not is_hidden
+        health_bar.visible = not is_hidden
+
+            # health_bar.value = hp_sent
 
     # TODO: Fix state machine later
     # # If the player is not moving, we don't need to update the state machine
@@ -251,13 +262,13 @@ func _physics_process(_delta: float) -> void:
 #         material.set_shader_parameter("enable_effect", false)
 #         # sprite.frame = 0
 
-func _isPlayerCrossingAnAreaWithZoneName(area: Area2D) -> String:
-    if area == null:
-        return ""
-    for group in area.get_groups():
-        if group.begins_with("zone"):
-            return group
-    return ""
+# func _isPlayerCrossingAnAreaWithZoneName(area: Area2D) -> String:
+#     if area == null:
+#         return ""
+#     for group in area.get_groups():
+#         if group.begins_with("zone"):
+#             return group
+#     return ""
 
 # func _on_area_entered(area: Area2D) -> void:
 func _on_hitbox_area_entered(area: Area2D) -> void:
@@ -325,6 +336,9 @@ func take_damage(damage:int, from_player_id: int) -> void:
         # print("Player avoided self-damage from own bullet")
         return
 
+    # Play sound when the player is hit
+    EventBus.audio_player_hit.emit(peer_id, name, number_of_life)
+
     sync_take_damage_on_all_peers.rpc(number_of_life, damage, from_player_id)
     # If the player is invincible, we don't want to decrease the number of lives.
     # print("Player touched by a bullet")
@@ -347,7 +361,15 @@ func sync_take_damage_on_all_peers(number_of_life_from_owner:int, damage:int, fr
     start_glow()
     var player_owner_id = multiplayer.get_remote_sender_id()
     EventBus.player_hit.emit(player_owner_id, name, number_of_life)
+    if number_of_life <= 0:
+        player_died()
     return
+
+#region: Player dying section
+func player_died() -> void:
+    EventBus.player_died.emit(peer_id)
+    # EventBus.remove_player.emit(peer_id)
+    hide_player()
 
 func hide_player() -> void:
     # This function is called when the player is hit and should be hidden.
@@ -361,12 +383,16 @@ func hide_player() -> void:
     # $DetectionArea.monitorable = false
     # Disable player controls
     $StateMachine.current_state.emit_signal("transitioned", $StateMachine.current_state, "PlayerIdle")
-    $Hitbox.monitoring = false
-    $Hitbox.monitorable = false
-    EventBus.player_died.emit(peer_id)
+    # $Hitbox.monitoring = false
+
+    # EventBus.player_died.emit(peer_id)
     if health_bar != null:
         health_bar.visible = false
+    if is_multiplayer_authority():
+        $Hitbox.set_deferred("monitoring", false)
+        $Hitbox.set_deferred("monitorable", false)
 
+@rpc("any_peer", "call_local", "reliable")
 func reset_player(new_position: Vector2) -> void:
     # This function is called when the player is respawned.
     is_hidden = false
@@ -379,16 +405,37 @@ func reset_player(new_position: Vector2) -> void:
     touching = 0  # Reset the number of bullets touching the player
     # Showing the player sprite and enabling the detection area
     $Sprite2D.visible = true
+
+    level = 1
+    current_xp = 0
+    EventBus.xp_gathered.emit(current_xp)
+    skill_points = 0
+    inventory = Inventory.new()
     # $DetectionArea.monitoring = true
     # $DetectionArea.monitorable = true
-    $Hitbox.monitoring = true
-    $Hitbox.monitorable = true
+    # $Hitbox.monitoring = true
+    $Hitbox.set_deferred("monitoring", true)
+    # $Hitbox.monitorable = true
+    $Hitbox.set_deferred("monitorable", true)
     material.set_shader_parameter("enable_effect", false)
     # Ensure camera is properly set up after respawn
     setup_camera()
     if health_bar != null:
         health_bar.visible = true
         health_bar.value = number_of_life
+
+    
+    # if is_multiplayer_authority():
+    #     $Hitbox.set_deferred("monitoring", true)
+    #     $Hitbox.set_deferred("monitorable", true)
+
+func on_restart_button_pressed() -> void:
+    reset_player(position)
+    reset_player.rpc_id(1, position)
+    return
+
+
+#endregion: Player dying section
 
 
 ####################### FORCE FIELD SECTION #######################
@@ -461,10 +508,10 @@ func _update_sprite_direction_from_motion(direction: Vector2) -> void:
 
 #region VISIBILITY SYNCHRONIZER SECTION =================================================================
 
-func move_player_to_destination_world(player_id: int, destination_world: String, destination_offset: Vector2) -> void:
+func move_player_to_destination_world(player_id: int, world_scene_ressource: WorldSceneRessourceClass) -> void:
     if player_id != peer_id:
         return
-    current_world = destination_world
+    current_world = world_scene_ressource.world_name
     if EventBus.move_player_inside_world.is_connected(move_player_inside_world):
         return
     EventBus.move_player_inside_world.connect(move_player_inside_world)
@@ -532,6 +579,7 @@ func on_refresh_visibility(body_peer_id: int, is_entering: bool) -> void:
         visible = true
         sync.set_visibility_for(1, true)
         sync.set_visibility_for(body_peer_id, is_entering)
+        # sync_information_to_visibile_peer.rpc_id(body_peer_id, is_hidden, number_of_life)
         return
     else:
         print(multiplayer.get_unique_id(), " - player.gd - on_refresh_visibility() - Refreshing visibility for peer: ", body_peer_id, " - is entering: ", is_entering)
@@ -541,6 +589,20 @@ func on_refresh_visibility(body_peer_id: int, is_entering: bool) -> void:
             visible = false
             # TODO: should also disable collision with the player
             # sync.set_visibility_for(body_peer_id, false)
+
+# @rpc("any_peer", "call_local", "reliable")
+# func sync_information_to_visibile_peer(is_hidden_info_sent: bool, hp_sent: int) -> void:
+#     print(multiplayer.get_unique_id(), " - player.gd - sync_information_to_visibile_peer() - is hidden: ", is_hidden_info_sent, " - hp: ", hp_sent)
+#     is_hidden = is_hidden_info_sent
+#     visible = not is_hidden
+#     number_of_life = hp_sent
+#     $Sprite2D.visible = not is_hidden_info_sent
+#     health_bar.visible = not is_hidden_info_sent
+#     health_bar.value = hp_sent
+#     return
+
+
+
 
     # if not multiplayer.is_server(): # Only the authority handles the visibility synchronization.
     #     return

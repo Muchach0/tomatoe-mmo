@@ -13,6 +13,8 @@ extends Node2D
 
 var spawn_points = []
 
+var world_name: String = ""
+
 # # Enemy scene paths
 # var enemy_scenes = {
 #     "Dummy": "res://Prefab/Enemies/Dummy.tscn",
@@ -43,7 +45,7 @@ func _ready() -> void:
     EventBus.spawn_player.connect(instantiate_player_scene)
     EventBus.respawn_player.connect(instantiate_player_scene)
     get_spawn_points()
-    EventBus.move_player_inside_world.emit(spawn_points[(len(EventBus.players) - 1 ) % 11], name)
+    EventBus.move_player_inside_world.emit(spawn_points[(len(EventBus.players) - 1 ) % 11], world_name)
     
 
     EventBus.spawn_enemy.connect(spawn_enemies)
