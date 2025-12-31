@@ -45,6 +45,7 @@ Player=""
 zoneA=""
 zoneB=""
 zoneC=""
+Skill_slot=""
 
 [input]
 

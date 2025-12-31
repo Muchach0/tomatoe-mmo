@@ -103,7 +103,7 @@ signal return_to_forest_button_pressed # Signal to notify that the return to for
 signal show_return_to_forest_button # Signal to notify the UI that the return to forest button should be shown
 signal hide_return_to_forest_button # Signal to notify the UI that the return to forest button should be hidden
 signal update_level_number # Signal to notify the UI that the level number should be updated
-
+signal move_player_to_forest_on_death # Signal to notify the phase manager that a player should be moved to forest on death
 
 # Signal related to skills
 signal attach_skills_to_ui(skills: Array[Skill]) # Signal to notify the UI that the skills should be attached to the player

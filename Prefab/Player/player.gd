@@ -368,9 +368,10 @@ func sync_take_damage_on_all_peers(number_of_life_from_owner:int, damage:int, fr
 
 #region: Player dying section
 func player_died() -> void:
+    hide_player()
     EventBus.player_died.emit(peer_id)
     # EventBus.remove_player.emit(peer_id)
-    hide_player()
+    
 
 func hide_player() -> void:
     # This function is called when the player is hit and should be hidden.

@@ -50,3 +50,25 @@ func move_player_to_forest() -> void:
     # var world_offset = default_forest_world_ressource.world_offset
     EventBus.move_player_to_destination_world.emit(player_id, world_resource)
     EventBus.hide_return_to_forest_button.emit()
+
+# Function to move all players to forest when they all die in dungeon
+func move_all_players_to_forest_on_death() -> void:
+    if not multiplayer.is_server():
+        return
+    
+    print(multiplayer.get_unique_id(), " - phase_manager.gd - move_all_players_to_forest_on_death() - Moving all players to forest after death")
+    # Don't increment phase when players die - only when they complete the level
+    # Broadcast to all players to move to forest
+    for player_id in EventBus.players.keys():
+        move_player_to_forest_on_death.rpc_id(player_id)
+
+@rpc("any_peer", "call_local", "reliable")
+func move_player_to_forest_on_death() -> void:
+    if multiplayer.is_server(): # server doesn't have a player
+        return
+    var player_id = multiplayer.get_unique_id()
+    var world_resource = default_forest_world_ressource
+    EventBus.move_player_to_destination_world.emit(player_id, world_resource)
+    EventBus.hide_return_to_forest_button.emit()
+    print(multiplayer.get_unique_id(), " - phase_manager.gd - move_player_to_forest_on_death() - Player %d moved to forest after death" % player_id)
+    EventBus.move_player_to_forest_on_death.emit()

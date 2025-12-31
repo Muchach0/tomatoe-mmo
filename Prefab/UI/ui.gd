@@ -71,6 +71,7 @@ func _ready() -> void:
     EventBus.update_level_number.connect(on_update_level_number)
 
     restart_button.pressed.connect(on_restart_button_pressed)
+    EventBus.move_player_to_forest_on_death.connect(on_restart_button_pressed)
 
     
     EventBus.connect("quest_activated", on_quest_activated)
@@ -118,7 +119,23 @@ func on_remove_player(_player_id) -> void:
 func on_player_died(player_id: int) -> void:
     if player_id != multiplayer.get_unique_id():
         return
-    on_game_over_screen_text_and_visibility("You died", "Restart", true)
+    
+    # Check if player is in the dungeon (not in the default forest world)
+    var is_in_dungeon: bool = false
+    if player_id in EventBus.players:
+        var player_world = EventBus.players[player_id].get("current_world", EventBus.DEFAULT_WORLD_NAME)
+        is_in_dungeon = (player_world != EventBus.DEFAULT_WORLD_NAME)
+    else:
+        # Fallback: check current_world_player_location
+        is_in_dungeon = (EventBus.current_world_player_location != EventBus.DEFAULT_WORLD_NAME)
+    
+    if is_in_dungeon:
+        # Player died in dungeon - show message but hide restart button
+        # The system will automatically move players back to forest when all die
+        on_game_over_screen_text_and_visibility("You died", "", true)
+    else:
+        # Player died in forest or other non-dungeon world - show restart button
+        on_game_over_screen_text_and_visibility("You died", "Restart", true)
 
 
 func on_joining_server_running_a_busy_round(should_display_label: bool) -> void:
@@ -153,8 +170,11 @@ func on_is_server_label_visible(should_display_server_label: bool) -> void:
 func on_game_over_screen_text_and_visibility(label_text: String, button_text: String, is_visible: bool) -> void:
     if not is_visible:
         game_over_screen.visible = false
+        return
     game_over_screen_label.text = label_text
     restart_button.text = button_text
+    # Show/hide restart button based on whether button_text is empty
+    restart_button.visible = (button_text != "")
     game_over_screen.visible = is_visible
 
 

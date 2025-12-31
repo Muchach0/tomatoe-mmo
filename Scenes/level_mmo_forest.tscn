@@ -145,7 +145,7 @@ script = ExtResource("3_sq5bs")
 encounter_resources = Array[ExtResource("4_qrlry")]([ExtResource("5_76rxa"), ExtResource("6_w2cjm"), ExtResource("7_d87u1"), ExtResource("8_qrlry"), ExtResource("9_76rxa")])
 
 [node name="NearRuinSpawner" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
-position = Vector2(2309, 541)
+position = Vector2(2390, 581)
 shape = SubResource("CircleShape2D_76rxa")
 
 [node name="DinoMobSpawner" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
@@ -153,7 +153,7 @@ position = Vector2(1267, 417)
 shape = SubResource("CircleShape2D_w2cjm")
 
 [node name="DinoMobSpawner2" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
-position = Vector2(687, 284)
+position = Vector2(1730, 1178)
 shape = SubResource("CircleShape2D_d87u1")
 
 [node name="DinoMobSpawner3" parent="Encounter_Area_Manager" instance=ExtResource("6_foedh")]
@@ -173,7 +173,7 @@ position = Vector2(2992, 2627)
 shape = SubResource("CircleShape2D_pesdp")
 
 [node name="PortalInstance" parent="." instance=ExtResource("9_khdg0")]
-position = Vector2(931, 415)
+position = Vector2(733, 279)
 world_scene_ressource = ExtResource("10_khdg0")
 
 [node name="PortalInstance2" parent="." instance=ExtResource("9_khdg0")]

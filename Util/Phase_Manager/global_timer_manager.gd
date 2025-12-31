@@ -31,6 +31,20 @@ func server_send_remaining_time_to_connected_client(remaining_time: float) -> vo
 func server_send_stage_finished_to_connected_client() -> void:
     EventBus.stage_finished.emit()
 
+# Function to restart the timer from scratch (called when all players die in dungeon)
+func restart_timer_from_scratch() -> void:
+    if !multiplayer.is_server():
+        return
+    print(multiplayer.get_unique_id(), " - global_timer_manager.gd - restart_timer_from_scratch() - Restarting timer from scratch")
+    start_countdown(duration)
+    # Broadcast the restart to all clients
+    server_restart_timer_from_scratch.rpc()
+
+@rpc("any_peer", "call_local", "reliable")
+func server_restart_timer_from_scratch() -> void:
+    print(multiplayer.get_unique_id(), " - global_timer_manager.gd - server_restart_timer_from_scratch() - Restarting timer from scratch on all clients")
+    start_countdown(duration)
+
 func start_countdown(remaining_time: float) -> void:
     countdown.stop()
     tick.stop()
