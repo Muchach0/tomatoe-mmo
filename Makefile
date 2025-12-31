@@ -116,7 +116,7 @@ gcp-trigger-build-server: export-linux push-new-docker-image-server ## Trigger G
           --port 10567 
 
 
-gcp-trigger-build-all: gcp-trigger-build-server gcp-trigger-build-client
+gcp-trigger-build-all: gcp-trigger-build-server gcp-trigger-build-client itch-upload
 
 
 gcp-init-dns: ## Initialize DNS for GCP
@@ -138,3 +138,8 @@ itch-build-zip: export-client-html
 	rm -f builds/client-html.zip
 	cd builds && zip -r client-html.zip client-html
 
+itch-login:
+	butler login
+
+itch-upload: itch-build-zip
+	butler push builds/client-html.zip muchachoo/tomatoe-mmo:client-html
