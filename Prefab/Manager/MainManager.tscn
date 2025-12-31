@@ -40,4 +40,3 @@ sound_hit = ExtResource("10_51y3y")
 sound_level_up = ExtResource("10_cp1yb")
 sound_enemy_die = ExtResource("11_cp1yb")
 music_background = ExtResource("10_74tvc")
-music_enabled = false
