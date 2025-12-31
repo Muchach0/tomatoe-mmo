@@ -290,7 +290,7 @@ func _on_stage_finished() -> void:
 		play_sound_effect(sound_pickup_coin, 1.1)
 
 
-func _on_level_started() -> void:
+func _on_level_started(_current_level: int, _current_wave: int, _enemies_killed_in_current_wave: int, _enemies_in_current_wave: int) -> void:
 	# Ensure background music is playing when level starts (if enabled)
 	if music_enabled and not is_music_playing:
 		play_background_music()
