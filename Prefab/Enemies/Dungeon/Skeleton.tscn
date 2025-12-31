@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://b0anaegxvegyc"]
+[gd_scene load_steps=25 format=3 uid="uid://b0anaegxvegyc"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_0qxta"]
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_1uoxs"]
+[ext_resource type="Resource" uid="uid://dtu0d38hfu07j" path="res://Resources/Items/LootTables/skeleton_loot.tres" id="3_1tlqv"]
 [ext_resource type="Texture2D" uid="uid://sfcvut5mce6u" path="res://Art/Sprites/recolor/skeleton_recolor.png" id="3_2wk8x"]
 [ext_resource type="Script" uid="uid://b73sir6xbr0gt" path="res://Util/Components/hurtbox.gd" id="4_d3c54"]
 [ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="5_7wgpw"]
@@ -157,7 +158,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rj2wl"]
-radius = 3458.7512
+radius = 628.05096
 
 [node name="Skelleton" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -168,10 +169,13 @@ script = ExtResource("2_1uoxs")
 MAX_DEFAULT_HEALTH = 25
 should_flip_sprite = true
 can_melee_attack = false
+loot_table = ExtResource("3_1tlqv")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_rj2wl")
+visibility_update_mode = 2
+public_visibility = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -242,7 +246,6 @@ position = Vector2(0, -168)
 [node name="AggroArea2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
-visible = false
 shape = SubResource("CircleShape2D_rj2wl")
 
 [node name="Shadow" type="Sprite2D" parent="."]

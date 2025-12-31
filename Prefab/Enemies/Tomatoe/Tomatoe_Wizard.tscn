@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://dbowps5qkmhfv"]
+[gd_scene load_steps=23 format=3 uid="uid://dbowps5qkmhfv"]
 
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="1_6atsj"]
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="2_r0w76"]
 [ext_resource type="Texture2D" uid="uid://dkvk48o20k7nk" path="res://Art/Sprites/tomatoe/tomatoe_wizard_1.png" id="3_5n4hy"]
+[ext_resource type="Resource" uid="uid://pq6vjxebwe7n" path="res://Resources/Items/LootTables/tomato_wizard_loot.tres" id="3_sipj5"]
 [ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="4_38yg2"]
 [ext_resource type="Script" uid="uid://c78lqfuowj4ou" path="res://Util/States/State_machine.gd" id="5_ckvdf"]
 [ext_resource type="Script" uid="uid://b2myt44bpyvvy" path="res://Util/States/EnemyIdle.gd" id="6_g5mxc"]
@@ -158,6 +159,7 @@ should_be_able_to_move = false
 can_shoot_bullets = true
 bullet_speed = 250.0
 can_melee_attack = false
+loot_table = ExtResource("3_sipj5")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

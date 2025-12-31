@@ -1,8 +1,14 @@
-[gd_resource type="Resource" script_class="AOEShootSkill" load_steps=2 format=3 uid="uid://g2li2adevben"]
+[gd_resource type="Resource" script_class="AOEShootSkill" load_steps=4 format=3 uid="uid://g2li2adevben"]
 
 [ext_resource type="Script" uid="uid://boi8bq5rf77wi" path="res://Resources/Skills/AOEShootSkill.gd" id="1_67ohd"]
+[ext_resource type="Texture2D" uid="uid://bybaw5r0ow2oc" path="res://Art/Sprites/Kenney/1_bit_pack.png" id="2_asgn4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asgn4"]
+atlas = ExtResource("2_asgn4")
+region = Rect2(112, 352, 16, 16)
 
 [resource]
 script = ExtResource("1_67ohd")
 max_pierce = 5
+icon = SubResource("AtlasTexture_asgn4")
 metadata/_custom_type_script = "uid://boi8bq5rf77wi"

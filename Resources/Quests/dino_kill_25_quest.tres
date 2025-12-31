@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=3 format=3 uid="uid://d0oh547nfk1tr"]
+
+[ext_resource type="Resource" uid="uid://lhlqkxbw3w5h" path="res://Resources/Items/Materials/life_potion.tres" id="1_qfufc"]
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="2_lo0yg"]
+
+[resource]
+script = ExtResource("2_lo0yg")
+quest_name = "Slay the Dinos!"
+quest_description = "Kill 25 dinos"
+target_count = 25
+reward_experience = 50
+reward_gold = 50
+reward_items = Array[Dictionary]([{
+"count": 5,
+"item": ExtResource("1_qfufc")
+}])

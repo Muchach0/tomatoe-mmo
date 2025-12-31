@@ -2,7 +2,7 @@ class_name AOEShootSkill extends Skill
 ## Area of Effect shooting skill - fires multiple bullets in a circular pattern
 
 ## Base damage for each bullet
-@export var damage: float = 5.0
+@export var damage: float = 4.0
 
 ## Speed of each bullet
 @export var speed: float = 300.0
@@ -49,7 +49,7 @@ func execute(player: Player, target_position: Vector2, bullet_manager: BulletMan
     
     # Prepare base bullet data
     var base_bullet_data = {
-        "damage": damage,
+        "damage": damage + level,
         "speed": speed,
         "max_pierce": max_pierce
     }

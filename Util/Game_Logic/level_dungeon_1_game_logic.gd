@@ -40,16 +40,18 @@ var wave_config = {
     5: {"enemy_count": 1, "enemy_types": ["Tomatoe_Seed_Boss"]},
 }
 
-# # Enemy scene paths
-# var enemy_scenes = {
-#     "Dummy": "res://Prefab/Enemies/Dummy.tscn",
-#     "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
-#     "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
-#     "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
-#     "Dino_green": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
-#     "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
-#     "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
-# }
+
+# Enemy scene paths
+var enemy_scenes = {
+    "Dummy": "res://Prefab/Enemies/Dummy.tscn",
+    "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
+    "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
+    "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
+    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
+    "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
+    "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
+}
+
 
 # bool to store if a game with bullets is currently running
 # We hide the player connecting in case a round is already running, necessary as the bullets are instantiated locally on round start.
@@ -74,7 +76,8 @@ func _ready() -> void:
     # EventBus.connect("bonus_touched", on_bonus_touched_by_player)
     # EventBus.connect("bonus_used", server_handles_bonus_used_by_player)
     EventBus.connect("one_enemy_die", _on_enemy_died)
-    EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
+    EventBus.connect("player_died", _on_player_died)
+    # EventBus.connect("restart_button_pressed", _on_button_restart_pressed)
     
     # Setup enemy spawner
     # if enemy_spawner:
@@ -267,6 +270,8 @@ func finish_game(is_win:= true) -> void:
         # if current_wave >= TOTAL_WAVES:
         # EventBus.game_over_screen_text_and_visibility.emit("Level completed! Victory!", "Restart", true)
         enable_portal_instance() # Enable the portal instance when the game is won
+        # Show return to forest button when dungeon level is completed
+        EventBus.show_return_to_forest_button.emit()
         # else:
         #     EventBus.game_over_screen_text_and_visibility.emit("Victory!", "Next Level", true)
         # init_bullet_count += INCREMENT_BULLET_COUNT
@@ -533,15 +538,16 @@ func spawn_enemies_in_wave(enemy_types: Array, count: int) -> void:
         var spawner_name_with_id = GLOBAL_SPAWNER_NAME_WITH_ID
         var enemy_name = enemy_type
         var world_name_from_spawner = current_world_name
+        var enemy_scene_path = enemy_scenes.get(enemy_type, "res://Prefab/Enemies/Dummy.tscn")
 
-        spawn_enemies_on_global_spawner(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner)
+        spawn_enemies_on_global_spawner(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner, enemy_scene_path)
 
-func spawn_enemies_on_global_spawner(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String) -> void:
+func spawn_enemies_on_global_spawner(spawner_name: String, spawner_name_with_id: String, enemy_name: String, spawn_position: Vector2, world_name_from_spawner: String, enemy_scene_path: String) -> void:
     if not multiplayer.is_server(): # Only the server can spawn enemies
         return
     if world_name_from_spawner != current_world_name: # Do not spawn the enemy if the world is not the same as the world of the level
         return
-    level_mmo_logic.spawn_enemies(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner)
+    level_mmo_logic.spawn_enemies(spawner_name, spawner_name_with_id, enemy_name, spawn_position, world_name_from_spawner, enemy_scene_path)
 
 
 
@@ -613,3 +619,87 @@ func disable_portal_instance() -> void:
         portal_instance.disable_portal()
 # End of game logic and portal instance handling
 #endregion
+
+
+#region player dying handling
+# Called when a player dies
+func _on_player_died(peer_id: int) -> void:
+    if not multiplayer.is_server():
+        return
+    if not is_a_game_with_bullets_currently_running:
+        return
+    
+    print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - _on_player_died() - Player %d died" % peer_id)
+    
+    # Check if all players in the dungeon are dead
+    if all_players_in_dungeon_are_dead():
+        print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - _on_player_died() - All players in dungeon are dead, restarting timer and moving to forest")
+        handle_all_players_died()
+
+# Check if all players in the current dungeon world are dead
+func all_players_in_dungeon_are_dead() -> bool:
+    if not multiplayer.is_server():
+        return false
+    
+    var players_in_dungeon = Helper.get_players_id_in_current_world(current_world_name)
+    if players_in_dungeon.is_empty():
+        return false
+    
+    # Check if all players in the dungeon are dead
+    for player_id in players_in_dungeon:
+        var player_node = Helper.find_player_by_peer_id(player_id)
+        if player_node and not player_node.is_hidden:
+            # Found at least one alive player
+            return false
+    
+    # All players in dungeon are dead
+    return true
+
+# Handle the case when all players in the dungeon have died
+func handle_all_players_died() -> void:
+    if not multiplayer.is_server():
+        return
+    
+    # Get reference to global timer manager and restart timer
+    var global_timer_manager = get_node_or_null("/root/Main/GlobalTimerManager")
+    if not global_timer_manager:
+        # Try alternative path
+        global_timer_manager = get_tree().get_first_node_in_group("GlobalTimerManager")
+    
+    if global_timer_manager and global_timer_manager.has_method("restart_timer_from_scratch"):
+        global_timer_manager.restart_timer_from_scratch()
+        print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - handle_all_players_died() - Timer restarted")
+    else:
+        print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - handle_all_players_died() - Warning: GlobalTimerManager not found")
+    
+    # Get reference to phase manager and move all players back to forest
+    var phase_manager = get_node_or_null("/root/Main/PhaseManager")
+    if not phase_manager:
+        # Try alternative path
+        phase_manager = get_tree().get_first_node_in_group("PhaseManager")
+    
+    if phase_manager and phase_manager.has_method("move_all_players_to_forest_on_death"):
+        phase_manager.move_all_players_to_forest_on_death()
+        print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - handle_all_players_died() - Players moved to forest")
+    else:
+        # Fallback: move players directly using EventBus
+        print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - handle_all_players_died() - PhaseManager not found, using direct EventBus call")
+        move_all_players_to_forest_directly()
+
+# Fallback function to move players to forest directly (if phase_manager is not found)
+func move_all_players_to_forest_directly() -> void:
+    if not multiplayer.is_server():
+        return
+    
+    print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - move_all_players_to_forest_directly() - Using fallback method to move players to forest")
+    # This is a fallback - ideally phase_manager should be found
+    # Update player's current_world to forest in EventBus.players
+    var players_in_dungeon = Helper.get_players_id_in_current_world(current_world_name)
+    for player_id in players_in_dungeon:
+        if player_id in EventBus.players:
+            EventBus.players[player_id]["current_world"] = EventBus.DEFAULT_WORLD_NAME
+            print(multiplayer.get_unique_id(), " - level_dungeon_1_game_logic.gd - move_all_players_to_forest_directly() - Updated player %d world to forest" % player_id)
+    # Note: Actual world transition would need to be handled by the world spawner system
+    # This fallback only updates the player data, but the phase_manager method is preferred
+
+#endregion 

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EncounterResource" load_steps=5 format=3 uid="uid://be8oh2jg5l5k7"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_m8yxy"]
+[ext_resource type="Resource" uid="uid://d0oh547nfk1tr" path="res://Resources/Quests/dino_kill_25_quest.tres" id="2_bdu53"]
+[ext_resource type="Script" uid="uid://bukxiy3yqj8sb" path="res://Resources/Encounter/encounter_bundle_resource_class.gd" id="4_dnftq"]
+[ext_resource type="Resource" uid="uid://1vs1pmnvy7sx" path="res://Resources/Spawner/dino_spawner.tres" id="5_tp8cg"]
+
+[resource]
+script = ExtResource("4_dnftq")
+spawner = ExtResource("5_tp8cg")
+quests = Array[ExtResource("1_m8yxy")]([ExtResource("2_bdu53")])
+metadata/_custom_type_script = "uid://bukxiy3yqj8sb"

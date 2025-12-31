@@ -13,15 +13,15 @@ const player_scene = preload("res://Prefab/Player/player_ship.tscn") # The playe
 var item_drop_scene = preload("res://Util/Items/item_drop.tscn")
 
 # Enemy scene paths
-var enemy_scenes = {
-    "Dummy": "res://Prefab/Enemies/Dummy.tscn",
-    "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
-    "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
-    "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
-    "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
-    "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
-    "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
-}
+# var enemy_scenes = {
+#     "Dummy": "res://Prefab/Enemies/Dummy.tscn",
+#     "Skeleton": "res://Prefab/Enemies/Dungeon/Skeleton.tscn",
+#     "Tomatoe_Wizard": "res://Prefab/Enemies/Tomatoe/Tomatoe_Wizard.tscn",
+#     "Tomatoe_ennemy": "res://Prefab/Enemies/Tomatoe/Tomatoe_ennemy.tscn",
+#     "Dino": "res://Prefab/Enemies/Dino/Dino_Green.tscn",
+#     "Tomatoe_Seed_Boss": "res://Prefab/Enemies/Tomatoe/Tomatoe_Seed_Boss.tscn",
+#     "Orc": "res://Prefab/Enemies/Orc/Orc.tscn",
+# }
 
 
 
@@ -62,7 +62,7 @@ func _spawn_enemy_callback(data: Dictionary) -> Node:
     var enemy_world = data["current_world_name"]
 
     var enemy_type = data.get("enemy_type", "Dummy")
-    var enemy_scene_path = enemy_scenes.get(enemy_type, "res://Prefab/Enemies/Dummy.tscn")
+    var enemy_scene_path = data.get("enemy_scene_path", "res://Prefab/Enemies/Dummy.tscn")
     
     # Load and instantiate enemy
     var enemy_scene = load(enemy_scene_path)

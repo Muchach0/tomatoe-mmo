@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=3 uid="uid://dl603q4umttiw"]
+[gd_scene load_steps=23 format=3 uid="uid://dl603q4umttiw"]
 
 [ext_resource type="Script" uid="uid://dwrvjvtfymngy" path="res://Prefab/Enemies/Enemy.gd" id="1_60wy3"]
 [ext_resource type="Material" uid="uid://bqobf4jtv2a83" path="res://Art/Shaders/RedShader.tres" id="2_vq48d"]
 [ext_resource type="Texture2D" uid="uid://b2crpvi287pog" path="res://Art/Sprites/recolor/necromancer_recolor.png" id="3_065sq"]
+[ext_resource type="Resource" uid="uid://pu8bg7l2sbr8" path="res://Resources/Items/LootTables/necromancer_loot.tres" id="3_suwtv"]
 [ext_resource type="Script" uid="uid://c7n12r1ga5b8m" path="res://Util/Components/hitbox.gd" id="3_ybg60"]
 [ext_resource type="Script" uid="uid://c78lqfuowj4ou" path="res://Util/States/State_machine.gd" id="4_2mn14"]
 [ext_resource type="Script" uid="uid://b2myt44bpyvvy" path="res://Util/States/EnemyIdle.gd" id="5_vq48d"]
@@ -11,6 +12,14 @@
 [ext_resource type="Script" uid="uid://deb3r81oga7je" path="res://Util/States/EnemyRangedAttack.gd" id="8_def456"]
 [ext_resource type="PackedScene" uid="uid://hlkjer88mbpu" path="res://Prefab/Components/HealthComponent.tscn" id="9_lvit6"]
 [ext_resource type="Texture2D" uid="uid://hrdmj1kjxrht" path="res://Art/Sprites/recolor/shadow_circle_recolor.png" id="11_065sq"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_065sq"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite2D:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_svmlw"]
 radius = 6.5
@@ -143,7 +152,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvix3"]
-radius = 393.80515
+radius = 117.586136
 
 [node name="Necromancer" type="CharacterBody2D"]
 material = ExtResource("2_vq48d")
@@ -157,7 +166,13 @@ can_shoot_bullets = true
 bullet_damage = 3.0
 bullet_speed = 250.0
 can_melee_attack = false
+loot_table = ExtResource("3_suwtv")
 metadata/_custom_type_script = "uid://dwrvjvtfymngy"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_065sq")
+visibility_update_mode = 2
+public_visibility = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -225,5 +240,4 @@ texture = ExtResource("11_065sq")
 [node name="AggroArea2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroArea2D"]
-visible = false
 shape = SubResource("CircleShape2D_bvix3")

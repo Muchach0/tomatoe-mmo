@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttributeData" load_steps=2 format=3 uid="uid://bat7m8otv3dv7"]
+
+[ext_resource type="Script" uid="uid://6n6xqjilplpq" path="res://Util/Experience/attribute_data.gd" id="1_7v42x"]
+
+[resource]
+script = ExtResource("1_7v42x")
+strength = 1.0
+agility = 1.0
+intelligence = 1.0
+wisdom = 1.0
+charisma = 1.0
+luck = 1.0
+constitution = 1.0
+metadata/_custom_type_script = "uid://6n6xqjilplpq"

@@ -1,10 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctqaaav1h2efi"]
+[gd_scene load_steps=14 format=3 uid="uid://ctqaaav1h2efi"]
 
 [ext_resource type="Script" uid="uid://c6fqaytyd6tbd" path="res://Util/AI/AiManager.gd" id="1_hlysy"]
 [ext_resource type="Script" uid="uid://dtln5tnvcufnb" path="res://Util/Upgrade/upgrade_manager.gd" id="2_ko3ch"]
 [ext_resource type="Script" uid="uid://d0ms3k0nv2mp5" path="res://Util/Network/NetworkManager.gd" id="3_m56va"]
 [ext_resource type="PackedScene" uid="uid://g1ov0o7f67on" path="res://Prefab/Manager/BulletManager.tscn" id="4_ko3ch"]
 [ext_resource type="Script" uid="uid://n6q41cjo3sy8" path="res://Util/Quests/quests.gd" id="5_emp2y"]
+[ext_resource type="Script" uid="uid://dhob6c4lrvd64" path="res://Util/Audio/audio_manager.gd" id="6_ch4kq"]
+[ext_resource type="AudioStream" uid="uid://3i1neqbgutxm" path="res://Art/Sounds/pickupCoin.wav" id="7_k08hq"]
+[ext_resource type="AudioStream" uid="uid://cejnvkaruohkw" path="res://Art/Sounds/bonusPickUp.wav" id="8_p267i"]
+[ext_resource type="AudioStream" uid="uid://dmhpsaln8xtg1" path="res://Art/Sounds/Shoot29.wav" id="9_k08hq"]
+[ext_resource type="AudioStream" uid="uid://dapjk1lpniirg" path="res://Art/Sounds/Hit77.wav" id="10_51y3y"]
+[ext_resource type="AudioStream" uid="uid://4bufaog4gvj8" path="res://Art/Sounds/background_music/whispering_dawn_1.ogg" id="10_74tvc"]
+[ext_resource type="AudioStream" uid="uid://biydr2gcejxqj" path="res://Art/Sounds/PowerUp34.wav" id="10_cp1yb"]
+[ext_resource type="AudioStream" uid="uid://hdw0totgqcnk" path="res://Art/Sounds/Hit72.wav" id="11_cp1yb"]
 
 [node name="Manager" type="Node"]
 
@@ -22,3 +30,13 @@ script = ExtResource("3_m56va")
 [node name="QuestManager" type="Node" parent="."]
 script = ExtResource("5_emp2y")
 metadata/_custom_type_script = "uid://n6q41cjo3sy8"
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("6_ch4kq")
+sound_pickup_coin = ExtResource("7_k08hq")
+sound_bonus_pickup = ExtResource("8_p267i")
+sound_laser_shoot = ExtResource("9_k08hq")
+sound_hit = ExtResource("10_51y3y")
+sound_level_up = ExtResource("10_cp1yb")
+sound_enemy_die = ExtResource("11_cp1yb")
+music_background = ExtResource("10_74tvc")

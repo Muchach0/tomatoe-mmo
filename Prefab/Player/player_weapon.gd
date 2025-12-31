@@ -170,3 +170,6 @@ func execute_skill(skill_index: int, mobile_touch_position: Vector2 = Vector2.ZE
     
     # Execute the skill
     skill.execute(player, target_position, bullet_manager)
+    
+    # Emit signal for shooting sound
+    EventBus.audio_shoot_play.emit()

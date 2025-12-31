@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ClassData" load_steps=2 format=3 uid="uid://bym337x4yyb4l"]
+
+[ext_resource type="Script" uid="uid://b0fk70ucvaaxe" path="res://Util/Experience/class_data.gd" id="1_sp118"]
+
+[resource]
+script = ExtResource("1_sp118")
+metadata/_custom_type_script = "uid://b0fk70ucvaaxe"

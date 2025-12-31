@@ -9,4 +9,5 @@ quest_name = "Skulls!"
 quest_description = "Pick up dino skulls"
 quest_type = 1
 target_item = ExtResource("2_ej2va")
+reward_experience = 10
 metadata/_custom_type_script = "uid://bnvfwn654nhh2"

@@ -1,14 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://bpvdttyklmoem"]
+[gd_scene load_steps=12 format=3 uid="uid://bpvdttyklmoem"]
 
 [ext_resource type="PackedScene" uid="uid://ctqaaav1h2efi" path="res://Prefab/Manager/MainManager.tscn" id="1_r150o"]
 [ext_resource type="Script" uid="uid://d27pkmcy3fpe7" path="res://Util/Mmo_Logic/world_spawner.gd" id="1_rgh2o"]
-[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Prefab/PortalInstance/WorldSceneRessourceClass.gd" id="2_50glp"]
+[ext_resource type="Script" uid="uid://vgo2gsdirylf" path="res://Resources/Worlds/WorldSceneRessourceClass.gd" id="2_50glp"]
 [ext_resource type="PackedScene" uid="uid://jdgl6gpb80es" path="res://Prefab/UI/UI.tscn" id="2_idj7w"]
 [ext_resource type="PackedScene" uid="uid://cfive5moe6hsv" path="res://Prefab/Player/PlayerCamera.tscn" id="3_kln2b"]
 [ext_resource type="Resource" uid="uid://du6p0pmqq7l7u" path="res://Resources/Worlds/world_forest.tres" id="3_vy5pj"]
 [ext_resource type="Resource" uid="uid://cpfc6gkslsdel" path="res://Resources/Worlds/world_test_1.tres" id="4_bmxlf"]
 [ext_resource type="Script" uid="uid://cd7k5dtqi0bol" path="res://Util/Mmo_Logic/global_spawners_logic.gd" id="5_pbw6q"]
 [ext_resource type="Resource" uid="uid://7pntt1jbp7jf" path="res://Resources/Worlds/world_dungeon_1.tres" id="5_vy5pj"]
+[ext_resource type="Script" uid="uid://bdtuhj7x2x0m0" path="res://Util/Phase_Manager/global_timer_manager.gd" id="10_bmxlf"]
+[ext_resource type="Script" uid="uid://by6gqmuyjoqx" path="res://Util/Phase_Manager/phase_manager.gd" id="11_4kpch"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_rgh2o")
@@ -35,3 +37,18 @@ spawn_path = NodePath("../..")
 [node name="ItemDropSpawner" type="MultiplayerSpawner" parent="Spawners"]
 _spawnable_scenes = PackedStringArray("uid://c2y8g8aps26he")
 spawn_path = NodePath("../..")
+
+[node name="GlobalTimerManager" type="Node" parent="."]
+script = ExtResource("10_bmxlf")
+duration = 180.0
+
+[node name="UiTickTimer" type="Timer" parent="GlobalTimerManager"]
+autostart = true
+
+[node name="CountdownTimer" type="Timer" parent="GlobalTimerManager"]
+wait_time = 120.0
+
+[node name="PhaseManager" type="Node" parent="."]
+script = ExtResource("11_4kpch")
+boss_room_world_resources_list = Array[ExtResource("2_50glp")]([ExtResource("5_vy5pj")])
+default_forest_world_ressource = ExtResource("3_vy5pj")

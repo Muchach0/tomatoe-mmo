@@ -1,16 +1,15 @@
-[gd_scene load_steps=18 format=3 uid="uid://jdgl6gpb80es"]
+[gd_scene load_steps=17 format=3 uid="uid://jdgl6gpb80es"]
 
 [ext_resource type="Script" uid="uid://cp1qex37r1rrc" path="res://Prefab/UI/ui.gd" id="1_gtstx"]
 [ext_resource type="PackedScene" uid="uid://cgqr0bo81lrix" path="res://Prefab/UI/Joystick/Joystick.tscn" id="2_bqg0t"]
 [ext_resource type="Theme" uid="uid://c6vho6rwvu82i" path="res://Art/Font/my_theme.tres" id="3_17e3r"]
-[ext_resource type="AudioStream" uid="uid://cv1200f5e67ib" path="res://Art/Sounds/explosion.wav" id="4_wheuw"]
-[ext_resource type="AudioStream" uid="uid://3i1neqbgutxm" path="res://Art/Sounds/pickupCoin.wav" id="5_fiall"]
-[ext_resource type="AudioStream" uid="uid://cejnvkaruohkw" path="res://Art/Sounds/bonusPickUp.wav" id="6_3qnsr"]
-[ext_resource type="AudioStream" uid="uid://b34dfti6a06rt" path="res://Art/Sounds/bonusUsed.wav" id="7_ty01m"]
 [ext_resource type="Script" uid="uid://dncevmkgy25gn" path="res://Prefab/UI/Inventory/inventory_display.gd" id="8_fiall"]
 [ext_resource type="PackedScene" uid="uid://d0hb815m3rp0f" path="res://Prefab/UI/Inventory/ItemSlot.tscn" id="9_3qnsr"]
+[ext_resource type="PackedScene" uid="uid://bm5t38lfaxw62" path="res://Prefab/UI/Skills/SkillSlot.tscn" id="10_18pal"]
+[ext_resource type="Script" uid="uid://djit13ordacfl" path="res://Prefab/UI/Skills/skill_display.gd" id="10_jum4t"]
 [ext_resource type="Texture2D" uid="uid://bku1tgsc4dkjk" path="res://Art/Sprites/icon/arrow_down.png" id="10_ty01m"]
 [ext_resource type="Texture2D" uid="uid://dsibb0fq75v1t" path="res://Art/Sprites/icon/arrow_left.png" id="11_ty01m"]
+[ext_resource type="PackedScene" uid="uid://c5gra3fegbvub" path="res://Prefab/UI/UI_Icon_Button.tscn" id="14_shvhy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fiall"]
 bg_color = Color(0, 0, 0, 0)
@@ -84,6 +83,118 @@ size_flags_horizontal = 4
 theme = ExtResource("3_17e3r")
 theme_override_font_sizes/font_size = 256
 text = "Restart"
+
+[node name="TimerFinishedGoBossRoom" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.224949, 0.224949)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="TimerFinishedGoBossRoom"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="TimerFinishedGoBossRoom/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -324.5
+offset_top = -313.0
+offset_right = 324.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Timer finished"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="TimerFinishedGoBossRoom"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TimerFinishedGoBossRoom/Control2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -494.0
+offset_right = 494.0
+offset_bottom = 321.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Go to the boss room"
+
+[node name="ReturnToMainWorldScreen" type="GridContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.224949, 0.224949)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="ReturnToMainWorldScreen"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="ReturnToMainWorldScreen/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -324.5
+offset_top = -313.0
+offset_right = 324.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Boss room cleared!
+END OF THE DEMO
+THANKS FOR PLAYING !"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="ReturnToMainWorldScreen"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ReturnToMainWorldScreen/Control2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -494.0
+offset_right = 494.0
+offset_bottom = 321.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_17e3r")
+theme_override_font_sizes/font_size = 256
+text = "Return to main world"
 
 [node name="WaveLabel" type="Label" parent="."]
 visible = false
@@ -218,42 +329,30 @@ offset_right = 170.0
 offset_bottom = 239.0
 text = "AI Request Failed LABEL"
 
-[node name="AudioManager" type="Node" parent="."]
-
-[node name="ExplosionAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("4_wheuw")
-
-[node name="WinAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("5_fiall")
-
-[node name="BonusPickUpAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("6_3qnsr")
-
-[node name="BonusUsedAudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("7_ty01m")
-
 [node name="ControlInventory" type="Control" parent="."]
+visible = false
 z_index = -7
 layout_mode = 3
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="Control" type="Control" parent="ControlInventory"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 offset_left = -20.0
-offset_top = -40.0
+offset_top = -20.0
 offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="InventoryDisplay" type="Control" parent="ControlInventory/Control" node_paths=PackedStringArray("slot_parent")]
 layout_mode = 1
@@ -269,9 +368,105 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_fiall")
+slot_parent = NodePath("GridContainer")
+
+[node name="GridContainer" type="GridContainer" parent="ControlInventory/Control/InventoryDisplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 4
+
+[node name="ItemSlot" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot2" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot3" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot4" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot5" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot6" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot7" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot8" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot9" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot10" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot11" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot12" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot13" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot14" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot15" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ItemSlot16" parent="ControlInventory/Control/InventoryDisplay/GridContainer" instance=ExtResource("9_3qnsr")]
+layout_mode = 2
+
+[node name="ControlSkillBar" type="Control" parent="."]
+z_index = -7
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Control" type="Control" parent="ControlSkillBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="SkillDisplay" type="Control" parent="ControlSkillBar/Control" node_paths=PackedStringArray("slot_parent")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("10_jum4t")
 slot_parent = NodePath("HBoxContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ControlInventory/Control/InventoryDisplay"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlSkillBar/Control/SkillDisplay"]
 layout_direction = 1
 layout_mode = 1
 anchors_preset = 8
@@ -287,28 +482,16 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="ItemSlot" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+[node name="SkillSlot" parent="ControlSkillBar/Control/SkillDisplay/HBoxContainer" instance=ExtResource("10_18pal")]
 layout_mode = 2
 
-[node name="ItemSlot2" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+[node name="SkillSlot2" parent="ControlSkillBar/Control/SkillDisplay/HBoxContainer" instance=ExtResource("10_18pal")]
 layout_mode = 2
 
-[node name="ItemSlot3" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+[node name="SkillSlot3" parent="ControlSkillBar/Control/SkillDisplay/HBoxContainer" instance=ExtResource("10_18pal")]
 layout_mode = 2
 
-[node name="ItemSlot4" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
-layout_mode = 2
-
-[node name="ItemSlot5" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
-layout_mode = 2
-
-[node name="ItemSlot6" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
-layout_mode = 2
-
-[node name="ItemSlot7" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
-layout_mode = 2
-
-[node name="ItemSlot8" parent="ControlInventory/Control/InventoryDisplay/HBoxContainer" instance=ExtResource("9_3qnsr")]
+[node name="SkillSlot4" parent="ControlSkillBar/Control/SkillDisplay/HBoxContainer" instance=ExtResource("10_18pal")]
 layout_mode = 2
 
 [node name="ControlQuests" type="Control" parent="."]
@@ -392,5 +575,83 @@ theme_override_styles/hovered_selected_focus = SubResource("StyleBoxEmpty_tc14e"
 theme_override_styles/selected = SubResource("StyleBoxEmpty_shvhy")
 select_mode = 1
 auto_tooltip = false
+
+[node name="GlobalTimerLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.5
+offset_right = 35.5
+offset_bottom = 40.0
+grow_horizontal = 2
+theme = ExtResource("3_17e3r")
+text = "2:00"
+
+[node name="ControlUIIcon" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ControlUIIcon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -70.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Inventory_Icon_Button" parent="ControlUIIcon/MarginContainer" instance=ExtResource("14_shvhy")]
+layout_mode = 2
+
+[node name="ExperienceBar" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ProgressBar" type="ProgressBar" parent="ExperienceBar"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_17e3r")
+step = 1.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="ExperienceBar/ProgressBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 10
+text = "Lv. 1"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [connection signal="pressed" from="AiButtonTest" to="." method="_on_ai_button_test_pressed"]

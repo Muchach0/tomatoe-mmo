@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=2 format=3 uid="uid://e1od3tbrua6m"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="2_ah8jx"]
+
+[resource]
+script = ExtResource("2_ah8jx")
+quest_name = "Damn Skeletons!"
+quest_description = "Kill 10 skeletons"
+reward_experience = 10

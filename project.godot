@@ -24,9 +24,8 @@ Helper="*res://Util/Helper/Helper.gd"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
-window/stretch/mode="viewport"
+window/size/viewport_width=640
+window/size/viewport_height=360
 
 [file_customization]
 
@@ -46,6 +45,7 @@ Player=""
 zoneA=""
 zoneB=""
 zoneC=""
+Skill_slot=""
 
 [input]
 

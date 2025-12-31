@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemySpawnerResourceClass" load_steps=3 format=3 uid="uid://bggj8e3y3mkp5"]
+
+[ext_resource type="PackedScene" uid="uid://b0anaegxvegyc" path="res://Prefab/Enemies/Dungeon/Skeleton.tscn" id="1_w1jek"]
+[ext_resource type="Script" uid="uid://bad6ch318s8w6" path="res://Util/Mmo_Logic/enemy_spawner_resource_class.gd" id="2_h3g56"]
+
+[resource]
+script = ExtResource("2_h3g56")
+name = "SkeletonSpawner"
+max_enemies_to_spawn = 15
+spawn_time = 2.0
+enemy_scene_array_of_dictionnary = Array[Dictionary]([{
+"name": "Skeleton",
+"scene": ExtResource("1_w1jek"),
+"spawn_rate": 1.0
+}])
+metadata/_custom_type_script = "uid://bad6ch318s8w6"

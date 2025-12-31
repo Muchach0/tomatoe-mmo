@@ -3,10 +3,11 @@ extends Node
 
 const DEFAULT_WORLD_NAME = "LevelForest"
 var current_world_player_location = "LevelForest"
+var current_world_scene : Node2D = null
 var players: Dictionary = {}
 
 signal player_hit
-signal player_died
+signal player_died(peer_id: int)
 signal respawn_player
 signal star_touched
 signal add_player # Signal to synchronize player data across peers when a new player connects
@@ -29,6 +30,7 @@ signal game_over_screen_text_and_visibility # Signal to notify the UI that the g
 signal update_wave_ui # Signal to notify the UI that the wave number and enemy count should be updated
 signal restart_button_pressed # Signal to notify the UI that the restart button has been pressed
 signal wave_cleared # Signal to notify the UI that the wave has been cleared
+signal update_global_timer_label # Signal to notify the UI that the global timer label should be updated
 
 # Signal linked to bonus
 signal bonus_touched # Signal to notify the game logic that a player touched a bonus
@@ -45,6 +47,8 @@ signal ai_request_failed # Signal to notify the UI that the AI request has faile
 # Audio related signals
 signal audio_explosion_play # Signal to notify the UI that the audio explosion should be played
 signal audio_win_play # Signal to notify the UI that the audio win should be played
+signal audio_shoot_play # Signal to notify the AudioManager that a shooting sound should be played
+signal audio_player_hit # Signal to notify the AudioManager that a player hit sound should be played
 
 
 # Signal linked to upgrades
@@ -73,13 +77,14 @@ signal item_picked_up(item: Item, count: int) # Signal to notify that an item wa
 
 # Signal related to inventory
 signal attach_inventory_to_ui # Signal to notify the UI that the inventory should be attached to the player
+signal show_inventory_ui(is_toggled: bool) # Signal to notify the UI that the inventory should be shown or hidden
 
 # Signal related to quests
 signal quest_activated(quest_id: String, quest_name: String, quest_resource: QuestResource) # Signal to notify quest activation
 signal quest_progress_updated(quest_id: String, current_progress: int, target_progress: int) # Signal to notify quest progress updates
 signal quest_completed(quest_id: String, quest_resource: QuestResource) # Signal to notify quest completion
 signal quest_reward_choice_available(player: Player, quest_resource: QuestResource, choice_items: Array[ItemStack]) # Signal to notify that a quest reward choice is available
-
+signal add_quest_defined(quest_resources_list: Array[QuestResource]) # Signal to notify to add the quest defined
 
 
 # Signal related to global spawners
@@ -88,3 +93,25 @@ signal spawn_enemy_on_global_spawner # Signal to notify the global spawner that 
 signal spawn_item_drop_on_global_spawner # Signal to notify the global spawner that an item drop should be spawned
 signal sync_visibility_after_player_moved_to_new_world # Signal to sync enemies and items after a player has moved to a new world
 signal move_player_inside_world # Signal to move a player inside a world
+
+
+# Signal related to stages and global timers
+signal stage_finished # Signal to notify the game logic that a stage has finished
+signal go_to_boss_room_button_pressed
+signal hide_go_boss_room_button # Signal to notify the UI that the go to boss room button should be hidden
+signal return_to_forest_button_pressed # Signal to notify that the return to forest button has been pressed
+signal show_return_to_forest_button # Signal to notify the UI that the return to forest button should be shown
+signal hide_return_to_forest_button # Signal to notify the UI that the return to forest button should be hidden
+signal update_level_number # Signal to notify the UI that the level number should be updated
+signal move_player_to_forest_on_death # Signal to notify the phase manager that a player should be moved to forest on death
+
+# Signal related to skills
+signal attach_skills_to_ui(skills: Array[Skill]) # Signal to notify the UI that the skills should be attached to the player
+signal skills_changed() # Handling of change of skills
+signal one_skill_level_up(skill: Skill) # Signal to notify the UI that a skill level has been upped
+
+
+# Experience related signals
+signal xp_gathered(amount: int) # Signal to notify the UI that the XP has been gathered
+signal leveled_up(level: int, levels_gained: int, skill_points: int) # Signal to notify the UI that the player has leveled up
+signal xp_changed(current_xp: int, xp_to_next: int) # Signal to notify the UI that the XP has changed

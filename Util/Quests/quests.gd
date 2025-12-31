@@ -62,6 +62,7 @@ func _ready() -> void:
     # Connect to EventBus signals
     EventBus.one_enemy_die.connect(_on_enemy_died)
     EventBus.item_picked_up.connect(on_item_picked_up)
+    EventBus.add_quest_defined.connect(add_quest)
 
 func add_quest(quest_resource: QuestResource, quest_id: String = "") -> String:
     """Add a quest to track. Returns the quest_id."""

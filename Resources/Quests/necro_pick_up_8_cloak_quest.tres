@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="QuestResource" load_steps=3 format=3 uid="uid://0p2qc5pn4fb1"]
+
+[ext_resource type="Script" uid="uid://bnvfwn654nhh2" path="res://Util/Quests/quest_resource.gd" id="1_w5hfe"]
+[ext_resource type="Resource" uid="uid://jxjppxfxsed" path="res://Resources/Items/Materials/purple_cloak.tres" id="2_w5hfe"]
+
+[resource]
+script = ExtResource("1_w5hfe")
+quest_name = "Necromancer"
+quest_description = "Pick up cloaks"
+quest_type = 1
+target_item = ExtResource("2_w5hfe")
+target_count = 8
+reward_experience = 10
+metadata/_custom_type_script = "uid://bnvfwn654nhh2"
