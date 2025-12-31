@@ -2,7 +2,7 @@ class_name ExplosiveShootSkill extends Skill
 ## Explosive shooting skill - fires a bullet that explodes on impact, damaging all entities in radius
 
 ## Base damage for the bullet (direct hit damage)
-@export var damage: float = 5.0
+@export var damage: float = 4.0
 
 ## Speed of the bullet
 @export var speed: float = 300.0
@@ -14,7 +14,7 @@ class_name ExplosiveShootSkill extends Skill
 @export var explosion_radius: float = 100.0
 
 ## Damage dealt by the explosion to all entities within radius
-@export var explosion_damage: float = 10.0
+@export var explosion_damage: float = 9.0
 
 ## Visual customization
 @export var bullet_sprite_texture: Texture2D = null  # Custom sprite texture (null = default)
@@ -43,11 +43,11 @@ func execute(player: Player, target_position: Vector2, bullet_manager: BulletMan
 	
 	# Prepare bullet data with explosion properties
 	var bullet_data = {
-		"damage": damage,
+		"damage": damage + level,
 		"speed": speed,
 		"max_pierce": max_pierce,
 		"explosion_radius": explosion_radius,
-		"explosion_damage": explosion_damage
+		"explosion_damage": explosion_damage + level
 	}
 	
 	# Add visual customizations

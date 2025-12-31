@@ -32,7 +32,8 @@ var target_position: Vector2 = Vector2()
 # Skills available to the player
 # Index 0: SimpleShootSkill (left click)
 # Index 1: AOEShootSkill (right click)
-@export var skills: Array[Skill] = []
+@export var default_skills: Array[Skill] = []
+var skills: Array[Skill] = []
 
 @onready var state_machine : Node = $StateMachine
 @onready var sprite: Sprite2D = $Sprite2D
@@ -101,8 +102,8 @@ func _ready() -> void:
 
     # Initialize default skills if not already set
     if skills.size() == 0:
-        skills.append(SimpleShootSkill.new())
-        skills.append(AOEShootSkill.new())
+        for skill in default_skills:
+            skills.append(skill.duplicate())
 
     if multiplayer != null and is_multiplayer_authority():
         EventBus.attach_inventory_to_ui.emit(inventory)
@@ -424,7 +425,15 @@ func reset_player(new_position: Vector2) -> void:
         health_bar.visible = true
         health_bar.value = number_of_life
 
-    
+    if not is_multiplayer_authority():
+        return
+    # Reset the skill bar
+    skills.clear()
+    for skill in default_skills:
+        skills.append(skill.duplicate())
+    EventBus.skills_changed.emit()
+
+
     # if is_multiplayer_authority():
     #     $Hitbox.set_deferred("monitoring", true)
     #     $Hitbox.set_deferred("monitorable", true)

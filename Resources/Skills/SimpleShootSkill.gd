@@ -2,7 +2,7 @@ class_name SimpleShootSkill extends Skill
 ## Simple shooting skill - fires a single bullet in the direction of the target
 
 ## Base damage for the bullet
-@export var damage: float = 5.0
+@export var damage: float = 4.0
 
 ## Speed of the bullet
 @export var speed: float = 300.0
@@ -36,7 +36,7 @@ func execute(player: Player, target_position: Vector2, bullet_manager: BulletMan
 	
 	# Prepare bullet data
 	var bullet_data = {
-		"damage": damage,
+		"damage": damage + level,
 		"speed": speed,
 		"max_pierce": max_pierce
 	}
